@@ -1,0 +1,167 @@
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">写文章
+                        <small></small>
+                    </h3>
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button type="button" class="btn btn-warning btn-sm savebtn">
+                            <i class="fa fa-save"></i>&nbsp;保存
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm publishbtn">
+                            <i class="fa fa-send"></i>&nbsp;发布
+                        </button>
+                    </div>
+                    <!-- /. tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body pad">
+                    <form id="form" role="form">
+                        <input id="blgId" name="id" type="hidden"/>
+                        <input id="status" name="status" type="hidden"/>
+                        <input id="staticLink" name="staticLink" type="hidden"/>
+                        <div class="form-group">
+                            <label class="control-label" for="title">文章标题</label>
+                            <input id="title" name="title" value="" class="form-control" type="text" placeholder="标题">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">内容</label>
+                            <textarea id="content2" name="content" class="form-control" style="width:100%;height:450px;"
+                                      placeholder="在这里编辑"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="tags">标签(最多5个标签，多个标签之间用“，”分隔)</label>
+                            <input id="tags" name="tags" value="${bean.tags }" class="form-control" type="text"
+                                   placeholder="标签">
+                            <div class="well checkbox-group">
+                                <style>
+                                    .taglist {
+                                        margin-right: 5px;
+                                        cursor: pointer;
+                                    }
+                                </style>
+                                <span class="label label-success taglist">java</span>
+                                <span class="label label-success taglist">操作系统</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="summary">文章摘要(默认提取文章的前200字作为摘要，你也可以在这里自行编辑)</label>
+                            <textarea id="summary" name="summary" class="form-control" placeholder="摘要"
+                                      rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">文章发表位置</label>
+                            <div class="well checkbox-group navs">
+                                <label class="radio-inline">
+                                    <input type="radio" name="publishLocation" value="">资讯
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="publishLocation" value="">基础技术
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="smallImg">小图（列表页）</label>
+                            <input id="smallImg" name="smallImg" value="" class="form-control" type="text"
+                                   placeholder="小图">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="bigImg">大图（文章头部）</label>
+                            <input id="bigImg" name="bigImg" value="" class="form-control" type="text"
+                                   placeholder="大图">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="sourceLink">转载来源(原创文章可以忽略)</label>
+                            <input id="sourceLink" name="sourceLink" value="" class="form-control" type="text"
+                                   placeholder="转载的URL">
+                        </div>
+                        <div class="form-group text-center btn-area">
+                            <a class="btn btn-warning savebtn" role="button"><i class="fa fa-save"></i>&nbsp;保存</a>&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-success publishbtn" role="button"><i class="fa fa-send"></i>&nbsp;发布</a>
+                            <div id="info" class="alert alert-warning alert-dismissible" role="alert"
+                                 style="display:none;">
+                                <button type="button" class="close" data-dismiss="alert"><span
+                                        aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <span id="msg">发布成功，正在跳转....</span>
+                            </div>
+
+                        </div>
+                    </form><!-- /#form -->
+
+                </div>
+            </div>
+        </div>
+        <!-- /.col-->
+    </div>
+    <!-- ./row -->
+</section>
+
+<script>
+    var keditor = null;
+    $(function () {
+        keditor = KindEditor.create('textarea[name=content]');
+        initNav();
+        initArticle();
+
+        $("#pushBtn").click(function () {
+            alert(keditor.html());
+        });
+    });
+
+    /**
+     * 初始化导航信息
+     */
+    function initNav() {
+        $.ajax({
+            type: "post",
+            url: "/admin/main/initNav.action",
+            dataType: "json",
+            success: function (data) {
+                if (data.list) {
+                    var $navs = $('.navs');
+                    for (var i = 0; i < data.list.length; i++) {
+                        $navs.append('<label class="radio-inline"><input type="radio" name="publishLocation" ' +
+                                'value="' + data.list[i].id + '">' + data.list[i].name + ' </label>');
+                    }
+                }
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+    ;
+
+    function initArticle() {
+        var id = getUrlParam("bid");
+        console.log("id : "+id+", "+window.location.search.substr(1)+", document "+location.href);
+        if (id) {
+            $.ajax({
+                type: "post",
+                url: "/admin/main/getArticleById.action",
+                data: {'id': id},
+                dataType: "json",
+                success: function (data) {
+                    console.log("data is " + data);
+                    if (data.bean) {
+                        $("#title").val(data.bean.title);
+                        $("#summary").val(data.bean.summary);
+                        $("#content2").html(data.bean.content);
+                        $("#tags").val(data.bean.tags);
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        }
+    }
+</script>
+<!-- /.content -->
+
+
+

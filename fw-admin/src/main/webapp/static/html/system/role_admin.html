@@ -1,0 +1,282 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 id="itemTitle"></h1>
+</section>
+<!-- .content -->
+<section class="content">
+    <div id="roleTable"></div>
+    <div id="toolbar">
+        <button id="add" class="btn btn-default">
+            <i class="glyphicon glyphicon-plus"></i>增加
+        </button>
+    </div>
+</section>
+<!-- .content -->
+<div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalLabel">角色信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="roleForm">
+                    <input type="hidden" name="id" id="id"/>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">名称:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control  validate[required]" name="name" id="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-sm-3 control-label">描述：</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="description" id="description">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="modalLabe2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalLabe2">授权菜单</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="menuForm">
+                    <input type="hidden" name="roleId" id="roleId"/>
+                    <div class="form-group">
+                        <label for="roleName" class="col-sm-3 control-label">角色:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="roleName" id="roleName" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">菜单选项</label>
+                        <div class="col-sm-8" id="menus">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="save2">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body" id="tipMsg"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">确认信息</h4>
+            </div>
+            <div class="modal-body" id="confirmMsg"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var isEdit = false;
+    $(function () {
+        $('#roleTable').bootstrapTable('destroy');
+        $('#roleTable').bootstrapTable({
+            columns: [
+                {field: 'id', title: 'ID', align: 'center', width: '3%'},
+                {field: 'name', title: '名称', align: 'center', width: '15%'},
+                {field: 'description', title: '描述', align: 'center', width: '50%'},
+                {
+                    field: 'id',
+                    title: '操作',
+                    align: 'center',
+                    width: '25%',
+                    formatter: function (val, row, index) {
+                        return '<button class="btn btn-sm btn-success opt-edit" data-id=' + val + '>' +
+                                '<i class="glyphicon glyphicon-edit"></i>编辑</button>' +
+                                '&nbsp;&nbsp;<button class="btn btn-sm btn-warning opt-menu" data-id=' + val +
+                                '><i class="glyphicon glyphicon-menu"></i>授权菜单</button>' +
+                                '&nbsp;&nbsp;<button class="btn btn-sm btn-danger opt-remove" data-id=' + val +
+                                '><i class="glyphicon glyphicon-remove"></i>删除</button>';
+                    }
+                }
+            ],
+            cache: false,
+            striped: true,
+            showRefresh: true,
+            pageSize: 10,
+            pagination: true,
+            pageList: [10, 20, 30, 50],
+            search: true,
+            sidePagination: "server", //表示服务端请求
+            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+            //设置为limit可以获取limit, offset, search, sort, order
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                var param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    searchText: params.searchText
+                };
+                return param;
+            },
+            uniqueId: 'id',
+            toolbar: '#toolbar',
+            url: '/admin/getRoles.action',
+            onLoadSuccess: function () {  //加载成功时执行
+                console.log("load success");
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("load fail");
+            }
+        });
+
+        $("#roleTable").on("click", '.opt-remove', function () {
+            var id = $(this).attr("data-id");
+            if (confirm("你确认删除【" + TableHelper.getRowByUniqueId("#roleTable", id).name + "】吗?" +
+                            "\r\n删除后再也不能找回，请谨慎操作！")) {
+                $.ajax({
+                    type: 'post',
+                    url: "/admin/delRoles.action",
+                    data: {'ids': id},
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result == 1) {
+                            $("#tipMsg").text("删除成功");
+                            $("#tipModal").modal('show');
+                            TableHelper.doRefresh("#roleTable");
+                        } else {
+                            $("#tipMsg").text("删除失败，错误码：" + json.result);
+                            $("#tipModal").modal('show');
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#roleTable").on("click", '.opt-edit', function () {
+            var id = $(this).attr("data-id");
+            isEdit = true;
+            $.ajax({
+                type: "post",
+                url: "/admin/getRole.action",
+                data: {id: id},
+                dataType: "json",
+                success: function (json) {
+                    if (json.entity) {
+                        $("#id").val(json.entity.id);
+                        $("#name").val(json.entity.name);
+                        $("#description").val(json.entity.description);
+                        $("#roleModal").modal('show');
+                    } else {
+                        $("#tipMsg").text("获取信息出错");
+                        $("#tipModal").modal('show');
+                    }
+                }
+            });
+        });
+
+        $("#roleTable").on("click", '.opt-menu', function () {
+            var id = $(this).attr("data-id");
+            var rolename = $(this).parent().siblings().eq(1).text();
+            $.ajax({
+                type: "post",
+                url: "/admin/getMenuByRole.action",
+                data: {roleId: id},
+                dataType: "json",
+                success: function (json) {
+                    if (json.result == 0) {
+                        var html = '';
+                        $.each(json.list, function (n, en) {
+                            console.log(en.check+", "+en+", "+en.name);
+                            if (en.check) {
+                                html += '<input type="checkbox" name="menus" value="' + en.id + '" checked="checked">' + en.name + '&nbsp;&nbsp; ';
+                            } else {
+                                html += '<input type="checkbox" name="menus" value="' + en.id + '">' + en.name + '&nbsp;&nbsp; ';
+                            }
+                        });
+                        $('#menus').html(html);
+                        $("#roleId").val(id);
+                        $("#roleName").val(rolename);
+                        $("#menuModal").modal('show');
+                    } else {
+                        $("#tipMsg").text("获取信息出错");
+                        $("#tipModal").modal('show');
+                    }
+                }
+            });
+        });
+
+        $('#add').click(function () {
+            isEdit = false;
+            $("#roleForm")[0].reset();
+            $("#id").val(null);
+            $("#roleModal").modal('show');
+        });
+
+        $('#save').click(function () {
+            if ($("#roleForm").validationEngine('validate')) {
+                $.ajax({
+                    type: "post",
+                    url: "/admin/saveRole.action?isEdit=" + isEdit,
+                    data: $('#roleForm').serialize(),
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result == 1) {
+                            $("#roleModal").modal('hide');
+                            $("#tipMsg").text("保存成功");
+                            $("#tipModal").modal('show');
+                            TableHelper.doRefresh("#roleTable");
+                        } else {
+                            $("#tipMsg").text("保存失败，错误码：" + json.result);
+                            $("#tipModal").modal('show');
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#save2').click(function () {
+            $.ajax({
+                type: "post",
+                url: "/admin/saveRoleMenu.action",
+                data: $('#menuForm').serialize(),
+                dataType: "json",
+                success: function (json) {
+                    if (json.result == 1) {
+                        $("#menuModal").modal('hide');
+                        $("#tipMsg").text("保存成功");
+                        $("#tipModal").modal('show');
+                        TableHelper.doRefresh("#roleTable");
+                    } else {
+                        $("#tipMsg").text("保存失败，错误码：" + json.result);
+                        $("#tipModal").modal('show');
+                    }
+                }
+            });
+        });
+
+    });
+
+</script>

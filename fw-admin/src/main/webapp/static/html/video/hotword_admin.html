@@ -1,0 +1,206 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 id="itemTitle"></h1>
+</section>
+<!-- .content -->
+<section class="content">
+<div id="hotWordTable"></div>
+<div id="toolbar">
+	<button id="add" class="btn btn-success">
+        <i class="glyphicon glyphicon-plus"></i>增加
+    </button>
+	<button id="edit" class="btn btn-primary" disabled="">
+		<i class="glyphicon glyphicon-edit"></i> 编辑
+	</button>
+	<button id="remove" class="btn btn-danger" disabled="">
+		<i class="glyphicon glyphicon-remove"></i> 删除
+	</button>
+    <button id="cancel" class="btn btn-warning">
+        <i class="glyphicon glyphicon-unchecked"></i> 取消选中
+    </button>
+</div>
+<div class="modal fade" id="hotwordModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="modalLabel">热门信息</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="hotwordForm">
+                    <input type="hidden" name="id" id="id"/>
+					<div class="form-group">
+						<label for="word" class="col-sm-2 control-label">词语:</label>
+                        <div class="col-sm-10">
+						<input type="text" class="form-control validate[required]" name="word" id="word">
+                        </div>
+					</div>
+                    <div class="form-group">
+                        <label for="showOrder" class="col-sm-2 control-label">排序:</label>
+                        <div class="col-sm-10">
+                        <input type="text" class="form-control validate[required]" name="showOrder" id="showOrder" value="0">
+                        </div>
+                    </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" id="save">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+    <div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body" id="tipMsg"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- .content -->
+<script>
+    var isEdit = false;
+$(function () {
+    $('#hotWordTable').bootstrapTable('destroy');
+    $('#hotWordTable').bootstrapTable({
+        columns: [
+            {field: 'tmp', title: 'ID', align: 'center', checkbox: true},
+            {field: 'id', title: 'ID', align: 'center',width: '10%'},
+            {field: 'word', title: '词语', align: 'center', width: '30%'},
+            {field: 'showOrder', title: '排序', align: 'center', width: '10%'}
+        ],
+        cache: false,
+        striped: true,
+        showRefresh: true,
+        pageSize: 10,
+        pagination: true,
+        pageList: [10, 20, 30, 50],
+        search: true,
+        sidePagination: "server", //表示服务端请求
+        //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        //设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType: "undefined",
+        queryParams: function queryParams(params) {   //设置查询参数
+            var param = {
+                pageNumber: params.pageNumber,
+                pageSize: params.pageSize,
+                searchText: params.searchText
+            };
+            return param;
+        },
+        toolbar: '#toolbar',
+        url: '/admin/queryResHotWords.action',
+        onLoadSuccess: function () {  //加载成功时执行
+            console.log("load success");
+        },
+        onLoadError: function () {  //加载失败时执行
+            console.log("load fail");
+        },
+        onUncheckAll: function (row) {
+            $("#edit,#remove").attr("disabled", "");
+        },
+        onCheckAll: function (row) {
+            $("#edit,#remove").attr("disabled",false);
+        },
+        onUncheck: function (row) {
+            if($('#hotWordTable').bootstrapTable('getSelections').length==0)
+                $("#edit,#remove").attr("disabled", "");
+        },
+        onCheck: function (row) {
+            $("#edit,#remove").attr("disabled",false);
+        }
+    });
+
+    $("#add").click(function(){
+        // 打开编辑弹窗
+        $("#hotwordModal").modal('show');
+        isEdit = false;
+        $("#hotwordForm")[0].reset();
+    });
+    $("#edit").tooltip({title:"请选择且只选择一项",trigger: 'focus ',placement: 'top'});
+    $("#edit").click(function(){
+        if(TableHelper.isSelectOne("#hotWordTable")) {
+            // 打开编辑弹窗
+            $("#hotwordModal").modal('show');
+            isEdit = true;
+            $.ajax({
+                type: "post",
+                url: "/admin/getResHotWord.action",
+                data: {'id': TableHelper.getOneSelectItem("#hotWordTable").id},
+                dataType: "json",
+                success: function (json) {
+                    if(json.entity){
+                        $("#id").val(json.entity.id);
+                        $("#word").val(json.entity.word);
+                        $("#showOrder").val(json.entity.showOrder);
+                    }else{
+                        $("#tipMsg").text("获取热门词语出错");
+                        $("#tipModal").modal('show');
+                    }
+                }
+            });
+        }
+    });
+    $("#remove").tooltip({title:"有且只能选择一项删除",trigger: 'focus ',placement: 'top'});
+    $("#remove").click(function(){
+        var rows = TableHelper.getAllSelectItems("#hotWordTable");
+        var ids = null;
+        rows.forEach(function(row){
+            ids = ids + row.id+",";
+        });
+        if(ids){
+            if(confirm("你确认删除【"+TableHelper.getRowByUniqueId("#hotWordTable",id).word+"】吗?\r\n删除后再也不能找回，请谨慎操作！")) {
+                ids = ids.substr(0, ids.length - 1);
+                $.ajax({
+                    type: 'post',
+                    url: "/admin/delResHotWord.action",
+                    data: {'ids': ids},
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result == 1) {
+                            $("#tipMsg").text("删除成功");
+                            $("#tipModal").modal('show');
+                            TableHelper.doRefresh("#hotWordTable");
+                        } else {
+                            $("#tipMsg").text("删除失败，错误码：" + json.result);
+                            $("#tipModal").modal('show');
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    $("#cancel").click(function(){
+        TableHelper.unCheckAll("#hotWordTable");
+    });
+
+    $("#save").click(function(){
+        if($("#hotwordForm").validationEngine('validate')){
+            $.ajax({
+                type: "post",
+                url: "/admin/saveResHotWord.action?isEdit="+isEdit,
+                data: $('#hotwordForm').serialize(),
+                dataType: "json",
+                success: function (json) {
+                    if(json.result==1){
+                        $("#hotwordModal").modal('hide');
+                        $("#tipMsg").text("保存成功");
+                        $("#tipModal").modal('show');
+                        TableHelper.doRefresh("#hotWordTable");
+                    }else{
+                        $("#tipMsg").text("保存失败，错误码："+json.result);
+                        $("#tipModal").modal('show');
+                    }
+                }
+            });
+        };
+    });
+
+});
+
+</script>

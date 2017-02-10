@@ -1,0 +1,160 @@
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">写文章
+                        <small></small>
+                    </h3>
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button type="button" class="btn btn-warning btn-sm savebtn" >
+                            <i class="fa fa-save"></i>&nbsp;保存
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm publishbtn">
+                            <i class="fa fa-send"></i>&nbsp;发布
+                        </button>
+                    </div>
+                    <!-- /. tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body pad">
+                    <form id="form" role="form">
+                        <input id="blgId" name="id" type="hidden" />
+                        <input id="status" name="status" type="hidden" />
+                        <input id="staticLink" name="staticLink" type="hidden" />
+                        <div class="form-group">
+                            <label class="control-label" for="title">文章标题</label>
+                            <input id="title" name="title" value="" class="form-control" type="text" placeholder="标题">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">内容</label>
+                            <textarea id="content2" name="content" class="form-control" style="width:100%;height:450px;"
+                                      placeholder="在这里编辑"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="tags">标签(最多5个标签，多个标签之间用“，”分隔)</label>
+                            <input id="tags" name="tags" value="${bean.tags }" class="form-control" type="text" placeholder="标签">
+                            <div class="well checkbox-group">
+                                <style>
+                                    .taglist{
+                                        margin-right:5px;
+                                        cursor:pointer;
+                                    }
+                                </style>
+                                    <span class="label label-success taglist">java</span>
+                                    <span class="label label-success taglist">操作系统</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="summary">文章摘要(默认提取文章的前200字作为摘要，你也可以在这里自行编辑)</label>
+                            <textarea  id="summary" name="summary" class="form-control" placeholder="摘要" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" >文章发表位置</label>
+                            <div class="well checkbox-group">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="publishLocation" value="">资讯
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="publishLocation" value="">基础技术
+                                        </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="sourceLink">转载来源(原创文章可以忽略)</label>
+                            <input id="sourceLink" name="sourceLink" value="" class="form-control" type="text" placeholder="转载的URL">
+                        </div>
+                        <div class="form-group text-center btn-area">
+                            <a  class="btn btn-warning savebtn" role="button"><i class="fa fa-save"></i>&nbsp;保存</a>&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-success publishbtn" role="button"><i class="fa fa-send"></i>&nbsp;发布</a>
+                            <div id="info" class="alert alert-warning alert-dismissible" role="alert" style="display:none;">
+                                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <span id="msg">发布成功，正在跳转....</span>
+                            </div>
+
+                        </div>
+                    </form><!-- /#form -->
+
+                </div>
+            </div>
+        </div>
+        <!-- /.col-->
+    </div>
+    <!-- ./row -->
+</section>
+<script src="http://admin.wolfbe.com/plugins/kindeditor-4.1.7/kindeditor.js"></script>
+<script src="http://admin.wolfbe.com/plugins/kindeditor-4.1.7/lang/zh_CN.js"></script>
+<script>
+    $(function () {
+        var keditor = KindEditor.create('textarea[name=content]');
+
+        $("#pushBtn").click(function(){
+            alert(keditor.html());
+        });
+    });
+//    KindEditor.ready(function(K) {
+//        window.editor = K.create('#content2');
+//        //初始化kindeditor插件
+//        editor = initKindeditor(K,'content2');
+//        //分类选择事件
+//        $("input[name=clsId]").click(function(){
+//            var all = [];
+//            $("input[name=clsId]:checked").each(function () {
+//                all.push($.trim($(this).parent().text()));
+//            });
+//            $("#category").val(all.join(','));
+//        });
+//        //标签点击事件
+//        $(".taglist").click(function(){
+//            var $tag = $("#tags");
+//            var vale = $.trim($tag.val());
+//            if(vale==''){
+//                $tag.val($(this).text());
+//            }else{
+//                var arr = vale.split(',');
+//                //限制标签为5个之内
+//                if(arr.length<5){
+//                    var v = ','+vale+',';
+//                    //判断点击的标签文本是否存在于#tag表单中
+//                    if(v.indexOf(','+$(this).text()+',')<0){
+//                        $tag.val(vale+','+$(this).text());
+//                    }
+//                }
+//            }
+//        });
+//    });
+
+//    //初始化kindeditor编辑器
+//    function initKindeditor(K ,editorId){
+//        console.log("editorId : "+editorId);
+//        editor =  K.create('#'+editorId,{
+//            resizeType: 1,//只能改变高度
+//            // uploadJson: contextPath + 'web/blog/image/upload',//上传路径
+//            // fileManagerJson: contextPath + 'web/blog/image/scan',
+//            // allowFileManager: true,
+//            extraFileUploadParams: {//上传文件额外的参数
+//
+//            }
+//        });
+//        K('#filemanager').click(function() {
+//            editor.loadPlugin('filemanager', function() {
+//                editor.plugin.filemanagerDialog({
+//                    viewType : 'VIEW',
+//                    dirName : 'image',
+//                    clickFn : function(url, title) {
+//                        K('#url').val(url);
+//                        editor.hideDialog();
+//                    }
+//                });
+//            });
+//        });
+//        return editor;
+//    };
+
+</script>
+<!-- /.content -->
+
+
+

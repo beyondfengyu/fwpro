@@ -1,0 +1,267 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 id="itemTitle"></h1>
+</section>
+<!-- .content -->
+<section class="content">
+<div id="videoTable"></div>
+<div id="toolbar">
+	<button id="add" class="btn btn-success">
+        <i class="glyphicon glyphicon-plus"></i>增加
+    </button>
+    <select name="status" id="statusId" data-btn-class="btn-warning">
+        <option value="">所有</option>
+        <option value="0">编辑</option>
+        <option value="1">就绪</option>
+        <option value="3">通过</option>
+        <option value="2">拒绝</option>
+        <option value="4">生成</option>
+        <option value="-1">丢弃</option>
+    </select>
+<!--	<button id="edit" class="btn btn-primary" disabled="">
+		<i class="glyphicon glyphicon-edit"></i> 编辑
+	</button>
+	<button id="remove" class="btn btn-danger" disabled="">
+		<i class="glyphicon glyphicon-remove"></i> 删除
+	</button>
+    <button id="cancel" class="btn btn-warning">
+        <i class="glyphicon glyphicon-unchecked"></i> 取消选中
+    </button>-->
+</div>
+    <div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body" id="tipMsg"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">确认信息</h4>
+                </div>
+                <div class="modal-body" id="confirmMsg"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- .content -->
+<script>
+    var isEdit = false;
+    var isSearch = false;
+$(function () {
+    // 构建下拉组合框
+    $('#statusId').btComboBox().on('change', function() {
+        isSearch = true;
+        TableHelper.doRefresh("#videoTable");
+    });
+    $('#statusId').btComboBox({'action': "select", 'value': '0'});
+    $("#searchBtn").click(function(){
+        isSearch = true;
+        TableHelper.doRefresh("#videoTable");
+    });
+    $('#videoTable').bootstrapTable('destroy');
+    $('#videoTable').bootstrapTable({
+        columns: [
+            {field: 'id', title: 'ID', align: 'center', width: '3%'},
+            {field: 'title', title: '标题', align: 'center', width: '10%'},
+            {field: 'type', title: '类型', align: 'center',visible:false},
+            {field: 'typeStr', title: '类型', align: 'center', width: '5%'},
+            {field: 'director', title: '导演',align: 'center', width: '5%'},
+            {field: 'actors', title: '演员', align: 'center', width: '10%'},
+            {field: 'country', title: '国家或地区', align: 'center', width: '5%'},
+            {field: 'released', title: '上映日期', align: 'center', width: '5%'},
+            {field: 'duration', title: '时长', align: 'center', width: '5%'},
+            {field: 'staticLink', title: '静态页地址', align: 'center', width: '10%'},
+            {field: 'createTime', title: '创建时间', align: 'center', width: '10%'},
+            {field: 'status', title: '状态', align: 'center', width: '5%',formatter: function (val, row, index) {
+                switch(val){
+                    case -1:return '丢弃';
+                    case 0 :return '编辑';
+                    case 1 :return '就绪';
+                    case 2 :return '拒绝';
+                    case 3 :return '通过';
+                    case 4 :return '生成';
+                    default:return '编辑';
+                }
+            }},
+            {
+                field: 'id',
+                title: '操作',
+                align: 'center',
+                width: '25%',
+                formatter: function (val, row, index) {
+                    return  '<button class="btn btn-sm opt-discard" data-id='+val+'><i class="glyphicon glyphicon-trash"></i>丢弃</button>'+
+                                    '&nbsp;&nbsp;<button class="btn btn-sm btn-danger opt-refuse" data-id='+val+'><i class="glyphicon glyphicon-remove"></i>拒绝</button>'+
+                                    '&nbsp;&nbsp;<button class="btn btn-sm btn-success opt-agree" data-id='+val+'><i class="glyphicon glyphicon-check"></i>通过</button>'+
+                                    '&nbsp;&nbsp;<button class="btn btn-sm btn-primary opt-edit" data-id='+val+'><i class="glyphicon glyphicon-edit"></i>编辑</button>'+
+                            '&nbsp;&nbsp;<button class="btn btn-sm btn-warning opt-scan" data-id='+val+'><i class="glyphicon glyphicon-file"></i>预览</button>';
+
+                }
+            }
+        ],
+        cache: false,
+        striped: true,
+        showRefresh: true,
+        pageSize: 10,
+        pagination: true,
+        pageList: [10, 20, 30, 50],
+        search: true,
+        sidePagination: "server", //表示服务端请求
+        //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        //设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType: "undefined",
+        queryParams: function queryParams(params) {   //设置查询参数
+            if(isSearch){
+                isSearch = false;
+                params.pageNumber = 1;
+            }
+            var param = {
+                pageNumber: params.pageNumber,
+                pageSize: params.pageSize,
+                searchText: params.searchText,
+                status: ComboboxHelper.getSelected("#statusId")
+            };
+            return param;
+        },
+        uniqueId:'id',
+        toolbar: '#toolbar',
+        url: '/admin/queryResVideos.action',
+        onLoadSuccess: function () {  //加载成功时执行
+            console.log("load success");
+        },
+        onLoadError: function () {  //加载失败时执行
+            console.log("load fail");
+        }
+    });
+    $("#videoTable").on("click",'.opt-discard',function(){
+        var id = $(this).attr("data-id");
+        if(confirm("你确认丢弃【"+TableHelper.getRowByUniqueId("#videoTable",id).title+"】吗?\r\n丢弃后再也不能找回，请谨慎操作！")){
+            checkVideo(id,-1);
+        }
+    });
+    $("#videoTable").on("click",'.opt-refuse',function(){
+        var id = $(this).attr("data-id");
+        if(parseInt(TableHelper.getRowByUniqueId("#videoTable",id).status)<1){
+            $("#tipMsg").text("当前记录状态还没有就绪，不能操作！");
+            $("#tipModal").modal('show');
+            return;
+        }
+        if(confirm("你确认拒绝【"+TableHelper.getRowByUniqueId("#videoTable",id).title+"】通过吗")){
+            checkVideo(id,2);
+        }
+    });
+    $("#videoTable").on("click",'.opt-agree',function(){
+        var id = $(this).attr("data-id");
+        if(parseInt(TableHelper.getRowByUniqueId("#videoTable",id).status)<1){
+            $("#tipMsg").text("当前记录状态还没有就绪，不能操作！");
+            $("#tipModal").modal('show');
+            return;
+        }
+        if(confirm("你确认赞同【"+TableHelper.getRowByUniqueId("#videoTable",id).title+"】通过吗？\r\n通过后将生成静态页面，请谨慎操作！")){
+            checkVideo(id,3);
+        }
+    });
+    $("#videoTable").on("click",'.opt-edit',function(){
+        var id = $(this).attr("data-id");
+        menuText = TableHelper.getRowByUniqueId("#videoTable",id).title;
+        $.ajax({
+            url:'/html/video/video_edit.html',
+            dataType:"html",
+            success: function(html){
+                $("#content").html(html);
+                $("#id").val(id);
+                $("#isEdit").val(1);
+                $("#itemTitle").text('编辑视频 -- '+menuText);
+                $("#videoName").text(menuText);
+                initSelectedVideo(id);
+            },
+            error: function(data){
+                $("#content").html("<h3>404&nbsp;&nbsp;The page can not found.</h3>"+data);
+            }
+        });
+    });
+    $("#videoTable").on("click",'.opt-scan',function(){
+        var id = $(this).attr("data-id");
+        console.log($(this).attr("data-id"));
+        window.open('http://v.wolfbe.com/vod/scan.action?source=admin&vid='+id);
+    });
+
+    $('#add').click(function(){
+        $.ajax({
+            url:'/html/video/video_edit.html',
+            dataType:"html",
+            success: function(html){
+                $("#content").html(html);
+                $("#id").val(0);
+                $("#isEdit").val(0);
+                $("#itemTitle").text('增加视频 -- ');
+                $("#videoName").text('增加视频');
+            },
+            error: function(data){
+                $("#content").html("<h3>404&nbsp;&nbsp;The page can not found.</h3>"+data);
+            }
+        });
+    });
+});
+    function initSelectedVideo(id){
+        $.ajax({
+            type: "post",
+            url: "/admin/getResVideo.action",
+            data: {'id': parseInt(id)},
+            dataType: "json",
+            success: function (json) {
+                if (json.entity) {
+
+                    $("#title").val(json.entity.title);
+                    $("#alias").val(json.entity.alias);
+                    $("#info2").val(json.entity.info);
+                    $("#poster").val(json.entity.poster);
+                    $("#cover").val(json.entity.cover);
+                    $("#director").val(json.entity.director);
+                    $("#actors").val(json.entity.actors);
+                    $("#released").val(json.entity.released);
+                    $("#language").val(json.entity.language);
+                    $("#duration").val(json.entity.duration);
+                    $("#qrcode").val(json.entity.qrcode);
+                    $("#scanTime").val(json.entity.scanTime);
+                    $("#likeTime").val(json.entity.likeTime);
+                    $("#country").val(json.entity.country);
+                    $(".sourceLinkId").attr("href",json.entity.sourceLink);
+                    $("#resourceLink").val(json.entity.resourceLink);
+                    ComboboxHelper.setDef("#type", json.entity.type+"");
+                } else {
+                    $("#tipMsg").text("获取视频信息出错");
+                    $("#tipModal").modal('show');
+                }
+            }
+        });
+    }
+    /**
+     * 审核资源，改变资源记录的状态
+     * @param status
+     */
+    function checkVideo(id,status){
+        $.ajax({
+            type: 'post',
+            url : '/admin/checkResVideo.action',
+            data: {'id':id,'status':status},
+            dataType: 'json',
+            success: function(json){
+                if (json.result == 1) {
+                    $("#tipMsg").text("操作成功");
+                    $("#tipModal").modal('show');
+                    TableHelper.doRefresh("#videoTable");
+                } else {
+                    $("#tipMsg").text("操作失败，错误码：" + json.result);
+                    $("#tipModal").modal('show');
+                }
+            }
+        })
+    }
+
+</script>

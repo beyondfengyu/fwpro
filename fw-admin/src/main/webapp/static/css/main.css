@@ -1,0 +1,7 @@
+@charset "utf-8";
+.tbar{
+	margin-top:8px;
+}
+.tbar span{
+	cursor:pointer;
+}

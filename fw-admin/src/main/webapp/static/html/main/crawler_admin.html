@@ -1,0 +1,330 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 id="itemTitle"></h1>
+</section>
+<!-- .content -->
+<section class="content">
+<div id="crawlerTable"></div>
+<div id="toolbar">
+	<button id="add" class="btn btn-success">
+        <i class="glyphicon glyphicon-plus"></i>增加
+    </button>
+</div>
+    <div class="modal fade" id="crawlerModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalLabel">爬虫信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="crawlerForm">
+                        <div class="form-group">
+                            <input type="hidden" name="id" id="cid">
+                            <label for="name" class="col-sm-2 control-label">网站名称:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control validate[required]" name="name" id="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="link" class="col-sm-2 control-label">网站URL:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control " name="link" id="link">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sTitle" class="col-sm-2 control-label">标题css:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sTitle" id="sTitle">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sSummary" class="col-sm-2 control-label">摘要css:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sSummary" id="sSummary">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sContent" class="col-sm-2 control-label">内容css:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sContent" id="sContent">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sSmallimg" class="col-sm-2 control-label">列表图css:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sSmallimg" id="sSmallimg">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sBigimg" class="col-sm-2 control-label">正文图css:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sBigimg" id="sBigimg">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="showorder" class="col-sm-2 control-label">排序:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="showorder" id="showorder" value="0">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="save">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body" id="tipMsg"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">确认信息</h4>
+                </div>
+                <div class="modal-body" id="confirmMsg"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- .content -->
+<script>
+    var isEdit = false;
+    var isSearch = false;
+$(function () {
+    $('#crawlerTable').bootstrapTable('destroy');
+    $('#crawlerTable').bootstrapTable({
+        columns: [
+            {field: 'id', title: 'ID', align: 'center', width: '3%'},
+//            {field: 'name', title: '名称', align: 'center',visible:false},
+            {field: 'name', title: '网站名称', align: 'center', width: '10%'},
+            {field: 'link', title: '网站链接', align: 'center', width: '10%'},
+            {field: 'sTitle', title: '标题css', align: 'center', width: '5%'},
+            {field: 'sSummary', title: '摘要css', align: 'center', width: '5%'},
+            {field: 'sContent', title: '正文css', align: 'center', width: '5%'},
+            {field: 'sBigimg', title: '正文图', align: 'center', width: '10%'},
+            {field: 'sSmallimg', title: '列表图',align: 'center', width: '10%'},
+            {field: 'sSource', title: '来源地址',align: 'center', width:'10%'},
+            {field: 'showorder', title: '排序',align: 'center', width:'5%'},
+            {field: 'createTime', title: '创建时间', align: 'center', width: '10%',formatter:function(val,row,index){
+                if(val){
+                    return val.substring(0,19);
+                }
+                return '-';
+            }},
+            {
+                field: 'id',
+                title: '操作',
+                align: 'center',
+                width: '25%',
+                formatter: function (val, row, index) {
+                    return  '<p style="display:block;margin-bottom:10px;"><button class="btn btn-sm opt-del" data-id='+val+'><i class="glyphicon glyphicon-trash"></i>丢弃</button>'+
+                                    '&nbsp;&nbsp;<button class="btn btn-sm btn-primary opt-edit" data-id='+val+'><i class="glyphicon glyphicon-edit"></i>编辑</button></p>';
+
+                }
+            }
+        ],
+        cache: false,
+        striped: true,
+        showRefresh: true,
+        pageSize: 10,
+        pagination: true,
+        pageList: [10, 20, 30, 50],
+        search: true,
+        sidePagination: "server", //表示服务端请求
+        //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        //设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType: "undefined",
+        queryParams: function queryParams(params) {   //设置查询参数
+            if(isSearch){
+                isSearch = false;
+                params.pageNumber = 1;
+            }
+            var param = {
+                pageNumber: params.pageNumber,
+                pageSize: params.pageSize,
+                searchText: params.searchText,
+                status: ComboboxHelper.getSelected("#statusId")
+            };
+            return param;
+        },
+        uniqueId:'id',
+        toolbar: '#toolbar',
+        url: '/admin/main/listCrawler.action',
+        onLoadSuccess: function () {  //加载成功时执行
+            console.log("load success");
+        },
+        onLoadError: function () {  //加载失败时执行
+            console.log("load fail");
+        }
+    });
+
+    $("#add").click(function(){
+        // 打开编辑弹窗
+        $("#crawlerModal").modal('show');
+        isEdit = false;
+        $("#crawlerForm")[0].reset();
+        $("#cid").val("");
+    });
+
+    $("#crawlerTable").on("click",'.opt-del',function(){
+        var id = $(this).attr("data-id");
+        if(confirm("你确认删除【"+TableHelper.getRowByUniqueId("#crawlerTable",id).title+"】吗?\r\n删除后再也不能找回，请谨慎操作！")){
+            $.ajax({
+                type: "get",
+                url:'/admin/main/delCrawler.action?id='+id,
+                dataType:"json",
+                success: function(json){
+                    if (json.result == 1) {
+                        $("#tipMsg").text("删除成功");
+                        $("#tipModal").modal('show');
+                        TableHelper.doRefresh("#crawlerTable");
+                    } else {
+                        $("#tipMsg").text("删除失败，错误码：" + json.result);
+                        $("#tipModal").modal('show');
+                    }
+                },
+                error: function(data){
+                    alert("出错啦！！！");
+                }
+            });
+        }
+    });
+
+    $("#crawlerTable").on("click",'.opt-edit',function(){
+        var id = $(this).attr("data-id");
+        isEdit = true;
+        $.ajax({
+            type: "get",
+            url:'/admin/main/getCrawler.action?id='+id,
+            dataType:"json",
+            success: function(json){
+                if(json.entity) {
+                    $('#name').val(json.entity.name);
+                    $('#link').val(json.entity.link);
+                    $('#sTitle').val(json.entity.sTitle);
+                    $('#sSummary').val(json.entity.sSummary);
+                    $('#sContent').val(json.entity.sContent);
+                    $('#sSmallimg').val(json.entity.sSmallimg);
+                    $('#sBigimg').val(json.entity.sBigimg);
+                    $('#cid').val(json.entity.id);
+                    $('#showoder').val(json.entity.showoder);
+                    // 打开编辑弹窗
+                    $("#crawlerModal").modal('show');
+                }else{
+                    $("#tipMsg").text("获取爬虫信息出错");
+                    $("#tipModal").modal('show');
+                }
+            },
+            error: function(data){
+                alert("出错啦！！！");
+            }
+        });
+    });
+
+
+    $('#crawler').click(function(){
+        $.ajax({
+            url:'/html/main/crawler_crawler.html',
+            dataType:"html",
+            success: function(html){
+                $("#content").html(html);
+            },
+            error: function(data){
+                $("#content").html("<h3>404&nbsp;&nbsp;The page can not found.</h3>"+data);
+            }
+        });
+    });
+
+    $("#save").click(function() {
+        var url = "/admin/main/editCrawler.action";
+        if(!isEdit){
+            url = "/admin/main/editCrawler.action";
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data: $('#crawlerForm').serialize(),
+            dataType: "json",
+            success: function (json) {
+                if (json.result == 1) {
+                    $("#crawlerModal").modal('hide');
+                    $("#tipMsg").text("保存成功");
+                    $("#tipModal").modal('show');
+                    TableHelper.doRefresh("#crawlerTable");
+                } else {
+                    $("#tipMsg").text("保存失败，错误码：" + json.result);
+                    $("#tipModal").modal('show');
+                }
+            }
+        });
+    });
+});
+    function initSelectedcrawler(id){
+        $.ajax({
+            type: "post",
+            url: "/admin/getRescrawler.action",
+            data: {'id': parseInt(id)},
+            dataType: "json",
+            success: function (json) {
+                if (json.entity) {
+
+                    $("#title").val(json.entity.title);
+                    $("#alias").val(json.entity.alias);
+                    $("#info2").val(json.entity.info);
+                    $("#poster").val(json.entity.poster);
+                    $("#cover").val(json.entity.cover);
+                    $("#director").val(json.entity.director);
+                    $("#actors").val(json.entity.actors);
+                    $("#released").val(json.entity.released);
+                    $("#language").val(json.entity.language);
+                    $("#duration").val(json.entity.duration);
+                    $("#qrcode").val(json.entity.qrcode);
+                    $("#scanTime").val(json.entity.scanTime);
+                    $("#likeTime").val(json.entity.likeTime);
+                    $("#country").val(json.entity.country);
+                    $(".sourceLinkId").attr("href",json.entity.sourceLink);
+                    $("#resourceLink").val(json.entity.resourceLink);
+                    ComboboxHelper.setDef("#type", json.entity.type+"");
+                } else {
+                    $("#tipMsg").text("获取视频信息出错");
+                    $("#tipModal").modal('show');
+                }
+            }
+        });
+    };
+    /**
+     * 审核资源，改变资源记录的状态
+     * @param status
+     */
+    function checkcrawler(id,status){
+        $.ajax({
+            type: 'post',
+            url : '/admin/main/checkcrawler.action',
+            data: {'id':id,'status':status},
+            dataType: 'json',
+            success: function(json){
+                if (json.result == 1) {
+                    $("#tipMsg").text("操作成功");
+                    $("#tipModal").modal('show');
+                    TableHelper.doRefresh("#crawlerTable");
+                } else {
+                    $("#tipMsg").text("操作失败，错误码：" + json.result);
+                    $("#tipModal").modal('show');
+                }
+            }
+        });
+    }
+
+</script>

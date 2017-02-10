@@ -1,0 +1,310 @@
+<div class="main">
+    <div style="width:80%;float:left;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 id="itemTitle"></h1>
+        </section>
+        <!-- .content -->
+        <section class="content">
+            <div id="docTable"></div>
+            <div id="toolbar">
+                <button id="add" class="btn btn-default">
+                    <i class="glyphicon glyphicon-plus"></i>增加
+                </button>
+            </div>
+        </section>
+        <!-- .content -->
+    </div>
+    <!-- .col-sm-10 -->
+    <div style="width:320px;max-height:100%;min-height:850px;float:right;background-color: #ffffff;" id="dirTree">
+        <div>选择目录</div>
+        <div id="jstree"></div>
+    </div>
+</div>
+<div id="showResult"></div>
+<div class="modal fade" id="docModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalLabel">文档信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="docForm">
+                    <input type="hidden" name="id" id="id"/>
+                    <input type="hidden" name="uid" id="uid"/>
+                    <input type="hidden" name="dirId" id="dirId"/>
+                    <div class="form-group">
+                        <label for="dirName" class="col-sm-3 control-label">目录:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="dirName" id="dirName" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">文档:</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="dname" name="dname" readonly = "readonly" >
+                            <input type="file" id="uploadFile" name="uploadFile">
+                            <button class="btn btn-success" type="button" id="uploadBtn">上传</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dpath" class="col-sm-3 control-label">路径:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="dpath" id="dpath" readonly = "readonly" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-sm-3 control-label">描述:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name="description" id="description"
+                                      style="width:300px;height:50px;">
+                            </textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body" id="tipMsg"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">确认信息</h4>
+            </div>
+            <div class="modal-body" id="confirmMsg"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var isEdit = false;
+    $(function () {
+        $('#docTable').bootstrapTable('destroy');
+        $('#docTable').bootstrapTable({
+            columns: [
+                {field: 'id', title: 'ID', align: 'center', width: '3%'},
+                {field: 'dirId', title: '目录ID', align: 'center', visible: false},
+                {field: 'dirName', title: '目录', align: 'center', width:'10%'},
+                {field: 'dname', title: '文档', align: 'center', width: '10%'},
+                {field: 'dpath', title: '路径', align: 'center', width: '15%'},
+                {field: 'uidName', title: '上传者', align: 'center', width: '10%'},
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                    width: '10%',
+                    formatter: function (val, row, index) {
+                        var newDate = new Date();
+                        newDate.setTime(val);
+                        return newDate.toLocaleString();
+                    }
+                },
+                {field: 'description', title: '描述', align: 'center', width: '10%'},
+                {
+                    field: 'id',
+                    title: '操作',
+                    align: 'center',
+                    width: '25%',
+                    formatter: function (val, row, index) {
+                        return '<button class="btn btn-sm btn-success opt-edit" data-id=' + val + '>' +
+                                '<i class="glyphicon glyphicon-edit"></i>编辑</button>' +
+                                '&nbsp;&nbsp;<button class="btn btn-sm btn-warning opt-role" data-id=' + val +
+                                '><i class="glyphicon glyphicon-doc"></i>授权角色</button>' +
+                                '&nbsp;&nbsp;<button class="btn btn-sm btn-danger opt-remove" data-id=' + val +
+                                '><i class="glyphicon glyphicon-remove"></i>删除</button>';
+                    }
+                }
+            ],
+            cache: false,
+            striped: true,
+            showRefresh: true,
+            pageSize: 10,
+            pagination: true,
+            pageList: [10, 20, 30, 50],
+            search: true,
+            sidePagination: "server", //表示服务端请求
+            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+            //设置为limit可以获取limit, offset, search, sort, order
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                var param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    searchText: params.searchText,
+                    dirId:$('#dirId').val()
+                };
+                return param;
+            },
+            uniqueId: 'id',
+            toolbar: '#toolbar',
+            url: '/admin/getDocFiles.action',
+            onLoadSuccess: function () {  //加载成功时执行
+                console.log("load success");
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("load fail");
+            }
+        });
+
+        $("#docTable").on("click", '.opt-remove', function () {
+            var id = $(this).attr("data-id");
+            if (confirm("你确认删除【" + TableHelper.getRowByUniqueId("#docTable", id).dname + "】吗?" +
+                            "\r\n删除后再也不能找回，请谨慎操作！")) {
+                $.ajax({
+                    type: 'post',
+                    url: "/admin/delDocFiles.action",
+                    data: {'docId': id},
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result == 1) {
+                            $("#tipMsg").text("删除成功");
+                            $("#tipModal").modal('show');
+                            TableHelper.doRefresh("#docTable");
+                        } else {
+                            $("#tipMsg").text("删除失败，错误码：" + json.result);
+                            $("#tipModal").modal('show');
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#docTable").on("click", '.opt-edit', function () {
+            var id = $(this).attr("data-id");
+            isEdit = true;
+            $.ajax({
+                type: "post",
+                url: "/admin/getDocFile.action",
+                data: {uid: id},
+                dataType: "json",
+                success: function (json) {
+                    if (json.entity) {
+                        $("#id").val(json.entity.id);
+                        $("#uid").val(json.entity.uid);
+                        $("#dname").val(json.entity.dname);
+                        $("#dpath").val(json.entity.dpath);
+                        $("#description").val(json.entity.description);
+                        $("#docModal").modal('show');
+                    } else {
+                        $("#tipMsg").text("获取信息出错");
+                        $("#tipModal").modal('show');
+                    }
+                }
+            });
+        });
+
+
+        $('#add').click(function () {
+            isEdit = false;
+            $("#id").val(null);
+            //$("#dirId").val(null);
+            $("#uid").val(null);
+            $('#dpath').val(null);
+            $('#dname').val(null);
+            $('#description').val(null);
+            $('#uploadFile').val(null);
+            $("#docModal").modal('show');
+        });
+
+        $('#save').click(function () {
+            if ($("#docForm").validationEngine('validate')) {
+                $.ajax({
+                    type: "post",
+                    url: "/admin/saveDocFile.action?isEdit=" + isEdit,
+                    data: $('#docForm').serialize(),
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result == 1) {
+                            $("#docModal").modal('hide');
+                            $("#tipMsg").text("保存成功");
+                            $("#tipModal").modal('show');
+                            TableHelper.doRefresh("#docTable");
+                        } else {
+                            $("#tipMsg").text("保存失败，错误码：" + json.result);
+                            $("#tipModal").modal('show');
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#uploadBtn').click(function () {
+            console.log("dirId is:"+$('#dirId').val());
+            var options = {
+                type: 'post',
+                url: '/admin/upload/docFile.action',
+                data:{'dirId':$('#dirId').val()},
+                dataType: 'json',
+                success: function (json) {
+                    if (json.dpath) {
+                        $('#dpath').val(json.dpath);
+                        $('#dname').val(json.dname);
+                    } else {
+                        $("#tipMsg").text(json.msg);
+                        $("#tipModal").modal('show');
+                    }
+                }
+            };
+            $("#docForm").ajaxSubmit(options);
+        });
+
+    });
+    // data format demo
+    $.jstree.defaults.core.themes.variant = "large";
+    $('#jstree').on('changed.jstree', function (e, data) {
+        if(data && data.selected && data.selected.length) {
+            var id = data.instance.get_node(data.selected[0]).id;
+            var text = data.instance.get_node(data.selected[0]).text;
+            $.ajax({
+                url:'/admin/getPathById.action',
+                data:{'dirId':id},
+                dataType:'json',
+                success:function(json){
+                    console.log("getPathById:"+json);
+                    if(json.result==0){
+                        $('#dpath').val(json.path);
+                        $('#dirName').val(text);
+                        $('#dirId').val(id);
+                        TableHelper.doRefresh("#docTable");
+                    }
+                },
+                error:function(data){
+
+                }
+
+            });
+        }
+    }).jstree({
+        'core':{
+            'multiple' : false,
+            'data' :{
+                'url': function (node) {
+                    return '/admin/tojstree.action';
+                },
+                'data' : function (node) {
+                    return node;
+                }
+            }
+        },
+        "plugins" : ["dnd"]
+    });
+</script>
