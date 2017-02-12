@@ -1,7 +1,7 @@
 package com.cus.wob.constants;
 
 /**
- * @author laochunyu  2016/2/26.
+ * @author Andy  2016/2/26.
  * @description
  */
 public class VideoStatus {

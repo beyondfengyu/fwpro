@@ -17,7 +17,7 @@ import com.cus.wob.frame.mvc.Scope;
 
 /**
  *
- * @author laochunyu   2015-11-10
+ * @author Andy   2015-11-10
  * @description 控制器的基类
  *
  */

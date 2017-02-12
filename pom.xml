@@ -11,6 +11,7 @@
         <module>fw-service</module>
         <module>fw-web</module>
         <module>fw-tool</module>
+        <module>fw-crawler</module>
     </modules>
     <packaging>pom</packaging>
 

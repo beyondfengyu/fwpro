@@ -18,7 +18,7 @@ import java.util.*;
 
 
 /**
- * @author laochunyu  2016/3/14.
+ * @author Andy  2016/3/14.
  * @description
  */
 @Component("redisEnv")

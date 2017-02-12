@@ -7,7 +7,7 @@ import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  * 读取任务配置文件的任务信息，并且调用定时器安排任务执行
- * @author laochunyu
+ * @author Andy
  * @version 1.0
  * @date 2016/8/4
  */

@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * @author laochunyu  2015/12/7.
+ * @author Andy  2015/12/7.
  * @description 使用FreeMarker来静态化HTML页面
  */
 public class HtmlStatic {

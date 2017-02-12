@@ -9,7 +9,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  *
- * @author laochunyu
+ * @author Andy
  * @description 自定义的mvc分发器
  *
  */

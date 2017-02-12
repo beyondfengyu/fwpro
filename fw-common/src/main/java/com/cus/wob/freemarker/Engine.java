@@ -14,7 +14,7 @@ import freemarker.template.Template;
 import org.springframework.stereotype.Component;
 
 /**
- * @author laochunyu 2015-7-21
+ * @author Andy 2015-7-21
  * @description 
  */
 @Component("engine")

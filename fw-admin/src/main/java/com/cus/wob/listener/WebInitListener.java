@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
- * @author laochunyu  2016/2/25.
+ * @author Andy  2016/2/25.
  * @description 容器启动的监听器
  */
 public class WebInitListener implements ApplicationListener<ContextRefreshedEvent> {

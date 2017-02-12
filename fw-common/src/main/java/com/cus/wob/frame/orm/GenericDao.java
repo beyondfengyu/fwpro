@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author laochunyu   2015-11-12
+ * @author Andy   2015-11-12
  * @description 提取DAO层的通用方法，通过反射的方式注入实体类
  *
  */

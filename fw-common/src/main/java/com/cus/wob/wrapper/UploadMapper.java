@@ -1,7 +1,7 @@
 package com.cus.wob.wrapper;
 /**
  *
- * @author laochunyu   2014-12-3
+ * @author Andy   2014-12-3
  * @description 
  *
  */

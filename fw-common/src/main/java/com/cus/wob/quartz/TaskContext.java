@@ -13,7 +13,7 @@ import java.util.List;
  * 定时任务上下文，加载任务的配置信息
  * 如：任务类、方法名、CRON表达式、执行范围（是否可执行）
  *
- * @author laochunyu
+ * @author Andy
  * @version 1.0
  * @date 2016/8/4
  */

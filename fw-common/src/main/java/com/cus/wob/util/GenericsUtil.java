@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author laochunyu  2016/3/10.
+ * @author Andy  2016/3/10.
  * @description 泛型工具类
  */
 public class GenericsUtil {

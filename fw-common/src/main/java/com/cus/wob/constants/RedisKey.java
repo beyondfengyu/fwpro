@@ -1,7 +1,7 @@
 package com.cus.wob.constants;
 
 /**
- * @author laochunyu
+ * @author Andy
  * @date 2016/8/4
  */
 public class RedisKey {

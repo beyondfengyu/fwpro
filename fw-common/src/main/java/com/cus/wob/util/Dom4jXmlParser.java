@@ -11,7 +11,7 @@ import java.io.File;
 
 /**
  * 使用Dom4j组件来解析xml文件
- * @author laochunyu
+ * @author Andy
  * @version 1.0
  * @date 2016/8/3
  */

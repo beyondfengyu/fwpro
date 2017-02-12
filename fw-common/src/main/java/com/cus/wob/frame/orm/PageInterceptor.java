@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.util.Properties;
 
 /**
- * @author laochunyu  2015/11/21.
+ * @author Andy  2015/11/21.
  * @description  mybatis分页拦截器
  */
 @Intercepts({@Signature(type =StatementHandler.class, method = "prepare", args ={Connection.class})})

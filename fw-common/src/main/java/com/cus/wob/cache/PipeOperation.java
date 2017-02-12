@@ -3,7 +3,7 @@ package com.cus.wob.cache;
 import redis.clients.jedis.Pipeline;
 
 /**
- * @author laochunyu  2016/3/14.
+ * @author Andy  2016/3/14.
  * @description
  */
 public interface PipeOperation {

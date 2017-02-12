@@ -3,7 +3,7 @@ package com.cus.wob.util;
 import java.util.Random;
 
 /**
- * @author laochunyu  2016/3/24.
+ * @author Andy  2016/3/24.
  * @description
  */
 public class NumberUtil {

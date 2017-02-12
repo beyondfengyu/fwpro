@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author laochunyu
+ * @author Andy
  * @date 2016/8/28
  */
 public class HttpUtil{

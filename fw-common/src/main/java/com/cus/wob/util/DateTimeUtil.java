@@ -9,7 +9,7 @@ import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 
 /**
- * @author laochunyu 2015-7-31
+ * @author Andy 2015-7-31
  * @description 时间日期的工具类
  */
 public class DateTimeUtil {

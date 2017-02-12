@@ -8,7 +8,7 @@ package com.cus.wob;
 import java.io.File;
 
 /**
- * @author laochunyu
+ * @author Andy
  * @version 1.0
  * @date 2016/11/17
  */

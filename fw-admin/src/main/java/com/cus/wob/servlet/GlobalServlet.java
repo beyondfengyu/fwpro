@@ -8,7 +8,7 @@ import java.io.IOException;
 
 /**
  *
- * @author laochunyu
+ * @author Andy
  * @description 服务器启动时初始化该Servlet
  * 可以用来为实例在启动时初始化某些数据或者启动某些任务
  *

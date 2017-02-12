@@ -1,7 +1,7 @@
 package com.cus.wob.wrapper;
 
 /**
- * @author laochunyu  2016/3/19.
+ * @author Andy  2016/3/19.
  * @description
  */
 public class SearchMapper {

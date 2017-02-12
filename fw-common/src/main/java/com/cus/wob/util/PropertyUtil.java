@@ -14,7 +14,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author laochunyu  2015/11/18.
+ * @author Andy  2015/11/18.
  * @description 配置文件工具类
  */
 public class PropertyUtil {

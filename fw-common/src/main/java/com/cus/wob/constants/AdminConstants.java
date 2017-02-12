@@ -1,7 +1,7 @@
 package com.cus.wob.constants;
 
 /**
- * @author laochunyu  2016/1/8.
+ * @author Andy  2016/1/8.
  * @description
  */
 public class AdminConstants {

@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author laochunyu   2014-9-4
+ * @author Andy   2014-9-4
  * @description 文件帮助类
  */
 public class FileUtil {

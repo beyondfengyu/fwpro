@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.*;
 
 /**
- * @author laochunyu  2015/11/17.
+ * @author Andy  2015/11/17.
  * @description
  */
 public class ReflectionUtil {

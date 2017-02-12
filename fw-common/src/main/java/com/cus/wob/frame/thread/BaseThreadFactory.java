@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author laochunyu  2015/12/7.
+ * @author Andy  2015/12/7.
  * @description
  */
 public class BaseThreadFactory implements ThreadFactory {

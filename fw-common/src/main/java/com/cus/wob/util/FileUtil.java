@@ -7,7 +7,7 @@ import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  * 
- * @author laochunyu 2015-11-12
+ * @author Andy 2015-11-12
  * @description 文件的工具类
  *
  */

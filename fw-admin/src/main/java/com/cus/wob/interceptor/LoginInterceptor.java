@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
 
 /**
- * @author laochunyu  2016/3/10.
+ * @author Andy  2016/3/10.
  * @description
  */
 public class LoginInterceptor implements HandlerInterceptor {
