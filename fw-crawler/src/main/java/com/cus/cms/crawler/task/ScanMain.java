@@ -24,27 +24,27 @@ public class ScanMain {
     public static void main(String[] args) throws InterruptedException {
         MongoCollection<Document> collection = MongodbHelper.getDbCollection("fwpro", "fw_url");
 
-
-        while (true) {
-            System.out.println("time: "+ DateTimeUtil.getCurrentTime() + "， size: " + collection.count());
-            TimeUnit.SECONDS.sleep(20);
-
-        }
-//        System.out.println("time: "+ DateTimeUtil.getCurrentTime() + "， size: " + collection.count());
+//
+//        while (true) {
+//            System.out.println("time: "+ DateTimeUtil.getCurrentTime() + "， size: " + collection.count());
+//            TimeUnit.SECONDS.sleep(20);
+//
+//        }
+        System.out.println("time: "+ DateTimeUtil.getCurrentTime() + "， size: " + collection.count());
 //        Document docc = new Document("link_url", "http://www.diyifanwen.com").append("site_type", 1).append("link_type",1);
 //        collection.insertOne(docc);
 //        collection.insertOne(docc);
-//        BasicDBObject dbObject = new BasicDBObject();
-//        Pattern pattern = Pattern.compile("^.*\\.rar$", Pattern.CASE_INSENSITIVE);
-//        dbObject.put("link_url", pattern);
-//        System.out.println(collection.count(dbObject));
-//
-//        FindIterable<Document> iter = collection.find(dbObject).limit(2);
-//        iter.forEach(new Block<Document>() {
-//            public void apply(Document doc) {
-//                System.out.println(doc.toJson());
-//            }
-//        });
+        BasicDBObject dbObject = new BasicDBObject();
+        Pattern pattern = Pattern.compile("^.*\\.ZIP$", Pattern.CASE_INSENSITIVE);
+        dbObject.put("link_url", pattern);
+        System.out.println(collection.count(dbObject));
+
+        FindIterable<Document> iter = collection.find(dbObject).limit(2);
+        iter.forEach(new Block<Document>() {
+            public void apply(Document doc) {
+                System.out.println(doc.toJson());
+            }
+        });
 //
 //        pattern = Pattern.compile("^.*\\.txt.+$", Pattern.CASE_INSENSITIVE);
 //        dbObject.put("link_url", pattern);
@@ -57,8 +57,8 @@ public class ScanMain {
 //        });
 //
 
-//        collection.deleteMany(dbObject);
+        collection.deleteMany(dbObject);
 
-//        MongodbHelper.closeClient();
+        MongodbHelper.closeClient();
     }
 }

@@ -68,6 +68,8 @@ public class CrawService {
                                 || linkUrl.endsWith(".bmp")
                                 || linkUrl.endsWith(".rar")
                                 || linkUrl.endsWith(".swf")
+                                || linkUrl.endsWith(".zip")
+                                || linkUrl.endsWith(".ZIP")
                                 || linkUrl.endsWith(".RAR")
                                 || linkUrl.endsWith(".SWF")
                                 || linkUrl.endsWith(".GIF")

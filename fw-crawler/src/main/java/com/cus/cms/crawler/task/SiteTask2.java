@@ -44,7 +44,7 @@ public class SiteTask2 extends TimerTask {
         for (String str : list) {
             urlMap.put(str, 1);
         }
-        urlQueue.addAll(list);
+        urlQueue.addAll(list.subList(740000, list.size()));
 
         // 启动多个线程同时工作
         for (int i = 0; i < fwSeed.getThread(); i++) {
