@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cus.wob.mapper.AdminTaskLogMapper" >
-  <resultMap id="BaseResultMap" type="com.cus.wob.model.AdminTaskLog" >
+<mapper namespace="com.cus.cms.mapper.AdminTaskLogMapper" >
+  <resultMap id="BaseResultMap" type="com.cus.cms.model.AdminTaskLog" >
     <!--
       WARNING - @mbggenerated
     -->

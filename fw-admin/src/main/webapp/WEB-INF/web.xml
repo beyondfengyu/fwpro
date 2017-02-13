@@ -83,7 +83,7 @@
     <!-- spring mvc控制器 -->
     <servlet>
         <servlet-name>dispatcher</servlet-name>
-        <servlet-class>com.cus.wob.servlet.MyDispatcherServlet</servlet-class>
+        <servlet-class>com.cus.cms.admin.servlet.MyDispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath*:/config/spring-mvc.xml</param-value>

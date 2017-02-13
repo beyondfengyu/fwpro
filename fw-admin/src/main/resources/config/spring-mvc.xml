@@ -12,7 +12,7 @@
     <description>spring mvc configuration</description>
 
     <!-- auto scan package name -->
-    <context:component-scan base-package="com.cus.wob.action" ></context:component-scan>  
+    <context:component-scan base-package="com.cus.cms.action" ></context:component-scan>
    <!--  <context:component-scan base-package="cn.cus.cms.module.**,cn.cus.cms.website.**,
     	cn.cus.cms.common.tags.**" /> -->
 
@@ -79,11 +79,11 @@
 
 	<!-- mvc inteceptor -->
     <mvc:interceptors>
-    	<bean class="com.cus.wob.base.BaseInterceptor" />
+    	<bean class="com.cus.cms.admin.base.BaseInterceptor" />
 		<mvc:interceptor>
 			<mvc:mapping path="/admin/*.action"/>
 			<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-			<bean class="com.cus.wob.interceptor.LoginInterceptor"/>
+			<bean class="com.cus.cms.admin.interceptor.LoginInterceptor"/>
 		</mvc:interceptor>
     </mvc:interceptors>
 	<!-- static resources files --><!-- 缓存一天的时间 -->

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cus.wob.mapper.AdminDictMapper" >
-  <resultMap id="BaseResultMap" type="com.cus.wob.model.AdminDict" >
+<mapper namespace="com.cus.cms.mapper.AdminDictMapper" >
+  <resultMap id="BaseResultMap" type="com.cus.cms.model.AdminDict" >
     <!--
       WARNING - @mbggenerated
     -->

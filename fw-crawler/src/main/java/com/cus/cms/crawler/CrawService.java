@@ -1,0 +1,77 @@
+package com.cus.cms.crawler;
+
+import com.cus.cms.crawler.model.LinkMapper;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author Andy
+ */
+public class CrawService {
+    private static final Logger logger = LoggerFactory.getLogger(CrawService.class);
+    /**
+     *  获取网页的所有符合要求的<a>标签的href属性值
+     * @param url
+     * @param prxUrl
+     * @param siteType
+     * @return
+     */
+    public static List<LinkMapper> getAllATag(String url, String prxUrl, int siteType) {
+        List<LinkMapper> list = new ArrayList<>();
+        try {
+            Document doc = Jsoup.connect(url).get();
+            if (doc != null) {
+                Elements aels = doc.getElementsByTag("a");
+                for (Element el : aels) {
+                    String href = el.attr("abs:href");
+                    if (href.startsWith(prxUrl) && !list.contains(href)) {
+                        LinkMapper mapper = new LinkMapper();
+                        String linkUrl = el.attr("abs:href");
+                        if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
+                            linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
+                        }
+                        mapper.setLinkUrl(el.attr("abs:href"));
+                        mapper.setSiteType(siteType);
+                        mapper.setSource(url);
+                        list.add(mapper);
+                    }
+                }
+            }
+        } catch (IOException e) {
+
+        }
+        return list;
+    }
+
+    public static List<String> getAllATagList(String url, String prxUrl, int siteType) {
+        List<String> list = new ArrayList<>();
+        try {
+            Document doc = Jsoup.connect(url).get();
+            if (doc != null) {
+                Elements aels = doc.getElementsByTag("a");
+                for (Element el : aels) {
+                    String href = el.attr("abs:href");
+                    if (href.startsWith(prxUrl) && !list.contains(href)) {
+                        LinkMapper mapper = new LinkMapper();
+                        String linkUrl = el.attr("abs:href");
+                        if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
+                            linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
+                        }
+                        list.add(linkUrl);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            logger.error("getAllATagList url is :" + url, e);
+        }
+        return list;
+    }
+}

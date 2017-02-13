@@ -18,8 +18,8 @@
         <!--  MyBatis Generator  -->
         <!--  Java接口和实体类  -->
         <targetJavaProject>E:/github/fwpro/fw-tool/src/main/java</targetJavaProject>
-        <targetMapperPackage>com.cus.wob.mapper</targetMapperPackage>
-        <targetModelPackage>com.cus.wob.model</targetModelPackage>
+        <targetMapperPackage>com.cus.cms.mapper</targetMapperPackage>
+        <targetModelPackage>com.cus.cms.model</targetModelPackage>
         <!--  XML生成路径  -->
         <targetResourcesProject>E:/github/fwpro/fw-tool/src/main/resources</targetResourcesProject>
         <targetXMLPackage>mapper</targetXMLPackage>
