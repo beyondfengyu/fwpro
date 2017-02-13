@@ -1,7 +1,7 @@
 package com.cus.cms.crawler.mogodb;
 
 /**
- * @author laochunyu
+ * @author Andy
  */
 public class MainTest {
 

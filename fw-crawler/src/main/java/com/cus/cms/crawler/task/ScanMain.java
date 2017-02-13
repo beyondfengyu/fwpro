@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
- * @author laochunyu
+ * @author Andy
  */
 public class ScanMain {
 
