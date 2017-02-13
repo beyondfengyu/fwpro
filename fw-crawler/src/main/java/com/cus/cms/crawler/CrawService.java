@@ -51,7 +51,7 @@ public class CrawService {
         return list;
     }
 
-    public static List<String> getAllATagList(String url, String prxUrl, int siteType) {
+    public static List<String> getAllATagList(String url, String prxUrl, int siteType) throws IOException {
         List<String> list = new ArrayList<>();
         try {
             Document doc = Jsoup.connect(url).timeout(10000).get();
@@ -60,13 +60,17 @@ public class CrawService {
                 for (Element el : aels) {
                     String href = el.attr("abs:href");
                     if (href.startsWith(prxUrl) && !list.contains(href)) {
-                        LinkMapper mapper = new LinkMapper();
                         String linkUrl = el.attr("abs:href");
                         if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
                             linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
                         }
                         if (linkUrl.endsWith(".gif") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".png")
-                                || linkUrl.endsWith(".bmp")) {
+                                || linkUrl.endsWith(".bmp")
+                                || linkUrl.endsWith(".rar")
+                                || linkUrl.endsWith(".GIF")
+                                || linkUrl.endsWith(".JPG")
+                                || linkUrl.endsWith(".PNG")
+                                || linkUrl.endsWith(".BMP")) {
                             continue;
                         }
                         list.add(linkUrl);
@@ -74,7 +78,8 @@ public class CrawService {
                 }
             }
         } catch (IOException e) {
-            logger.error("getAllATagList url is :" + url, e);
+            logger.error("getAllATagList url is :" + url );
+            throw e;
         }
         return list;
     }

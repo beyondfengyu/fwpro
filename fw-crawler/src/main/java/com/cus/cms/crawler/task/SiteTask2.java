@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -56,8 +57,14 @@ public class SiteTask2 extends TimerTask {
                         while (true) {
                             String linkUrl = urlQueue.take();
                             // 通过爬虫爬取当前网页的所有链接元素
-                            List<String> hrefs = CrawService.getAllATagList(linkUrl, fwSeed.getSiteLink(), fwSeed.getId());
-                            newQueue.addAll(hrefs);
+                            List<String> hrefs = null;
+                            try {
+                                hrefs = CrawService.getAllATagList(linkUrl, fwSeed.getSiteLink(), fwSeed.getId());
+                                newQueue.addAll(hrefs);
+                            } catch (IOException e) {
+                                urlQueue.put(linkUrl);
+                            }
+
                         }
                     }catch (InterruptedException e) {
                         e.printStackTrace();
