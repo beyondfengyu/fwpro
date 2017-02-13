@@ -12,6 +12,7 @@
         <module>fw-web</module>
         <module>fw-tool</module>
         <module>fw-crawler</module>
+        <module>fw-dao</module>
     </modules>
     <packaging>pom</packaging>
 
