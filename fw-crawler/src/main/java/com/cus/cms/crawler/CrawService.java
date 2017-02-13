@@ -54,7 +54,7 @@ public class CrawService {
     public static List<String> getAllATagList(String url, String prxUrl, int siteType) {
         List<String> list = new ArrayList<>();
         try {
-            Document doc = Jsoup.connect(url).get();
+            Document doc = Jsoup.connect(url).timeout(10000).get();
             if (doc != null) {
                 Elements aels = doc.getElementsByTag("a");
                 for (Element el : aels) {
@@ -64,6 +64,10 @@ public class CrawService {
                         String linkUrl = el.attr("abs:href");
                         if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
                             linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
+                        }
+                        if (linkUrl.endsWith(".gif") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".png")
+                                || linkUrl.endsWith(".bmp")) {
+                            continue;
                         }
                         list.add(linkUrl);
                     }

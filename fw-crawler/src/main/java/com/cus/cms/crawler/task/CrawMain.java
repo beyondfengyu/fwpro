@@ -17,7 +17,7 @@ public class CrawMain {
 
 
     public static void main(String[] args) throws InterruptedException {
-        List<String> list = CrawService.getAllATagList("http://www.diyifanwen.com/fanwen/jiaojiliyi/index_2.html", "http://www.diyifanwen.com", 1);
+        List<String> list = CrawService.getAllATagList("http://www.diyifanwen.com/sucai/shoujifengjingtupian", "http://www.diyifanwen.com", 1);
 
         System.out.println(list.size());
     }
