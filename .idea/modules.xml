@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/fw-admin/fw-admin.iml" filepath="$PROJECT_DIR$/fw-admin/fw-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fw-common/fw-common.iml" filepath="$PROJECT_DIR$/fw-common/fw-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fw-crawler/fw-crawler.iml" filepath="$PROJECT_DIR$/fw-crawler/fw-crawler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fw-dao/fw-dao.iml" filepath="$PROJECT_DIR$/fw-dao/fw-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fw-service/fw-service.iml" filepath="$PROJECT_DIR$/fw-service/fw-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fw-tool/fw-tool.iml" filepath="$PROJECT_DIR$/fw-tool/fw-tool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fw-web/fw-web.iml" filepath="$PROJECT_DIR$/fw-web/fw-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fwpro.iml" filepath="$PROJECT_DIR$/fwpro.iml" />
+    </modules>
+  </component>
+</project>
