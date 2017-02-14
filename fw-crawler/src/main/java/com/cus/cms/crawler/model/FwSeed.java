@@ -4,18 +4,18 @@ package com.cus.cms.crawler.model;
  * @author Andy
  */
 public class FwSeed {
-    private int id;
+    private int siteType;
     private String siteName;
     private String siteLink;
     private int startId;
     private int thread;
 
-    public int getId() {
-        return id;
+    public int getSiteType() {
+        return siteType;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSiteType(int siteType) {
+        this.siteType = siteType;
     }
 
     public int getStartId() {
@@ -53,7 +53,7 @@ public class FwSeed {
     @Override
     public String toString() {
         return "FwSeed{" +
-                "id=" + id +
+                "siteType=" + siteType +
                 ", siteName='" + siteName + '\'' +
                 ", siteLink='" + siteLink + '\'' +
                 '}';

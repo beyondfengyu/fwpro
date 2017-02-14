@@ -67,7 +67,7 @@ public class UrlTask extends TimerTask{
                         while (true) {
                             // 获取当前需要爬取数据的网页链接
                             preStatement = conn.prepareStatement(sql);
-                            preStatement.setInt(1, fwSeed.getId());
+                            preStatement.setInt(1, fwSeed.getSiteType());
                             preStatement.setInt(2, mid);
                             rs = preStatement.executeQuery();
                             if (!rs.next()) {
@@ -83,7 +83,7 @@ public class UrlTask extends TimerTask{
                             preStatement.close();
 
                             // 通过爬虫爬取当前网页的所有链接元素
-                            List<LinkMapper> hrefs = CrawService.getAllATag(linkUrl, fwSeed.getSiteLink(), fwSeed.getId());
+                            List<LinkMapper> hrefs = CrawService.getAllATag(linkUrl, fwSeed.getSiteLink(), fwSeed.getSiteType());
                             dbQueue.put(hrefs);
                         }
                     } catch (SQLException e) {

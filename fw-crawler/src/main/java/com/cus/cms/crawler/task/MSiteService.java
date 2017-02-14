@@ -52,7 +52,7 @@ public class MSiteService {
                 FwSeed seed = new FwSeed();
                 seed.setSiteLink(document.getString("site_link"));
                 seed.setSiteName(document.getString("site_name"));
-                seed.setId(document.getInteger("site_type"));
+                seed.setSiteType(document.getInteger("site_type"));
                 seed.setStartId(document.getInteger("start_id"));
                 seed.setThread(document.getInteger("thread"));
                 list.add(seed);
