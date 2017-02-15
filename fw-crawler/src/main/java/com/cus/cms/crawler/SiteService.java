@@ -1,7 +1,7 @@
 package com.cus.cms.crawler;
 
 import com.cus.cms.crawler.model.LinkMapper;
-import com.cus.cms.crawler.task.MongodbHelper;
+import com.cus.cms.crawler.mogodb.MongodbHelper;
 import com.cus.cms.crawler.util.DateTimeUtil;
 import com.cus.cms.crawler.util.DbUtil;
 import com.cus.cms.crawler.model.FwSeed;

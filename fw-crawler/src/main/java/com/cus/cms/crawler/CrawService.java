@@ -94,7 +94,7 @@ public class CrawService {
      * @param url http://www.diyifanwen.com/qt/wzdt.htm
      * @return
      */
-    public static List<String> getAllMap(String url) throws IOException {
+    public static List<String> getAllMap(String url, String prxUrl) throws IOException {
         List<String> list = new ArrayList<>();
         try {
             Document doc = Jsoup.connect(url).timeout(5000).get();
@@ -103,7 +103,7 @@ public class CrawService {
                 Elements aels = boxEl.getElementsByTag("a");
                 for (Element el : aels) {
                     String href = el.attr("abs:href");
-                    if (!list.contains(href)) {
+                    if (href.startsWith(prxUrl) && !list.contains(href)) {
                         String linkUrl = el.attr("abs:href");
                         if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
                             linkUrl = linkUrl.substring(0, linkUrl.length() - 1);

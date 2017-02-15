@@ -1,10 +1,7 @@
 package com.cus.cms.crawler.task;
 
-import com.cus.cms.crawler.StartMain;
 import com.cus.cms.crawler.model.FwSeed;
-import com.cus.cms.crawler.model.LinkMapper;
-import com.cus.cms.crawler.util.DateTimeUtil;
-import com.cus.cms.crawler.util.DbUtil;
+import com.cus.cms.crawler.mogodb.MongodbHelper;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
