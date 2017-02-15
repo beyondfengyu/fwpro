@@ -89,7 +89,7 @@ public class SiteTask2 extends TimerTask {
                             }
                             urlMap.put(href, type);
                             urlQueue.put(href);
-                            siteService.insertFwUrl(href,type, fwSeed.getSiteType());
+                            siteService.insertFwUrl(href,type, fwSeed.getSiteType(),1);
                             logger.info("======>>>> new url : {}", href);
                         }
                     } catch (InterruptedException e) {

@@ -32,10 +32,10 @@ public class MSiteService {
         return docCollection;
     }
 
-    public void insertFwUrl(String linkUrl, Integer linkType, Integer siteType) {
+    public void insertFwUrl(String linkUrl, Integer linkType, Integer siteType, Integer status) {
         try {
             Document document = new Document("link_url", linkUrl)
-                    .append("site_type", siteType).append("link_type", linkType);
+                    .append("site_type", siteType).append("link_type", linkType).append("status",status);
             docCollection.insertOne(document);
         } catch (Exception e) {
             logger.error("insertFwUrl error, linkUrl is: {}", linkUrl, e);

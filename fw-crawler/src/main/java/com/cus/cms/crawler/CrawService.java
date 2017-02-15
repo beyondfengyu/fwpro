@@ -88,4 +88,35 @@ public class CrawService {
         }
         return list;
     }
+
+    /**
+     *
+     * @param url http://www.diyifanwen.com/qt/wzdt.htm
+     * @return
+     */
+    public static List<String> getAllMap(String url) throws IOException {
+        List<String> list = new ArrayList<>();
+        try {
+            Document doc = Jsoup.connect(url).timeout(5000).get();
+            if (doc != null) {
+                Element boxEl = doc.getElementsByClass("box1").first();
+                Elements aels = boxEl.getElementsByTag("a");
+                for (Element el : aels) {
+                    String href = el.attr("abs:href");
+                    if (!list.contains(href)) {
+                        String linkUrl = el.attr("abs:href");
+                        if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
+                            linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
+                        }
+                        logger.info("map url ====>>> {},{}", el.text(), linkUrl);
+                        list.add(linkUrl);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            logger.error("getAllMap url is :" + url );
+            throw e;
+        }
+        return list;
+    }
 }

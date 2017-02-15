@@ -25,7 +25,7 @@ public class MongodbHelper {
         buide.socketTimeout(0);
         buide.socketKeepAlive(true);
         MongoClientOptions myOptions = buide.build();
-        mongoClient = new MongoClient(new ServerAddress("127.0.0.1", 27017), myOptions);
+        mongoClient = new MongoClient(new ServerAddress("116.31.122.23", 27017), myOptions);
     }
 
     public static MongoCollection<Document>  getDbCollection(String db, String docset) {
