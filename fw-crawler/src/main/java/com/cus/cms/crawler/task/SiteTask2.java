@@ -36,7 +36,7 @@ public class SiteTask2 extends TimerTask {
     public void run() {
         ExecutorService executorService = Executors.newFixedThreadPool(fwSeed.getThread() + 1);
 
-        List<String> list = siteService.getAllUrl(fwSeed.getId());
+        List<String> list = siteService.getAllUrl(fwSeed.getSiteType());
         if (list.size() < 1) {
             list.add(fwSeed.getSiteLink());
         }
@@ -44,7 +44,7 @@ public class SiteTask2 extends TimerTask {
         for (String str : list) {
             urlMap.put(str, 1);
         }
-        urlQueue.addAll(list.subList(740000, list.size()));
+        urlQueue.addAll(list.subList(fwSeed.getStartId(), list.size()));
 
         // 启动多个线程同时工作
         for (int i = 0; i < fwSeed.getThread(); i++) {
@@ -59,7 +59,7 @@ public class SiteTask2 extends TimerTask {
                             // 通过爬虫爬取当前网页的所有链接元素
                             List<String> hrefs = null;
                             try {
-                                hrefs = CrawService.getAllATagList(linkUrl, fwSeed.getSiteLink(), fwSeed.getId());
+                                hrefs = CrawService.getAllATagList(linkUrl, fwSeed.getSiteLink(), fwSeed.getSiteType());
                                 newQueue.addAll(hrefs);
                             } catch (IOException e) {
                                 urlQueue.put(linkUrl);
@@ -84,12 +84,12 @@ public class SiteTask2 extends TimerTask {
                         String href = newQueue.take();
                         if (!urlMap.containsKey(href)) {
                             int type = 1;
-                            if (href.endsWith("html") || href.endsWith("html") || href.endsWith("shtml")) {
+                            if (href.endsWith("htm") || href.endsWith("html") || href.endsWith("shtml")) {
                                 type = 2;
                             }
                             urlMap.put(href, type);
                             urlQueue.put(href);
-                            siteService.insertFwUrl(href,type, fwSeed.getId());
+                            siteService.insertFwUrl(href,type, fwSeed.getSiteType());
                             logger.info("======>>>> new url : {}", href);
                         }
                     } catch (InterruptedException e) {

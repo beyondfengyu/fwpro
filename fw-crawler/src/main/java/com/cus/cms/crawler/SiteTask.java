@@ -75,7 +75,7 @@ public class SiteTask extends TimerTask{
                             isCount = false;
                             try {
                                 preStatement = conn.prepareStatement(sqlCount);
-                                preStatement.setInt(1, fwSeed.getId());
+                                preStatement.setInt(1, fwSeed.getSiteType());
                                 preStatement.setInt(2, fwSeed.getStartId());
                                 preStatement.setInt(3, (p + s) * SIZE);
                                 preStatement.setInt(4, SIZE);
@@ -104,7 +104,7 @@ public class SiteTask extends TimerTask{
 
                             // 获取当前需要爬取数据的网页链接
                             preStatement = conn.prepareStatement(sql);
-                            preStatement.setInt(1, fwSeed.getId());
+                            preStatement.setInt(1, fwSeed.getSiteType());
                             preStatement.setInt(2, fwSeed.getStartId());
                             preStatement.setInt(3, (p + s) * SIZE);
                             preStatement.setInt(4, SIZE);
@@ -116,7 +116,7 @@ public class SiteTask extends TimerTask{
                                 logger.info("current fw_url ====>> id is: {}, linkUrl is: {}",rs.getInt("id"), linkUrl);
 
                                 // 通过爬虫爬取当前网页的所有链接元素
-                                List<LinkMapper> hrefs = CrawService.getAllATag(linkUrl, fwSeed.getSiteLink(), fwSeed.getId());
+                                List<LinkMapper> hrefs = CrawService.getAllATag(linkUrl, fwSeed.getSiteLink(), fwSeed.getSiteType());
                                 dbQueue.put(hrefs);
                             }
 

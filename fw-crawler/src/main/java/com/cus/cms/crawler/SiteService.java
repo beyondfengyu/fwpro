@@ -39,7 +39,7 @@ public class SiteService {
             FwSeed fwUrl = new FwSeed();
             fwUrl.setSiteLink(resultSet.getString("site_url"));
             fwUrl.setSiteName(resultSet.getString("site_name"));
-            fwUrl.setId(resultSet.getInt("id"));
+            fwUrl.setSiteType(resultSet.getInt("id"));
             fwUrl.setStartId(resultSet.getInt("start_id"));
             fwUrl.setThread(resultSet.getInt("thread"));
             list.add(fwUrl);

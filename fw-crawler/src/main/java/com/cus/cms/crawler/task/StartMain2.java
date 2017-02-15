@@ -1,6 +1,5 @@
 package com.cus.cms.crawler.task;
 
-import com.cus.cms.crawler.task.MSiteService;
 import com.cus.cms.crawler.model.FwSeed;
 import com.cus.cms.crawler.model.LinkMapper;
 

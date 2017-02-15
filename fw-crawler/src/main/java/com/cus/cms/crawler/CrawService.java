@@ -54,7 +54,7 @@ public class CrawService {
     public static List<String> getAllATagList(String url, String prxUrl, int siteType) throws IOException {
         List<String> list = new ArrayList<>();
         try {
-            Document doc = Jsoup.connect(url).timeout(10000).get();
+            Document doc = Jsoup.connect(url).timeout(35000).get();
             if (doc != null) {
                 Elements aels = doc.getElementsByTag("a");
                 for (Element el : aels) {
