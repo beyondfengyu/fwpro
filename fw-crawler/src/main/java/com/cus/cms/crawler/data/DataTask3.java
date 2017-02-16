@@ -3,30 +3,21 @@ package com.cus.cms.crawler.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andy
  */
-public class DataTask implements Runnable {
+public class DataTask3 extends BaseTask {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataTask3.class);
 
-    private LinkedBlockingQueue<String> moreUrls;
-    private String prxUrl;
-    private String url;
-
-    public DataTask(String url, String prxUrl) {
-        this.url = url;
-        this.prxUrl = prxUrl;
-        this.moreUrls = new LinkedBlockingQueue<>();
+    public DataTask3(String url, String prxUrl) {
+        super(url, prxUrl);
     }
 
     @Override
@@ -37,15 +28,22 @@ public class DataTask implements Runnable {
             @Override
             public void run() {
                 try {
+                    storeService.saveNav(url, 1);
                     List<String> oneUrls = DataService.getOneNavList(url, prxUrl);
+                    List<String> twoUrls = new ArrayList<String>();
                     for (String str : oneUrls) {
                         logger.info("oneUrls =====>>> {}", str);
-                        List<String> twoUrls = DataService.getTwoNavList(str, prxUrl);
-                        moreUrls.addAll(twoUrls);
-                    }
+                        twoUrls.addAll(DataService.getTwoNavList(str, prxUrl));
 
+                    }
+                    for (String str : twoUrls) {
+                        logger.info("twoUrls =====>>> {}", str);
+                        List<String> threeUrls = DataService.getTwoNavList(str, prxUrl);
+                        storeService.batchSaveNav(threeUrls, 2);
+                        moreUrls.addAll(threeUrls);
+                    }
                 } catch (Exception e) {
-                    logger.error("DataTask error, ", e);
+                    logger.error("DataTask3 error, ", e);
                 }
             }
         });
@@ -56,12 +54,13 @@ public class DataTask implements Runnable {
                 public void run() {
                     while (true) {
                         try {
-                            String moreUrl = moreUrls.poll(60, TimeUnit.SECONDS);
+                            String moreUrl = moreUrls.poll(30, TimeUnit.SECONDS);
                             if (moreUrl == null) {
                                 logger.info("execute more url wait 60 second , but no url");
                                 break;
                             }
                             List<String> list = DataService.getAllPageList(moreUrl, prxUrl);
+                            storeService.saveUrl(list, 1);
                         } catch (Exception e) {
                             logger.error("execute more url error", e);
                         }

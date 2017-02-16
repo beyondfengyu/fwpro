@@ -1,5 +1,6 @@
 package com.cus.cms.crawler.data;
 
+import com.mongodb.client.MongoCollection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class DataService {
     private static final Logger logger = LoggerFactory.getLogger(DataService.class);
+    private MongoCollection<org.bson.Document> docCollection;
 
     public static List<String> getOneNavList(String url, String prxUrl) throws IOException {
         List<String> list = new ArrayList<>();
@@ -35,20 +37,6 @@ public class DataService {
                             String linkUrl = el.attr("abs:href");
                             if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
                                 linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
-                            }
-                            if (linkUrl.endsWith(".gif") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".png")
-                                    || linkUrl.endsWith(".bmp")
-                                    || linkUrl.endsWith(".rar")
-                                    || linkUrl.endsWith(".swf")
-                                    || linkUrl.endsWith(".zip")
-                                    || linkUrl.endsWith(".ZIP")
-                                    || linkUrl.endsWith(".RAR")
-                                    || linkUrl.endsWith(".SWF")
-                                    || linkUrl.endsWith(".GIF")
-                                    || linkUrl.endsWith(".JPG")
-                                    || linkUrl.endsWith(".PNG")
-                                    || linkUrl.endsWith(".BMP")) {
-                                continue;
                             }
                             list.add(linkUrl);
                         }
@@ -77,20 +65,6 @@ public class DataService {
                             String linkUrl = el.attr("abs:href");
                             if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
                                 linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
-                            }
-                            if (linkUrl.endsWith(".gif") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".png")
-                                    || linkUrl.endsWith(".bmp")
-                                    || linkUrl.endsWith(".rar")
-                                    || linkUrl.endsWith(".swf")
-                                    || linkUrl.endsWith(".zip")
-                                    || linkUrl.endsWith(".ZIP")
-                                    || linkUrl.endsWith(".RAR")
-                                    || linkUrl.endsWith(".SWF")
-                                    || linkUrl.endsWith(".GIF")
-                                    || linkUrl.endsWith(".JPG")
-                                    || linkUrl.endsWith(".PNG")
-                                    || linkUrl.endsWith(".BMP")) {
-                                continue;
                             }
                             list.add(linkUrl);
                         }
@@ -134,13 +108,12 @@ public class DataService {
 
                 //分析尾页链接，获取总页数
                 String[] arr = lastIndex.split("index_");
-                String num = arr[1].split("\\.")[0];
-                String form = arr[0] + "index_%d.html";
+                String[] tmp = arr[1].split("\\.");
 
-                for (int i = 1; i <= Integer.valueOf(num); i++) {
+                for (int i = 1; i <= Integer.valueOf(tmp[0]); i++) {
                     String page = url;
                     if (i != 1) {
-                        page = String.format(form, i);
+                        page = String.format("%sindex_%d.%s", arr[0],i,tmp[1]);
                     }
                     // 解析出列表页的所有链接
                     getPageList(page, prxUrl, list);
@@ -175,7 +148,7 @@ public class DataService {
                     if (linkUrl.endsWith("#") || linkUrl.endsWith("/")) {
                         linkUrl = linkUrl.substring(0, linkUrl.length() - 1);
                     }
-                    logger.info("list url ====>>> {},{}", el.text(), linkUrl);
+//                    logger.info("list url ====>>> {},{}", el.text(), linkUrl);
                     list.add(linkUrl);
                 }
             }
@@ -183,4 +156,7 @@ public class DataService {
             logger.error("getAllPageList parse page error, url is :" + page, e);
         }
     }
+
+
+
 }

@@ -33,7 +33,6 @@ public class MongodbHelper {
         MongoDatabase database = mongoClient.getDatabase(db);
         // 进入某个文档集
         MongoCollection<Document> collection = database.getCollection(docset);
-
         return collection;
     }
 
