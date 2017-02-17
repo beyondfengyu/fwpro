@@ -31,6 +31,7 @@ public class DataTask2 extends BaseTask {
                 try {
                     storeService.saveNav(url, 1);
                     List<String> oneUrls = DataService.getOneNavList(url, prxUrl);
+                    storeService.batchSaveNav(oneUrls, 3);
                     for (String str : oneUrls) {
                         List<String> twoUrls = null;
                         logger.info("oneUrls =====>>> {}", str);
@@ -91,11 +92,11 @@ public class DataTask2 extends BaseTask {
         };
 
 
-//        for (String nav : urls2) {
-//            executorService.execute(new DataTask2(nav,"http://www.diyifanwen.com"));
+        for (String nav : urls2) {
+            executorService.execute(new DataTask2(nav,"http://www.diyifanwen.com"));
 //            TimeUnit.MINUTES.sleep(10);
-//        }
-//
+        }
+
 
     }
 }

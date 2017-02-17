@@ -67,24 +67,24 @@ public class DataTask1 extends BaseTask {
         executorService = Executors.newFixedThreadPool(16);
 
         String[] urls1 = {
-//                "http://www.diyifanwen.com/sms/zhufuduanxin",
-//                "http://www.diyifanwen.com/tool/chunlianjijin",
-//                "http://www.diyifanwen.com/tool/mingrenjianjie",
-//                "http://www.diyifanwen.com/tool/naojinjizhuanwan",
-//                "http://www.diyifanwen.com/tool/mingrenmingyan",
-//                "http://www.diyifanwen.com/tool/duilian",
-//                "http://www.diyifanwen.com/tool/yuyan",
-//                "http://www.diyifanwen.com/tool/jingdianyuju",
-//                "http://www.diyifanwen.com/tool/geyan",
-//                "http://www.diyifanwen.com/lizhi",
-//                "http://www.diyifanwen.com/sanwen"
+                "http://www.diyifanwen.com/sms/zhufuduanxin",
+                "http://www.diyifanwen.com/tool/chunlianjijin",
+                "http://www.diyifanwen.com/tool/mingrenjianjie",
+                "http://www.diyifanwen.com/tool/naojinjizhuanwan",
+                "http://www.diyifanwen.com/tool/mingrenmingyan",
+                "http://www.diyifanwen.com/tool/duilian",
+                "http://www.diyifanwen.com/tool/yuyan",
+                "http://www.diyifanwen.com/tool/jingdianyuju",
+                "http://www.diyifanwen.com/tool/geyan",
+                "http://www.diyifanwen.com/lizhi",
+                "http://www.diyifanwen.com/sanwen"
         };
 
 
-//        for (String nav : urls1) {
-//            executorService.execute(new DataTask1(nav, "http://www.diyifanwen.com"));
+        for (String nav : urls1) {
+            executorService.execute(new DataTask1(nav, "http://www.diyifanwen.com"));
 //            TimeUnit.MINUTES.sleep(10);
-//        }
+        }
 
 
     }
