@@ -32,8 +32,8 @@ public class DataTask1 extends BaseTask {
                 try {
                     storeService.saveNav(url, 1);
                     List<String> twoUrls = DataService.getTwoNavList(url, prxUrl);
-                    moreUrls.addAll(twoUrls);
                     storeService.batchSaveNav(twoUrls, 2);
+                    moreUrls.addAll(twoUrls);
                 } catch (Exception e) {
                     logger.error("DataTask1 error, ", e);
                 }
@@ -60,5 +60,32 @@ public class DataTask1 extends BaseTask {
                 }
             });
         }
+    }
+    private static ExecutorService executorService;
+
+    public static void main(String[] args) throws Exception {
+        executorService = Executors.newFixedThreadPool(16);
+
+        String[] urls1 = {
+//                "http://www.diyifanwen.com/sms/zhufuduanxin",
+//                "http://www.diyifanwen.com/tool/chunlianjijin",
+//                "http://www.diyifanwen.com/tool/mingrenjianjie",
+//                "http://www.diyifanwen.com/tool/naojinjizhuanwan",
+//                "http://www.diyifanwen.com/tool/mingrenmingyan",
+//                "http://www.diyifanwen.com/tool/duilian",
+//                "http://www.diyifanwen.com/tool/yuyan",
+//                "http://www.diyifanwen.com/tool/jingdianyuju",
+//                "http://www.diyifanwen.com/tool/geyan",
+//                "http://www.diyifanwen.com/lizhi",
+//                "http://www.diyifanwen.com/sanwen"
+        };
+
+
+//        for (String nav : urls1) {
+//            executorService.execute(new DataTask1(nav, "http://www.diyifanwen.com"));
+//            TimeUnit.MINUTES.sleep(10);
+//        }
+
+
     }
 }

@@ -3,7 +3,6 @@ package com.cus.cms.crawler.data;
 import com.cus.cms.crawler.mogodb.MongodbHelper;
 import com.cus.cms.crawler.util.DateTimeUtil;
 import com.mongodb.client.MongoCollection;
-import com.mysql.fabric.xmlrpc.base.Data;
 import org.bson.Document;
 
 import java.util.concurrent.TimeUnit;

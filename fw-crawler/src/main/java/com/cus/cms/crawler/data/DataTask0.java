@@ -12,13 +12,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Andy
  */
-public class DataTask3 extends BaseTask {
+public class DataTask0 extends BaseTask {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataTask3.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataTask0.class);
 
-    public DataTask3(String url, String prxUrl) {
+    public DataTask0(String url, String prxUrl) {
         super(url, prxUrl);
     }
+
 
     @Override
     public void run() {
@@ -29,21 +30,12 @@ public class DataTask3 extends BaseTask {
             public void run() {
                 try {
                     storeService.saveNav(url, 1);
-                    List<String> oneUrls = DataService.getOneNavList(url, prxUrl);
                     List<String> twoUrls = new ArrayList<String>();
-                    for (String str : oneUrls) {
-                        logger.info("oneUrls =====>>> {}", str);
-                        twoUrls.addAll(DataService.getTwoNavList(str, prxUrl));
-
-                    }
-                    for (String str : twoUrls) {
-                        logger.info("twoUrls =====>>> {}", str);
-                        List<String> threeUrls = DataService.getTwoNavList(str, prxUrl);
-                        storeService.batchSaveNav(threeUrls, 2);
-                        moreUrls.addAll(threeUrls);
-                    }
+                    twoUrls.add(url);
+                    storeService.batchSaveNav(twoUrls, 2);
+                    moreUrls.addAll(twoUrls);
                 } catch (Exception e) {
-                    logger.error("DataTask3 error, ", e);
+                    logger.error("DataTask1 error, ", e);
                 }
             }
         });
@@ -73,15 +65,17 @@ public class DataTask3 extends BaseTask {
     private static ExecutorService executorService;
 
     public static void main(String[] args) throws Exception {
-        executorService = Executors.newFixedThreadPool(4);
+        executorService = Executors.newFixedThreadPool(8);
 
-        String[] urls3 = {
-                "http://www.diyifanwen.com/jiaoan"
+        String[] urls0 = {
+                "http://www.diyifanwen.com/tool/xingyeduilian",
+                "http://www.diyifanwen.com/jiaoan/gaozhongxinxijishujiaoan",
         };
 
-//        for (String nav : urls3) {
-//            executorService.execute(new DataTask3(nav,"http://www.diyifanwen.com"));
-//            TimeUnit.MINUTES.sleep(10);
+
+//        for (String nav : urls0) {
+//            executorService.execute(new DataTask0(nav, "http://www.diyifanwen.com"));
+////            TimeUnit.MINUTES.sleep(10);
 //        }
 
     }

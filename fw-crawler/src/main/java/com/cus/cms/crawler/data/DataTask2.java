@@ -76,4 +76,26 @@ public class DataTask2 extends BaseTask {
             });
         }
     }
+
+    private static ExecutorService executorService;
+
+    public static void main(String[] args) throws Exception {
+        executorService = Executors.newFixedThreadPool(8);
+
+        String[] urls2 = {
+                "http://www.diyifanwen.com/sms",
+                "http://www.diyifanwen.com/sicijianshang",
+                "http://www.diyifanwen.com/zuowen",
+                "http://www.diyifanwen.com/fanwen",
+                "http://www.diyifanwen.com/guoxue"
+        };
+
+
+//        for (String nav : urls2) {
+//            executorService.execute(new DataTask2(nav,"http://www.diyifanwen.com"));
+//            TimeUnit.MINUTES.sleep(10);
+//        }
+//
+
+    }
 }
