@@ -29,9 +29,7 @@ public class DataTask2 extends BaseTask {
             @Override
             public void run() {
                 try {
-                    storeService.saveNav(url, 1);
                     List<String> oneUrls = DataService.getOneNavList(url, prxUrl);
-                    storeService.batchSaveNav(oneUrls, 3);
                     for (String str : oneUrls) {
                         List<String> twoUrls = null;
                         logger.info("oneUrls =====>>> {}", str);
@@ -46,7 +44,6 @@ public class DataTask2 extends BaseTask {
                         }else {
                             twoUrls = DataService.getTwoNavList(str, prxUrl);
                         }
-                        storeService.batchSaveNav(twoUrls, 2);
                         moreUrls.addAll(twoUrls);
                     }
 

@@ -99,7 +99,7 @@ public class DataService {
                     return list;
                 }
                 String lastIndex = pels.first().attr("abs:href");
-                if (lastIndex == null) {
+                if (lastIndex == null || "".equals(lastIndex)) {
                     logger.error("CutPage get last no href Attributter , url is: " + url);
                     // 解析出列表页的所有链接
                     getPageList(url, prxUrl, list);

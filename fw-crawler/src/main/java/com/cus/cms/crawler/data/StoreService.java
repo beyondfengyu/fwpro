@@ -46,6 +46,18 @@ public class StoreService {
         }
     }
 
+    public void saveErrorUrl(String url, int siteType){
+        try {
+            MongoCollection<Document> dirCollection = MongodbHelper.getDbCollection("fwpro", "fw_error");
+            Document doc = new Document("url", url)
+                    .append("site_type", siteType)
+                    .append("status", 1);
+            dirCollection.insertOne(doc);
+        } catch (Exception e) {
+            logger.error("saveErrorUrl error , url is " + url, e);
+        }
+    }
+
     public void saveNav(String url, int dirType) {
         if (url == null || "".equals(url)) {
             return;

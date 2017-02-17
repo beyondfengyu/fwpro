@@ -30,9 +30,7 @@ public class DataTask1 extends BaseTask {
             @Override
             public void run() {
                 try {
-                    storeService.saveNav(url, 1);
                     List<String> twoUrls = DataService.getTwoNavList(url, prxUrl);
-                    storeService.batchSaveNav(twoUrls, 2);
                     moreUrls.addAll(twoUrls);
                 } catch (Exception e) {
                     logger.error("DataTask1 error, ", e);

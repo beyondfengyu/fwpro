@@ -1,5 +1,9 @@
 package com.cus.cms.crawler.data;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +33,8 @@ public class DataTask0 extends BaseTask {
             @Override
             public void run() {
                 try {
-                    storeService.saveNav(url, 1);
                     List<String> twoUrls = new ArrayList<String>();
                     twoUrls.add(url);
-                    storeService.batchSaveNav(twoUrls, 2);
                     moreUrls.addAll(twoUrls);
                 } catch (Exception e) {
                     logger.error("DataTask1 error, ", e);
@@ -66,17 +68,27 @@ public class DataTask0 extends BaseTask {
 
     public static void main(String[] args) throws Exception {
         executorService = Executors.newFixedThreadPool(8);
+//        String url = "http://www.diyifanwen.com/zuowen";
+//        Document doc = Jsoup.connect(url).get();
+//        Element ZwClassDl = doc.getElementsByClass("ZwClassDl").first();
+//        Elements als = ZwClassDl.getElementsByTag("a");
+//
+//        List<String> urls0 = new ArrayList<>();
+//        for (Element el : als) {
+//            urls0.add(el.attr("abs:href"));
+//            System.out.println("url : " + el.attr("abs:href"));
+//        }
 
         String[] urls0 = {
                 "http://www.diyifanwen.com/tool/xingyeduilian",
                 "http://www.diyifanwen.com/jiaoan/gaozhongxinxijishujiaoan",
         };
 
-
-//        for (String nav : urls0) {
-//            executorService.execute(new DataTask0(nav, "http://www.diyifanwen.com"));
-////            TimeUnit.MINUTES.sleep(10);
-//        }
+//
+        for (String nav : urls0) {
+            executorService.execute(new DataTask0(nav, "http://www.diyifanwen.com"));
+//            TimeUnit.MINUTES.sleep(10);
+        }
 
     }
 }
