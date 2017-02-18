@@ -1,7 +1,7 @@
-package com.cus.cms.common.util;
+package com.cus.cms.admin.util;
 /**
  *
- * @author Andy   2014-12-2
+ * @author laochunyu   2014-12-2
  * @description 允许的图片的类型
  * 
  */

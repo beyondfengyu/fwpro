@@ -1,4 +1,4 @@
-package com.cus.cms.common.util;
+package com.cus.cms.admin.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -10,10 +10,10 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author Andy   2014-9-4
+ * @author laochunyu   2014-9-4
  * @description 文件帮助类
  */
-public class FileUtil {
+public class AdminUtil {
 
     private static AtomicLong genrator = new AtomicLong();
 

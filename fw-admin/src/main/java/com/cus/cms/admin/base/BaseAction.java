@@ -36,7 +36,7 @@ public class BaseAction {
 		return MvcContext.getResponse();
 	}
 
-	protected int getAdminId(){
+	protected long getAdminId(){
 		try {
 			Object tmp = getAttribute(AdminConstants.HAS_LOGIN, Scope.SESSION);
 			if(tmp!=null) {
@@ -44,7 +44,7 @@ public class BaseAction {
 				if (!BlankUtil.isBlank(isLogin) && "true".equalsIgnoreCase(isLogin)) {
 					String adminId = getAttribute(AdminConstants.ADMIN_ID, Scope.SESSION).toString();
 					if (!BlankUtil.isBlank(adminId)) {
-						return Integer.valueOf(adminId);
+						return Long.valueOf(adminId);
 					}
 				}
 			}
