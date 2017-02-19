@@ -1,7 +1,6 @@
 package com.cus.cms.dao.system;
 
-import com.cus.cms.common.model.AdminRefRoleMenu;
-import com.cus.cms.common.model.AdminRefUserRole;
+import com.cus.cms.common.model.system.AdminRefRoleMenu;
 import com.mongodb.WriteResult;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -25,7 +24,7 @@ public class AdminRefRoleMenuDao extends BasicDAO<AdminRefRoleMenu,ObjectId> {
 
     public List<AdminRefRoleMenu> queryMenuByRole(Long roleId) {
         Query<AdminRefRoleMenu> query = createQuery();
-        query.field("roleId").equals(roleId);
+        query.field("roleId").equal(roleId);
         return find(query).asList();
     }
 
@@ -37,7 +36,7 @@ public class AdminRefRoleMenuDao extends BasicDAO<AdminRefRoleMenu,ObjectId> {
 
     public WriteResult delRefByRoleId(Long roleId) {
         Query<AdminRefRoleMenu> query = createQuery();
-        query.field("roleId").equals(roleId);
+        query.field("roleId").equal(roleId);
         return deleteByQuery(query);
     }
 }

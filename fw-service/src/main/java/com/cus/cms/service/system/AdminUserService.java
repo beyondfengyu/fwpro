@@ -1,9 +1,9 @@
 package com.cus.cms.service.system;
 
 
-import com.cus.cms.common.model.AdminRefUserRole;
-import com.cus.cms.common.model.AdminRole;
-import com.cus.cms.common.model.AdminUser;
+import com.cus.cms.common.model.system.AdminRefUserRole;
+import com.cus.cms.common.model.system.AdminRole;
+import com.cus.cms.common.model.system.AdminUser;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.util.DateTimeUtil;
 import com.cus.cms.common.util.EncrytcUtil;
@@ -23,7 +23,7 @@ import java.util.List;
  * @description
  */
 @Service("adminUserService")
-public class AdminUserService extends BaseService<AdminUser> {
+public class AdminUserService extends BaseService {
     @Autowired
     private AdminUserDao adminUserDao;
     @Autowired
@@ -41,11 +41,12 @@ public class AdminUserService extends BaseService<AdminUser> {
             adminUserDao.updateByKey(adminUser);
         }else{
             adminUser.setPassword(EncrytcUtil.encodeMD5String("123"));
-            adminUser.setStatus(true);
+            adminUser.setStatus(1);
             adminUser.setCreateTime(DateTimeUtil.getCurrentTime());
             if(BlankUtil.isBlank(adminUser.getHeadImg())) {
                 adminUser.setHeadImg("/static/AdminLTE/img/user2-160x160.jpg");
             }
+            adminUser.setId(snowFlake.nextId());
             adminUserDao.save(adminUser);
         }
         return 1;

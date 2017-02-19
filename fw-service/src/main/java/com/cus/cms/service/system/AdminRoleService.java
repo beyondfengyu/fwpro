@@ -1,9 +1,9 @@
 package com.cus.cms.service.system;
 
 
-import com.cus.cms.common.model.AdminRefRoleMenu;
-import com.cus.cms.common.model.AdminRefUserRole;
-import com.cus.cms.common.model.AdminRole;
+import com.cus.cms.common.model.system.AdminRefRoleMenu;
+import com.cus.cms.common.model.system.AdminRefUserRole;
+import com.cus.cms.common.model.system.AdminRole;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.dao.system.AdminRefRoleMenuDao;
 import com.cus.cms.dao.system.AdminRefUserRoleDao;
@@ -20,7 +20,7 @@ import java.util.List;
  * @description
  */
 @Service("adminRoleService")
-public class AdminRoleService extends BaseService<AdminRole> {
+public class AdminRoleService extends BaseService {
     @Autowired
     private AdminRoleDao adminRoleDao;
     @Autowired
@@ -78,6 +78,9 @@ public class AdminRoleService extends BaseService<AdminRole> {
 
     public int saveUserRole(Long adminId , Long[] roles){
         WriteResult result = adminRefUserRoleDao.delRefByUid(adminId);
+        if (roles == null) {
+            return 1;
+        }
         for(Long roleId: roles){
             AdminRefUserRole adminRefUserRole = new AdminRefUserRole();
             adminRefUserRole.setAdminId(adminId);
@@ -94,6 +97,9 @@ public class AdminRoleService extends BaseService<AdminRole> {
 
     public int saveRoleMenu(Long roleId , Long[] menus){
         WriteResult result = adminRefRoleMenuDao.delRefByRoleId(roleId);
+        if (menus == null) {
+            return 1;
+        }
         for(Long menuId: menus){
             AdminRefRoleMenu adminRefRoleMenu = new AdminRefRoleMenu();
             adminRefRoleMenu.setMenuId(menuId);

@@ -4,9 +4,9 @@ package com.cus.cms.admin.action.system;
 import com.alibaba.fastjson.JSONObject;
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.common.constants.ErrorCode;
-import com.cus.cms.common.model.AdminMenu;
-import com.cus.cms.common.model.AdminRefRoleMenu;
-import com.cus.cms.common.model.AdminRole;
+import com.cus.cms.common.model.system.AdminMenu;
+import com.cus.cms.common.model.system.AdminRefRoleMenu;
+import com.cus.cms.common.model.system.AdminRole;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.service.system.AdminMenuService;
 import com.cus.cms.service.system.AdminRoleService;
@@ -125,7 +125,7 @@ public class RoleAction extends BaseAction {
     @ResponseBody
     public void saveRoleMenu(Long roleId, Long[] menus) {
         int result = -1;
-        if (roleId != null && menus != null) {
+        if (roleId != null) {
             try {
                 result = adminRoleService.saveRoleMenu(roleId, menus);
             } catch (Exception e) {

@@ -80,7 +80,7 @@ public class StartMain {
                     continue;
                 }
 
-                org.bson.Document dirdoc = new org.bson.Document("dir_name", navMap.get(url))
+                org.bson.Document dirdoc = new org.bson.Document("dir_name", txt)
                         .append("dir_code", code)
                         .append("dir_type", 2)
                         .append("last_code", lastcode)

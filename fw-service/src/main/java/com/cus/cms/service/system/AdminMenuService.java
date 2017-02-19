@@ -2,15 +2,14 @@ package com.cus.cms.service.system;
 
 
 
-import com.cus.cms.common.model.AdminMenu;
-import com.cus.cms.common.model.AdminRefRoleMenu;
-import com.cus.cms.common.model.AdminRefUserRole;
+import com.cus.cms.common.model.system.AdminMenu;
+import com.cus.cms.common.model.system.AdminRefRoleMenu;
+import com.cus.cms.common.model.system.AdminRefUserRole;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.util.DateTimeUtil;
 import com.cus.cms.dao.system.AdminMenuDao;
 import com.cus.cms.dao.system.AdminRefRoleMenuDao;
 import com.cus.cms.dao.system.AdminRefUserRoleDao;
-import com.cus.cms.dao.system.AdminRoleDao;
 import com.cus.cms.service.BaseService;
 import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
@@ -18,15 +17,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Andy  2015/12/26.
  * @description
  */
 @Service("adminMenuService")
-public class AdminMenuService extends BaseService<AdminMenu> {
+public class AdminMenuService extends BaseService {
 
     @Autowired
     private AdminRefUserRoleDao adminRefUserRoleDao;
@@ -68,7 +68,7 @@ public class AdminMenuService extends BaseService<AdminMenu> {
         }else{
             adminMenu.setCreateTime(DateTimeUtil.getCurrentTime());
             adminMenu.setId(snowFlake.nextId());
-            adminMenu.setStatus(true);
+            adminMenu.setStatus(1);
             adminMenuDao.save(adminMenu, WriteConcern.ACKNOWLEDGED);
         }
         return 1;

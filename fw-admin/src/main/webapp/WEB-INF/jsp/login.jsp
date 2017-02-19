@@ -47,7 +47,7 @@
     <div class="main_box">
         <div class="login_box">
             <div class="login_logo">
-                <img src="/static/images/logo.png"/><span style="font-size:20px;position: absolute;bottom:2px;color:#222;">&nbsp;&nbsp;高&nbsp;迈&nbsp;文&nbsp;控&nbsp;系&nbsp;统</span>
+                <img src="/static/images/logo.png"/><span style="font-size:20px;position: absolute;bottom:2px;color:#222;">&nbsp;&nbsp;优&nbsp;文&nbsp;后&nbsp;台&nbsp;管&nbsp;理&nbsp;系&nbsp;统</span>
             </div>
 
             <div class="login_form">
@@ -92,9 +92,9 @@
 <!-- Bootstrap core JavaScript -->
 <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="/static/js/jquery/supersized.3.2.7.min.js"></script>
-<script src="/static/js/supersized-init.js"></script>
-<script src="/static/js/jquery/jquery.md5.js"></script>
+<script src="/static/plugins/supersized/supersized.3.2.7.min.js"></script>
+<script src="/static/plugins/supersized/supersized-init.js"></script>
+<script src="/static/plugins/jQuery/jquery.md5.js"></script>
 <script type="text/javascript">
     var iframeHasLoginPage = true;	//为避免登录页面嵌套在iframe中而定义
     var timeForIframe = new Date().getTime();

@@ -2,7 +2,7 @@ package com.cus.cms.admin.action.system;
 
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.common.constants.AdminConstants;
-import com.cus.cms.common.model.AdminUser;
+import com.cus.cms.common.model.system.AdminUser;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.util.StringUtil;
 import com.cus.cms.service.system.AdminUserService;

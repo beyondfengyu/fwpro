@@ -1,7 +1,6 @@
 package com.cus.cms.dao.system;
 
-import com.cus.cms.common.model.AdminMenu;
-import com.cus.cms.common.model.AdminRefRoleMenu;
+import com.cus.cms.common.model.system.AdminMenu;
 import com.cus.cms.common.util.BlankUtil;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
@@ -37,15 +36,15 @@ public class AdminMenuDao extends BasicDAO<AdminMenu, Long> {
 
     public List<AdminMenu> queryParentMenus() {
         Query<AdminMenu> query = createQuery();
-        query.field("parent").equals(0);
-        query.field("status").equals(1);
+        query.field("parentId").equal(0);
+        query.field("status").equal(1);
         query.order("-showorder");
         return query.asList();
     }
 
     public UpdateResults updateByKey(AdminMenu adminMenu) {
         Query<AdminMenu> query = createQuery();
-        query.field("id").equals(adminMenu.getId());
+        query.field("id").equal(adminMenu.getId());
         UpdateOperations<AdminMenu> updateOp = createUpdateOperations();
         updateOp.set("name", adminMenu.getName())
                 .set("parentId", adminMenu.getParentId())

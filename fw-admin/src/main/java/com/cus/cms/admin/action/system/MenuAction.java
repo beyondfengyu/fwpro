@@ -1,10 +1,9 @@
 package com.cus.cms.admin.action.system;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.common.constants.ErrorCode;
-import com.cus.cms.common.model.AdminMenu;
+import com.cus.cms.common.model.system.AdminMenu;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.wrapper.Combobox;
 import com.cus.cms.service.system.AdminMenuService;
@@ -70,11 +69,11 @@ public class MenuAction extends BaseAction {
         JSONObject jsonObject = new JSONObject();
         List<AdminMenu> list = adminMenuService.getMenuWithPage(searchText, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
-            Map<Long,String> parentMap = getParentNames();
-            for(AdminMenu adminMenu: list){
-                if(adminMenu.getParentId()==0){
+            Map<Long, String> parentMap = getParentNames();
+            for (AdminMenu adminMenu : list) {
+                if (adminMenu.getParentId() == 0) {
                     adminMenu.setParentName("#");
-                }else{
+                } else {
                     adminMenu.setParentName(parentMap.get(adminMenu.getParentId()));
                 }
             }
@@ -163,13 +162,11 @@ public class MenuAction extends BaseAction {
         return boxs;
     }
 
-    private Map<Long,String> getParentNames(){
-        Map<Long,String> map = new HashMap<Long,String>();
+    private Map<Long, String> getParentNames() {
+        Map<Long, String> map = new HashMap<Long, String>();
         List<AdminMenu> list = adminMenuService.getParentMenus();
-        for(AdminMenu adminMenu: list){
-            if(adminMenu.getParentId()==0){
-                map.put(adminMenu.getId(),adminMenu.getName());
-            }
+        for (AdminMenu adminMenu : list) {
+            map.put(adminMenu.getId(), adminMenu.getName());
         }
         return map;
     }

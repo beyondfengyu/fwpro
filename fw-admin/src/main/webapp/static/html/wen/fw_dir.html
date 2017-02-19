@@ -4,39 +4,42 @@
 </section>
 <!-- .content -->
 <section class="content">
-    <div id="menuTable"></div>
+    <div id="dirTable"></div>
     <div id="toolbar">
         <button id="add" class="btn btn-default">
             <i class="glyphicon glyphicon-plus"></i>增加
         </button>
     </div>
-    <div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal fade" id="dirModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalLabel">菜单信息</h4>
+                    <h4 class="modal-title" id="modalLabel">频道信息</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" id="menuForm">
+                    <form class="form-horizontal" id="dirForm">
                         <input type="hidden" name="id" id="id"/>
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">名称:</label>
+                            <label for="dirName" class="col-sm-2 control-label">名称:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control validate[required]" name="name" id="name">
+                                <input type="text" class="form-control validate[required]" name="dirName" id="dirName">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">路径:</label>
+                            <label for="dirCode" class="col-sm-2 control-label">编码:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control validate[required]" name="path" id="path">
+                                <input type="text" class="form-control validate[required]" name="dirCode" id="dirCode">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="icon" class="col-sm-2 control-label">图标:</label>
+                            <label for="dirType" class="col-sm-2 control-label">类型:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="icon" id="icon">
+                                <select name="dirType" id="dirType" data-btn-class="btn-warning">
+                                    <option value="1">一级栏目</option>
+                                    <option value="2">二级栏目</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -56,16 +59,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="parentId" class="col-sm-2 control-label">父级:</label>
+                            <label for="lastCode" class="col-sm-2 control-label">上级:</label>
                             <div class="col-sm-10">
-                                <select name="parentId" id="parentId" data-btn-class="btn-warning">
+                                <select name="lastCode" id="lastCode" data-btn-class="btn-warning">
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description" class="col-sm-2 control-label">描述:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" name="description" id="description"></textarea>
                             </div>
                         </div>
                     </form>
@@ -92,26 +89,29 @@
 <script>
     var isEdit = false;
     $(function () {
-        $('#menuTable').bootstrapTable('destroy');
-        $('#menuTable').bootstrapTable({
+        $('#dirTable').bootstrapTable('destroy');
+        $('#dirTable').bootstrapTable({
             columns: [
-                {field: 'id', title: 'ID', align: 'center', width: '5%'},
-                {field: 'name', title: '名字', align: 'center', width: '10%'},
-                {field: 'parentId', title: '父ID', align: 'center', visible: false},
-                {field: 'parentName', title: '父级', align: 'center', width: '10%'},
-                {field: 'path', title: '路径', width: '15%'},
-                {field: 'icon', title: '图标', width: '10%'},
+                {field: 'id', title: 'ID', align: 'center', visible: false},
+                {field: 'dirName', title: '名字', align: 'center', width: '10%'},
+                {field: 'dirCode', title: '编码', align: 'center', width: '10%'},
+                {field: 'lastCode', title: '父ID', align: 'center', visible: false},
+                {field: 'lastName', title: '上级', align: 'center', width: '10%'},
+                {field: 'dirType', title: '类型', width: '10%', formatter: function (val, row, index) {
+                    if (val == 1) {
+                        return '一级栏目';
+                    }
+                    return '二级栏目';
+                }},
                 {field: 'showorder', title: '排序', align: 'center', width: '5%'},
                 {
                     field: 'status', title: '状态', align: 'center', width: '5%', formatter: function (val, row, index) {
-                    if (val == true) {
-                        return '有效';
+                        if (val == 1) {
+                            return '有效';
+                        }
+                        return '无效';
                     }
-                    return '无效';
-                }
                 },
-                {field: 'createTime', title: '创建时间', align: 'center', width: '10%'},
-                {field: 'description', title: '描述', align: 'center', width: '10%'},
                 {
                     field: 'id',
                     title: '操作',
@@ -132,21 +132,16 @@
             pagination: true,
             pageList: [1, 10, 20, 30, 50],
             search: true,
-            sidePagination: "server", //表示服务端请求
+            sidePagination: "client", //表示服务端请求
             //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
-                var param = {
-                    pageNumber: params.pageNumber,
-                    pageSize: params.pageSize,
-                    searchText: params.searchText
-                };
-                return param;
+                return params;
             },
             uniqueId: 'id',
             toolbar: '#toolbar',
-            url: '/admin/queryMenus.action',
+            url: '/wen/getFwDirs.action',
             onLoadSuccess: function () {  //加载成功时执行
                 console.log("load success");
             },
@@ -158,24 +153,24 @@
 
         // 构建下拉组合框
         ComboboxHelper.build(null, '#status');
-        ComboboxHelper.build('/admin/getParentMenus.action', '#parentId', "0");
-        $("#menuForm").validationEngine();
+        ComboboxHelper.build('/wen/getParentFwDirs.action', '#lastCode', "0");
+        $("#dirForm").validationEngine();
 
 
-        $("#menuTable").on("click", '.opt-remove', function () {
+        $("#dirTable").on("click", '.opt-remove', function () {
             var id = $(this).attr("data-id");  
-            if (confirm("你确认删除【" + TableHelper.getRowByUniqueId("#menuTable", id).name + "】吗?" +
+            if (confirm("你确认删除【" + TableHelper.getRowByUniqueId("#dirTable", id).dirName + "】吗?" +
                             "\r\n删除后再也不能找回，请谨慎操作！")) {
                 $.ajax({
                     type: 'post',
-                    url: "/admin/delMenus.action",
+                    url: "/wen/delFwDirs.action",
                     data: {'id': id},
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
                             $("#tipMsg").text("删除成功");
                             $("#tipModal").modal('show');
-                            TableHelper.doRefresh("#menuTable");
+                            TableHelper.doRefresh("#dirTable");
                         } else {
                             $("#tipMsg").text("删除失败，错误码：" + json.result);
                             $("#tipModal").modal('show');
@@ -185,28 +180,27 @@
             }
         });
 
-        $("#menuTable").on("click", '.opt-edit', function () {
+        $("#dirTable").on("click", '.opt-edit', function () {
             var id = $(this).attr("data-id");
             isEdit = true;
             $.ajax({
                 type: "post",
-                url: "/admin/getMenuById.action",
-                data: {id: id},
+                url: "/wen/getFwDirById.action",
+                data: {'id': id},
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
                         $("#id").val(json.entity.id);
-                        $("#name").val(json.entity.name);
-                        $("#path").val(json.entity.path);
-                        $("#icon").val(json.entity.icon);
+                        $("#dirCode").val(json.entity.dirCode);
+                        $("#dirName").val(json.entity.dirName);
+                        $("#dirType").val(json.entity.dirType);
                         $("#showorder").val(json.entity.showorder);
-                        $("#description").val(json.entity.description);
-                        ComboboxHelper.setDef("#parentId", json.entity.parentId);
+                        ComboboxHelper.setDef("#lastCode", json.entity.lastCode);
                         ComboboxHelper.setDef("#status", json.entity.status ? "1" : "0");
                         // 打开编辑弹窗
-                        $("#menuModal").modal('show');
+                        $("#dirModal").modal('show');
                     } else {
-                        $("#tipMsg").text("获取菜单信息出错");
+                        $("#tipMsg").text("获取信息出错");
                         $("#tipModal").modal('show');
                     }
                 }
@@ -215,26 +209,25 @@
 
         $("#add").click(function () {
             // 打开编辑弹窗
-            $("#menuModal").modal('show');
+            $("#dirModal").modal('show');
             isEdit = false;
-            $("#menuForm")[0].reset();
-            $("#id").val(0);
+            $("#dirForm")[0].reset();
         });
 
 
         $("#save").click(function () {
-            if ($("#menuForm").validationEngine('validate')) {
+            if ($("#dirForm").validationEngine('validate')) {
                 $.ajax({
                     type: "post",
-                    url: "/admin/saveMenu.action?isEdit=" + isEdit,
-                    data: $('#menuForm').serialize(),
+                    url: "/wen/saveFwDir.action?isEdit=" + isEdit,
+                    data: $('#dirForm').serialize(),
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
-                            $("#menuModal").modal('hide');
+                            $("#dirModal").modal('hide');
                             $("#tipMsg").text("保存成功");
                             $("#tipModal").modal('show');
-                            TableHelper.doRefresh("#menuTable");
+                            TableHelper.doRefresh("#dirTable");
                         } else {
                             $("#tipMsg").text("保存失败，错误码：" + json.result);
                             $("#tipModal").modal('show');

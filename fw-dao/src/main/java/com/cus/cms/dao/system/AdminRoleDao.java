@@ -1,6 +1,6 @@
 package com.cus.cms.dao.system;
 
-import com.cus.cms.common.model.AdminRole;
+import com.cus.cms.common.model.system.AdminRole;
 import com.cus.cms.common.util.BlankUtil;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
@@ -27,7 +27,7 @@ public class AdminRoleDao extends BasicDAO<AdminRole, Long> {
 
     public UpdateResults updateByKey(AdminRole adminRole) {
         Query<AdminRole> query = createQuery();
-        query.field("id").equals(adminRole.getId());
+        query.field("id").equal(adminRole.getId());
         UpdateOperations<AdminRole> updateOp = createUpdateOperations();
         updateOp.set("name", adminRole.getName())
                 .set("description", adminRole.getDescription());

@@ -26,8 +26,8 @@
 	</bean>
 
 	<bean id="mongoClientOption" class="com.cus.cms.common.mongo.MongoClientOption">
-		<property name="minConnectionsPerHost" value="50" />
-		<property name="maxConnectionsPerHost" value="200" />
+		<property name="minConnectionsPerHost" value="20" />
+		<property name="maxConnectionsPerHost" value="100" />
 		<property name="threadsAllowedToBlockForConnectionMultiplier" value="20" />
 		<property name="maxWaitTime" value="12000" />
 		<property name="maxConnectionIdleTime" value="0" />

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Andy   2015-11-10
  * @description
  */
-public abstract class BaseService<T> {
+public abstract class BaseService{
 
     protected final Logger m_logger = LoggerFactory.getLogger(getClass());
     @Autowired

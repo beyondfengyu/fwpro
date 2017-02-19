@@ -1,6 +1,6 @@
 package com.cus.cms.dao.system;
 
-import com.cus.cms.common.model.AdminUser;
+import com.cus.cms.common.model.system.AdminUser;
 import com.cus.cms.common.util.BlankUtil;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
@@ -10,7 +10,6 @@ import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class AdminUserDao extends BasicDAO<AdminUser, Long>{
 
     public UpdateResults updateByKey(AdminUser adminUser) {
         Query<AdminUser> query = createQuery();
-        query.field("id").equals(adminUser.getId());
+        query.field("id").equal(adminUser.getId());
         UpdateOperations<AdminUser> updateOp = createUpdateOperations();
         updateOp.set("username", adminUser.getUsername())
                 .set("optUid", adminUser.getOptUid())
@@ -41,8 +40,8 @@ public class AdminUserDao extends BasicDAO<AdminUser, Long>{
 
     public AdminUser queryByAccount(String account, String password) {
         Query<AdminUser> query = createQuery();
-        query.field("username").equals(account);
-        query.field("password").equals(password);
+        query.field("username").equal(account);
+        query.field("password").equal(password);
         return findOne(query);
     }
 
@@ -71,13 +70,13 @@ public class AdminUserDao extends BasicDAO<AdminUser, Long>{
 
     public AdminUser queryUserByName(String name) {
         Query<AdminUser> query = createQuery();
-        query.field("username").equals(name);
+        query.field("username").equal(name);
         return findOne(query);
     }
 
     public UpdateResults updateLastLogin(AdminUser adminUser) {
         Query<AdminUser> query = createQuery();
-        query.field("id").equals(adminUser.getId());
+        query.field("id").equal(adminUser.getId());
         UpdateOperations<AdminUser> updateOp = createUpdateOperations();
         updateOp.set("lastLogin", adminUser.getLastLogin());
         return updateFirst(query, updateOp);

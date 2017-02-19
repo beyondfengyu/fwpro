@@ -1,6 +1,6 @@
 package com.cus.cms.dao.system;
 
-import com.cus.cms.common.model.AdminRefUserRole;
+import com.cus.cms.common.model.system.AdminRefUserRole;
 import com.mongodb.WriteResult;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -25,13 +25,13 @@ public class AdminRefUserRoleDao extends BasicDAO<AdminRefUserRole, ObjectId> {
 
     public List<AdminRefUserRole> queryRefRoleByAdminId(Long adminId) {
         Query<AdminRefUserRole> query = createQuery();
-        query.field("adminId").equals(adminId);
+        query.field("adminId").equal(adminId);
         return find(query).asList();
     }
 
     public WriteResult delRefByUid(Long uid) {
         Query<AdminRefUserRole> query = createQuery();
-        query.field("adminId").equals(uid);
+        query.field("adminId").equal(uid);
         return deleteByQuery(query);
     }
 

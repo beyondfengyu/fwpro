@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.admin.util.ImageType;
 import com.cus.cms.common.constants.ErrorCode;
-import com.cus.cms.common.model.AdminRefUserRole;
-import com.cus.cms.common.model.AdminRole;
-import com.cus.cms.common.model.AdminUser;
+import com.cus.cms.common.model.system.AdminRefUserRole;
+import com.cus.cms.common.model.system.AdminRole;
+import com.cus.cms.common.model.system.AdminUser;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.admin.util.AdminUtil;
 import com.cus.cms.common.util.DateTimeUtil;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -172,7 +171,7 @@ public class UserAction extends BaseAction {
     @ResponseBody
     public void saveUserRole(Long uid, Long[] roles) {
         int result = -1;
-        if (uid != null && roles != null) {
+        if (uid != null) {
             try {
                 result = adminRoleService.saveUserRole(uid, roles);
             } catch (Exception e) {
