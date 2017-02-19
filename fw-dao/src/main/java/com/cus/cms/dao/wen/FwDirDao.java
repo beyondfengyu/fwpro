@@ -5,6 +5,7 @@ import com.cus.cms.common.util.BlankUtil;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
+import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
@@ -18,19 +19,19 @@ import java.util.List;
  * @author Andy
  */
 @Repository
-public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
+public class FwDirDao extends BasicDAO<FwDir, String> {
 
     @Autowired
     protected FwDirDao(@Qualifier("datastore")Datastore ds) {
         super(ds);
     }
 
-    public List<FwDir> queryFwDirs(String name) {
+    public List<FwDir> queryFwDirs(String name, int offset, int size) {
         Query<FwDir> query = createQuery();
         if (!BlankUtil.isBlank(name)) {
             query.field(FwDir.FW_NAME).contains(name);
         }
-        return query.asList();
+        return query.asList(new FindOptions().skip(offset).limit(size));
     }
 
     public List<FwDir> queryParentFwDirs() {

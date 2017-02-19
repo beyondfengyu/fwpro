@@ -13,11 +13,11 @@ public class FwDir implements Serializable {
     @Transient
     public static final String ID = "_id";
     @Transient
-    public static final String FW_CODE = "fw_code";
+    public static final String FW_CODE = "dir_code";
     @Transient
-    public static final String FW_NAME = "fw_name";
+    public static final String FW_NAME = "dir_name";
     @Transient
-    public static final String FW_TYPE = "fw_type";
+    public static final String FW_TYPE = "dir_type";
     @Transient
     public static final String LAST_CODE = "last_code";
     @Transient
@@ -26,7 +26,7 @@ public class FwDir implements Serializable {
     public static final String SHOW_ORDER = "show_order";
 
     @Id
-    private ObjectId id;
+    private String id;
 
     @Property(value = FW_CODE)
     private String dirCode;
@@ -49,11 +49,11 @@ public class FwDir implements Serializable {
     @Transient
     private String lastName;
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

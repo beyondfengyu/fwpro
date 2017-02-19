@@ -92,8 +92,8 @@
         $('#dirTable').bootstrapTable('destroy');
         $('#dirTable').bootstrapTable({
             columns: [
-                {field: 'id', title: 'ID', align: 'center', visible: false},
-                {field: 'dirName', title: '名字', align: 'center', width: '10%'},
+                {field: 'id', title: 'ID', align: 'center',  width: '10%'},
+                {field: 'dirName', title: '名称', align: 'center', width: '10%'},
                 {field: 'dirCode', title: '编码', align: 'center', width: '10%'},
                 {field: 'lastCode', title: '父ID', align: 'center', visible: false},
                 {field: 'lastName', title: '上级', align: 'center', width: '10%'},
@@ -132,12 +132,17 @@
             pagination: true,
             pageList: [1, 10, 20, 30, 50],
             search: true,
-            sidePagination: "client", //表示服务端请求
+            sidePagination: "server", //表示服务端请求
             //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
-                return params;
+                var param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    searchText: params.searchText
+                };
+                return param;
             },
             uniqueId: 'id',
             toolbar: '#toolbar',

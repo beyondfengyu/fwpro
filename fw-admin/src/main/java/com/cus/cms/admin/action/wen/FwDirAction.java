@@ -36,7 +36,7 @@ public class FwDirAction extends BaseAction {
     @ResponseBody
     public void getFwDirs(String searchText) {
         JSONObject jsonObject = new JSONObject();
-        List<FwDir> list = fwDirService.getFwDirs(searchText);
+        List<FwDir> list = fwDirService.getFwDirs(searchText, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
             Map<String, String> parentMap = getLastNames();
             for (FwDir fwDir : list) {
