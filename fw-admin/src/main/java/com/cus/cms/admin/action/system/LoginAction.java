@@ -27,44 +27,47 @@ public class LoginAction extends BaseAction {
     private AdminUserService adminUserService;
 
     @RequestMapping("/login/door")
-    public String toLogin(){
+    public String toLogin() {
         return "/login";
     }
+
     /**
      * 后台登录验证
-     * @param account 账号，可以是用户名、邮箱
+     *
+     * @param account  账号，可以是用户名、邮箱
      * @param password MD5加密后的密码
      * @param authCode MD5加密后的验证码
      */
     @RequestMapping("/login/login")
     @ResponseBody
-    public void login(String account,String password,String authCode) throws UnsupportedEncodingException {
-        int result = validateData(account,password,authCode);
-        if(result==0){ //参数验证成功
+    public void login(String account, String password, String authCode) throws UnsupportedEncodingException {
+        int result = validateData(account, password, authCode);
+        if (result == 0) { //参数验证成功
             AdminUser adminUser = adminUserService.getAdminUser(account, password);
-            if(adminUser!=null){
-                setAttribute(AdminConstants.HAS_LOGIN,"true", com.cus.cms.common.frame.mvc.Scope.SESSION);
-                setAttribute(AdminConstants.ADMIN_ID,adminUser.getId(), com.cus.cms.common.frame.mvc.Scope.SESSION);
-                setAttribute(AdminConstants.ADMIN_NAME,adminUser.getUsername(),com.cus.cms.common.frame.mvc.Scope.SESSION);
-                Cookie cookie1 = new Cookie(AdminConstants.HAS_LOGIN,"true");
-                Cookie cookie2 = new Cookie(AdminConstants.ADMIN_ID,adminUser.getId()+"");
-                Cookie cookie3 = new Cookie(AdminConstants.ADMIN_NAME, URLEncoder.encode(adminUser.getUsername(),"utf-8"));
+            if (adminUser != null) {
+                setAttribute(AdminConstants.HAS_LOGIN, "true", com.cus.cms.common.frame.mvc.Scope.SESSION);
+                setAttribute(AdminConstants.ADMIN_ID, adminUser.getId(), com.cus.cms.common.frame.mvc.Scope.SESSION);
+                setAttribute(AdminConstants.ADMIN_NAME, adminUser.getUsername(), com.cus.cms.common.frame.mvc.Scope.SESSION);
+                Cookie cookie1 = new Cookie(AdminConstants.HAS_LOGIN, "true");
+                Cookie cookie2 = new Cookie(AdminConstants.ADMIN_ID, adminUser.getId() + "");
+                Cookie cookie3 = new Cookie(AdminConstants.ADMIN_NAME, URLEncoder.encode(adminUser.getUsername(), "utf-8"));
                 getResponse().addCookie(cookie1);
                 getResponse().addCookie(cookie2);
                 getResponse().addCookie(cookie3);
                 adminUserService.updateLastLogin(adminUser.getId());
-                m_logger.info("amdin ["+adminUser.getUsername()+"] login system.");
+                m_logger.info("amdin [" + adminUser.getUsername() + "] login system.");
                 writeJson(true, adminUser.getId() + "@" + adminUser.getUsername());
                 return;
-            }else{
+            } else {
                 result = 404;  //不存在
             }
         }
-        writeJson(false,result+"");
+        writeJson(false, result + "");
     }
 
     /**
      * 退出登录
+     *
      * @param model
      * @return
      */
@@ -72,8 +75,8 @@ public class LoginAction extends BaseAction {
     public String logout(Model model) {
 //        Subject currentUser = SecurityUtils.getSubject();  //获取当前用户认证信息
 //        currentUser.logout();
-        if(getAdminId()>0) {
-            m_logger.info("admin logout, name is:"+getAttribute(AdminConstants.ADMIN_NAME, com.cus.cms.common.frame.mvc.Scope.SESSION));
+        if (getAdminId() > 0) {
+            m_logger.info("admin logout, name is:" + getAttribute(AdminConstants.ADMIN_NAME, com.cus.cms.common.frame.mvc.Scope.SESSION));
             getRequest().getSession().removeAttribute(AdminConstants.HAS_LOGIN);
             getRequest().getSession().removeAttribute(AdminConstants.ADMIN_ID);
             getRequest().getSession().removeAttribute(AdminConstants.ADMIN_NAME);
@@ -96,14 +99,16 @@ public class LoginAction extends BaseAction {
     //////////////////////////////////////////////////////////////////////////////////
     //////// 自定义函数
     //////////////////////////////////////////////////////////////////////////////////
+
     /**
      * 检验表单数据是否正确
+     *
      * @param account
      * @param password
      * @param authCode
      */
-    private int validateData(String account,String password,String authCode) {
-        account = StringUtil.filterSubstring(StringUtil.filterSpecial(account),50);
+    private int validateData(String account, String password, String authCode) {
+        account = StringUtil.filterSubstring(StringUtil.filterSpecial(account), 50);
         password = StringUtil.filterSpecial(password);
         authCode = StringUtil.filterSpecial(authCode);
         if (!BlankUtil.isBlank(account)) {

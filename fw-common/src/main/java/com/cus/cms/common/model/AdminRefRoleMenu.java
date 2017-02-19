@@ -1,9 +1,7 @@
 package com.cus.cms.common.model;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Field;
-import org.mongodb.morphia.annotations.Index;
-import org.mongodb.morphia.annotations.Indexes;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.*;
 
 
 @Entity(value="admin_ref_role_menu",noClassnameStored=true)
@@ -12,9 +10,20 @@ import org.mongodb.morphia.annotations.Indexes;
 )
 public class AdminRefRoleMenu {
 
+    @Id
+    private ObjectId id;
+
     private long roleId;
 
     private long menuId;
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     /**
      * @return role_id

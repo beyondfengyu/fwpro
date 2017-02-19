@@ -72,15 +72,15 @@ public class AdminRoleService extends BaseService<AdminRole> {
         return adminRoleDao.find().asList();
     }
 
-    public List<AdminRefUserRole> getRoleByUid(Long uid){
-        return adminRefUserRoleDao.queryRoleByUid(uid);
+    public List<AdminRefUserRole> getRoleByAdminId(Long adminId){
+        return adminRefUserRoleDao.queryRefRoleByAdminId(adminId);
     }
 
-    public int saveUserRole(Long uid , Long[] roles){
-        WriteResult result = adminRefUserRoleDao.delRefByUid(uid);
+    public int saveUserRole(Long adminId , Long[] roles){
+        WriteResult result = adminRefUserRoleDao.delRefByUid(adminId);
         for(Long roleId: roles){
             AdminRefUserRole adminRefUserRole = new AdminRefUserRole();
-            adminRefUserRole.setAdminId(uid);
+            adminRefUserRole.setAdminId(adminId);
             adminRefUserRole.setRoleId(roleId);
             adminRefUserRoleDao.save(adminRefUserRole);
         }
@@ -92,9 +92,9 @@ public class AdminRoleService extends BaseService<AdminRole> {
         return adminRefRoleMenuDao.queryMenuByRole(roleId);
     }
 
-    public int saveRoleMenu(Long roleId , Integer[] menus){
+    public int saveRoleMenu(Long roleId , Long[] menus){
         WriteResult result = adminRefRoleMenuDao.delRefByRoleId(roleId);
-        for(Integer menuId: menus){
+        for(Long menuId: menus){
             AdminRefRoleMenu adminRefRoleMenu = new AdminRefRoleMenu();
             adminRefRoleMenu.setMenuId(menuId);
             adminRefRoleMenu.setRoleId(roleId);

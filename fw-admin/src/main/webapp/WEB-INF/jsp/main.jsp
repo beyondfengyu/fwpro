@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>系统</title>
+    <title>优文后台管理系统  |  WOLFBE.COM</title>
     <%@include file="common/style.html" %>
     <!-- script code -->
     <%@include file="common/script.html"%>

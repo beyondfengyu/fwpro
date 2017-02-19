@@ -12,7 +12,7 @@
     <description>spring mvc configuration</description>
 
     <!-- auto scan package name -->
-    <context:component-scan base-package="com.cus.cms.action" ></context:component-scan>
+    <context:component-scan base-package="com.cus.cms.admin.action" ></context:component-scan>
    <!--  <context:component-scan base-package="cn.cus.cms.module.**,cn.cus.cms.website.**,
     	cn.cus.cms.common.tags.**" /> -->
 

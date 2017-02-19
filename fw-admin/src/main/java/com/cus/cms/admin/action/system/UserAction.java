@@ -9,6 +9,7 @@ import com.cus.cms.common.model.AdminRole;
 import com.cus.cms.common.model.AdminUser;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.admin.util.AdminUtil;
+import com.cus.cms.common.util.DateTimeUtil;
 import com.cus.cms.service.system.AdminRoleService;
 import com.cus.cms.service.system.AdminUserService;
 import net.coobird.thumbnailator.Thumbnails;
@@ -56,7 +57,7 @@ public class UserAction extends BaseAction {
 
     @RequestMapping("/admin/getUser")
     @ResponseBody
-    public void getAdminUser(Integer uid) {
+    public void getAdminUser(Long uid) {
         JSONObject jsonObject = new JSONObject();
         if (!BlankUtil.isBlank(uid)) {
             try {
@@ -78,7 +79,7 @@ public class UserAction extends BaseAction {
         if (adminUser != null) {
             try {
                 adminUser.setOptUid(getAdminId());
-                adminUser.setUpdateTime(new Date());
+                adminUser.setUpdateTime(DateTimeUtil.getCurrentTime());
                 result = adminUserService.saveUser(adminUser, isEdit);
             } catch (Exception e) {
                 m_logger.warn("saveUser fail,cause by " + e.getMessage(), e);
@@ -149,7 +150,7 @@ public class UserAction extends BaseAction {
         JSONObject jsonObject = new JSONObject();
         if (uid != null && uid > 0) {
             List<AdminRole> list = adminRoleService.getAllRole();
-            List<AdminRefUserRole> refUserRoles = adminRoleService.getRoleByUid(uid);
+            List<AdminRefUserRole> refUserRoles = adminRoleService.getRoleByAdminId(uid);
             for (AdminRole adminRole : list) {
                 adminRole.setRole(false);
                 for (AdminRefUserRole adminRefUserRole : refUserRoles) {

@@ -123,7 +123,7 @@ public class RoleAction extends BaseAction {
 
     @RequestMapping("/admin/saveRoleMenu")
     @ResponseBody
-    public void saveRoleMenu(Long roleId, Integer[] menus) {
+    public void saveRoleMenu(Long roleId, Long[] menus) {
         int result = -1;
         if (roleId != null && menus != null) {
             try {

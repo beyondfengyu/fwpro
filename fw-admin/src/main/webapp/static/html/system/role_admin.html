@@ -159,7 +159,7 @@
                 $.ajax({
                     type: 'post',
                     url: "/admin/delRoles.action",
-                    data: {'ids': id},
+                    data: {'id': id},
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
@@ -231,7 +231,7 @@
         $('#add').click(function () {
             isEdit = false;
             $("#roleForm")[0].reset();
-            $("#id").val(null);
+            $("#id").val(0);
             $("#roleModal").modal('show');
         });
 

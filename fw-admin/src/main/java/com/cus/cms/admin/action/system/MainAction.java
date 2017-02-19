@@ -1,9 +1,10 @@
 package com.cus.cms.admin.action.system;
 
-import com.cus.wob.base.BaseAction;
-import com.cus.wob.model.AdminRole;
-import com.cus.wob.model.AdminUser;
-import com.cus.wob.service.admin.AdminUserService;
+
+import com.cus.cms.admin.base.BaseAction;
+import com.cus.cms.common.model.AdminRole;
+import com.cus.cms.common.model.AdminUser;
+import com.cus.cms.service.system.AdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,7 @@ public class MainAction extends BaseAction {
     @RequestMapping("/admin/main")
     public String toMain(Model model) {
         try {
-            int adminId = getAdminId();
+            long adminId = getAdminId();
             AdminUser adminUser = adminUserService.getAdminUserById(adminId);
             if (adminUser != null) {
                 adminUser.setPassword("");

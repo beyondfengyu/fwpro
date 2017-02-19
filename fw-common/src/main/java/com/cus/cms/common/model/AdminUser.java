@@ -3,7 +3,6 @@ package com.cus.cms.common.model;
 
 import org.mongodb.morphia.annotations.*;
 
-import java.util.Date;
 
 @Entity(value="admin_user",noClassnameStored=true)
 @Indexes(
@@ -32,7 +31,7 @@ public class AdminUser {
     /**
      * 上次登录时间
      */
-    private Date lastLogin;
+    private String lastLogin;
 
     private String email;
 
@@ -40,9 +39,9 @@ public class AdminUser {
 
     private String qq;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 
     @Transient
     private String roleStr;
@@ -152,7 +151,7 @@ public class AdminUser {
      *
      * @return last_login - 上次登录时间
      */
-    public Date getLastLogin() {
+    public String getLastLogin() {
         return lastLogin;
     }
 
@@ -161,7 +160,7 @@ public class AdminUser {
      *
      * @param lastLogin 上次登录时间
      */
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
 
@@ -210,28 +209,28 @@ public class AdminUser {
     /**
      * @return create_time
      */
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
     /**
      * @param createTime
      */
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
     /**
      * @return update_time
      */
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
     /**
      * @param updateTime
      */
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 }

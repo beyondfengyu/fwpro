@@ -8,11 +8,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="高迈文控系统">
+    <meta name="description" content="优文后台管理系统  |  WOLFBE.COM">
     <meta name="author" content="锋宇">
     <link rel="icon" href="/favicon.ico">
 
-    <title>系统</title>
+    <title>优文后台管理系统  |  WOLFBE.COM</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">

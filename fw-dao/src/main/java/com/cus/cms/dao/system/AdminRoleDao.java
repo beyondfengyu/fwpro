@@ -8,15 +8,20 @@ import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author Andy
  */
+@Repository
 public class AdminRoleDao extends BasicDAO<AdminRole, Long> {
 
-    protected AdminRoleDao(Datastore ds) {
+    @Autowired
+    protected AdminRoleDao(@Qualifier("datastore")Datastore ds) {
         super(ds);
     }
 
@@ -38,7 +43,10 @@ public class AdminRoleDao extends BasicDAO<AdminRole, Long> {
         return query.asList(new FindOptions().skip(offset).limit(size));
     }
 
-    public AdminRole queryRoleByAdminId(long adminId) {
-        return findOne("adminId", adminId);
+
+    public AdminRole queryRoleByRoleIds(List<Long> roleIds) {
+        Query<AdminRole> query = createQuery();
+        query.field("id").in(roleIds);
+        return findOne(query);
     }
 }

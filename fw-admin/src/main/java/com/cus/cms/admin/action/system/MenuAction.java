@@ -86,7 +86,7 @@ public class MenuAction extends BaseAction {
 
     @RequestMapping("/admin/getMenuById")
     @ResponseBody
-    public void getMenuById(Integer id) {
+    public void getMenuById(Long id) {
         JSONObject jsonObject = new JSONObject();
         if (id != null) {
             AdminMenu adminMenu = adminMenuService.getAdminMenuById(id);

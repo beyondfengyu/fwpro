@@ -3,7 +3,7 @@
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0.0
     </div>
-    <strong>Copyright &copy; 2016 <a href="http://wolfbe.com">高迈工作室</a>.</strong> All rights
+    <strong>Copyright &copy; 2016 <a href="http://wolfbe.com">锋宇工作室</a>.</strong> All rights
     reserved.
 </footer>
 

@@ -6,15 +6,20 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author Andy
  */
+@Repository
 public class AdminRefUserRoleDao extends BasicDAO<AdminRefUserRole, ObjectId> {
 
-    protected AdminRefUserRoleDao(Datastore ds) {
+    @Autowired
+    protected AdminRefUserRoleDao(@Qualifier("datastore")Datastore ds) {
         super(ds);
     }
 
@@ -29,4 +34,5 @@ public class AdminRefUserRoleDao extends BasicDAO<AdminRefUserRole, ObjectId> {
         query.field("adminId").equals(uid);
         return deleteByQuery(query);
     }
+
 }

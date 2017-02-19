@@ -20,6 +20,8 @@ public class TestMain {
     private static String url = "http://www.diyifanwen.com/";
 
     public static void main(String[] args) throws IOException {
+//        Long id = 11457314586497024;
+
         Document doc = Jsoup.connect(url).timeout(5000).get();
         Elements aels = doc.getElementsByTag("a");
         List<String> list = new ArrayList<>();

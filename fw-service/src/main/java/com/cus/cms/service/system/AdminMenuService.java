@@ -6,6 +6,7 @@ import com.cus.cms.common.model.AdminMenu;
 import com.cus.cms.common.model.AdminRefRoleMenu;
 import com.cus.cms.common.model.AdminRefUserRole;
 import com.cus.cms.common.util.BlankUtil;
+import com.cus.cms.common.util.DateTimeUtil;
 import com.cus.cms.dao.system.AdminMenuDao;
 import com.cus.cms.dao.system.AdminRefRoleMenuDao;
 import com.cus.cms.dao.system.AdminRefUserRoleDao;
@@ -28,11 +29,12 @@ import java.util.List;
 public class AdminMenuService extends BaseService<AdminMenu> {
 
     @Autowired
-    private AdminMenuDao adminMenuDao;
-    @Autowired
     private AdminRefUserRoleDao adminRefUserRoleDao;
     @Autowired
     private AdminRefRoleMenuDao adminRefRoleMenuDao;
+    @Autowired
+    private AdminMenuDao adminMenuDao;
+
 
     /**
      * 分页查询菜单
@@ -64,7 +66,7 @@ public class AdminMenuService extends BaseService<AdminMenu> {
         if(isEdit) {
             adminMenuDao.updateByKey(adminMenu);
         }else{
-            adminMenu.setCreateTime(new Date());
+            adminMenu.setCreateTime(DateTimeUtil.getCurrentTime());
             adminMenu.setId(snowFlake.nextId());
             adminMenu.setStatus(true);
             adminMenuDao.save(adminMenu, WriteConcern.ACKNOWLEDGED);
@@ -97,7 +99,7 @@ public class AdminMenuService extends BaseService<AdminMenu> {
 
         List<Long> menuIds = new ArrayList<>();
         for (AdminRefRoleMenu refRoleMenu : refMenus) {
-            roleIds.add(refRoleMenu.getMenuId());
+            menuIds.add(refRoleMenu.getMenuId());
         }
         return adminMenuDao.queryMenuByRoles(menuIds);
     }

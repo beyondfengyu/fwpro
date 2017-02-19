@@ -1,10 +1,13 @@
 package com.cus.cms.service.system;
 
 
+import com.cus.cms.common.model.AdminRefUserRole;
 import com.cus.cms.common.model.AdminRole;
 import com.cus.cms.common.model.AdminUser;
 import com.cus.cms.common.util.BlankUtil;
+import com.cus.cms.common.util.DateTimeUtil;
 import com.cus.cms.common.util.EncrytcUtil;
+import com.cus.cms.dao.system.AdminRefUserRoleDao;
 import com.cus.cms.dao.system.AdminRoleDao;
 import com.cus.cms.dao.system.AdminUserDao;
 import com.cus.cms.service.BaseService;
@@ -12,7 +15,7 @@ import org.mongodb.morphia.query.UpdateResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +28,8 @@ public class AdminUserService extends BaseService<AdminUser> {
     private AdminUserDao adminUserDao;
     @Autowired
     private AdminRoleDao adminRoleDao;
+    @Autowired
+    private AdminRefUserRoleDao adminRefUserRoleDao;
 
     /**
      * 插入管理员信息
@@ -37,7 +42,7 @@ public class AdminUserService extends BaseService<AdminUser> {
         }else{
             adminUser.setPassword(EncrytcUtil.encodeMD5String("123"));
             adminUser.setStatus(true);
-            adminUser.setCreateTime(new Date());
+            adminUser.setCreateTime(DateTimeUtil.getCurrentTime());
             if(BlankUtil.isBlank(adminUser.getHeadImg())) {
                 adminUser.setHeadImg("/static/AdminLTE/img/user2-160x160.jpg");
             }
@@ -60,8 +65,17 @@ public class AdminUserService extends BaseService<AdminUser> {
         return adminUserDao.get(adminId);
     }
 
-    public AdminRole ingetRoleByAdminId(long uid){
-        return adminRoleDao.queryRoleByUid(uid);
+    public AdminRole getRoleByAdminId(long adminId){
+        List<AdminRefUserRole> refRoles = adminRefUserRoleDao.queryRefRoleByAdminId(adminId);
+        if (refRoles == null || refRoles.size() < 1) {
+            return null;
+        }
+
+        List<Long> roleIds = new ArrayList<>();
+        for (AdminRefUserRole refUserRole : refRoles) {
+            roleIds.add(refUserRole.getRoleId());
+        }
+        return adminRoleDao.queryRoleByRoleIds(roleIds);
     }
 
     public List<AdminUser> getUserWithPage(String text, int page, int size){
@@ -88,7 +102,7 @@ public class AdminUserService extends BaseService<AdminUser> {
     public int updateLastLogin(long adminId){
         AdminUser param = new AdminUser();
         param.setId(adminId);
-        param.setLastLogin(new Date());
+        param.setLastLogin(DateTimeUtil.getCurrentTime());
         UpdateResults updateResults= adminUserDao.updateLastLogin(param);
         return 1;
     }

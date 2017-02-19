@@ -1,12 +1,10 @@
 package com.cus.cms.common.model;
 
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
 import java.io.Serializable;
-import java.util.Date;
 
-@Entity(value="admin_menu",noClassnameStored=true)
+@Entity(value = "admin_menu", noClassnameStored = true)
 @Indexes(
         @Index(fields = {@Field("name"), @Field("parentId")})
 )
@@ -26,7 +24,7 @@ public class AdminMenu implements Serializable {
     private String icon;
     private Boolean status;
     private Integer showorder;
-    private Date createTime;
+    private String createTime;
     private String description;
 
     @Transient
@@ -151,14 +149,14 @@ public class AdminMenu implements Serializable {
     /**
      * @return CREATE_TIME
      */
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
     /**
      * @param createTime
      */
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

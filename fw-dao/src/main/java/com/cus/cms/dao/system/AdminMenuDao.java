@@ -9,16 +9,20 @@ import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author Andy
  */
+@Repository
 public class AdminMenuDao extends BasicDAO<AdminMenu, Long> {
 
-
-    protected AdminMenuDao(Datastore ds) {
+    @Autowired
+    protected AdminMenuDao(@Qualifier("datastore")Datastore ds) {
         super(ds);
     }
 
@@ -55,7 +59,7 @@ public class AdminMenuDao extends BasicDAO<AdminMenu, Long> {
 
     public List<AdminMenu> queryMenuByRoles(List<Long> menuIds) {
         Query<AdminMenu> query = createQuery();
-        query.filter("id in ", menuIds);
+        query.field("id").in(menuIds);
         return find(query).asList();
     }
 }

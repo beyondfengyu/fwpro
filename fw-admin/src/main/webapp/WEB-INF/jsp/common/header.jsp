@@ -4,9 +4,9 @@
     <!-- Logo -->
     <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b>LT</span>
+        <span class="logo-mini"><b>YW</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>高迈ISO文控管理</b>系统</span>
+        <span class="logo-lg"><b>优文管理</b>系统</span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -267,15 +267,15 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="${adminUser.headImg}" class="img-circle" alt="${adminUser.username}">
-            </div>
-            <div class="pull-left info">
-                <p>${adminUser.username}</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-            </div>
-        </div>
+        <%--<div class="user-panel">--%>
+            <%--<div class="pull-left image">--%>
+                <%--<img src="${adminUser.headImg}" class="img-circle" alt="${adminUser.username}">--%>
+            <%--</div>--%>
+            <%--<div class="pull-left info">--%>
+                <%--<p>${adminUser.username}</p>--%>
+                <%--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>--%>
+            <%--</div>--%>
+        <%--</div>--%>
         <!-- search form -->
         <!--<form action="#" method="get" class="sidebar-form">
             <div class="input-group">

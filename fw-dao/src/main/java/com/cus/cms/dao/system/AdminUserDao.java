@@ -8,15 +8,21 @@ import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author Andy
  */
+@Repository
 public class AdminUserDao extends BasicDAO<AdminUser, Long>{
 
-    protected AdminUserDao(Datastore ds) {
+    @Autowired
+    protected AdminUserDao(@Qualifier("datastore")Datastore ds) {
         super(ds);
     }
 
@@ -29,8 +35,7 @@ public class AdminUserDao extends BasicDAO<AdminUser, Long>{
                 .set("email", adminUser.getEmail())
                 .set("headImg", adminUser.getHeadImg())
                 .set("phone", adminUser.getPhone())
-                .set("qq", adminUser.getQq())
-                .set("status", adminUser.getStatus());
+                .set("qq", adminUser.getQq());
         return updateFirst(query, updateOp);
     }
 

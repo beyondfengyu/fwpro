@@ -128,15 +128,15 @@
             columns: [
                 {field: 'id', title: 'ID', align: 'center', width: '3%'},
                 {field: 'optUid', title: '类型', align: 'center', visible: false},
-                {field: 'username', title: '姓名', align: 'center', width: '5%'},
+                {field: 'username', title: '姓名', align: 'center', width: '8%'},
                 {field: 'password', title: '密码', align: 'center', width: '5%', visible: false},
                 {
                     field: 'headImg',
                     title: '头像',
                     align: 'center',
-                    width: '10%',
+                    width: '8%',
                     formatter: function (val, row, index) {
-                        return "<img src='" + val + "' width='80' height='50'>";
+                        return "<img src='" + val + "' width='70' height='50'>";
                     }
                 },
                 {
@@ -152,41 +152,20 @@
                         }
                     }
                 },
-                {field: 'email', title: '邮箱', align: 'center', width: '10%'},
-                {field: 'phone', title: '手机号码', align: 'center', width: '10%'},
-                {field: 'qq', title: 'QQ', align: 'center', width: '10%'},
+                {field: 'email', title: '邮箱', align: 'center', width: '8%'},
+                {field: 'phone', title: '手机号码', align: 'center', width: '8%'},
+                {field: 'qq', title: 'QQ', align: 'center', width: '8%'},
                 {
                     field: 'lastLogin',
                     title: '最后登录',
                     align: 'center',
-                    width: '10%',
-                    formatter: function (val, row, index) {
-                        var newDate = new Date();
-                        newDate.setTime(val);
-                        return newDate.toLocaleString();
-                    }
-                },
-                {
-                    field: 'createTime',
-                    title: '创建时间',
-                    align: 'center',
-                    width: '10%',
-                    formatter: function (val, row, index) {
-                        var newDate = new Date();
-                        newDate.setTime(val);
-                        return newDate.toLocaleString();
-                    }
+                    width: '8%'
                 },
                 {
                     field: 'updateTime',
                     title: '更新时间',
                     align: 'center',
-                    width: '10%',
-                    formatter: function (val, row, index) {
-                        var newDate = new Date();
-                        newDate.setTime(val);
-                        return newDate.toLocaleString();
-                    }
+                    width: '10%'
                 },
                 {
                     field: 'id',
@@ -240,7 +219,7 @@
                 $.ajax({
                     type: 'post',
                     url: "/admin/delUsers.action",
-                    data: {'ids': id},
+                    data: {'id': id},
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
@@ -317,7 +296,8 @@
             $("#imgUrl").attr("src", "");
             isEdit = false;
             $("#userForm")[0].reset();
-            $("#id").val(null);
+            $("#id").val(0);
+            $("#optUid").val(0);
             $("#userModal").modal('show');
         });
 
