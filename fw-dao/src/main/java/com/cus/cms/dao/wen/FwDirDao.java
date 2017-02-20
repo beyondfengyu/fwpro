@@ -19,7 +19,7 @@ import java.util.List;
  * @author Andy
  */
 @Repository
-public class FwDirDao extends BasicDAO<FwDir, String> {
+public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
 
     @Autowired
     protected FwDirDao(@Qualifier("datastore")Datastore ds) {
@@ -31,6 +31,7 @@ public class FwDirDao extends BasicDAO<FwDir, String> {
         if (!BlankUtil.isBlank(name)) {
             query.field(FwDir.FW_NAME).contains(name);
         }
+        query.order("-id");
         return query.asList(new FindOptions().skip(offset).limit(size));
     }
 

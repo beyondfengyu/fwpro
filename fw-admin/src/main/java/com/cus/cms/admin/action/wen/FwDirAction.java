@@ -45,6 +45,7 @@ public class FwDirAction extends BaseAction {
                 } else {
                     fwDir.setLastName(parentMap.get(fwDir.getLastCode()));
                 }
+                fwDir.setIdstr(fwDir.getId().toHexString());
             }
             jsonObject.put("total", fwDirService.getFwDirCount(searchText));
         }
@@ -59,6 +60,7 @@ public class FwDirAction extends BaseAction {
         if (id != null) {
             FwDir fwDir = fwDirService.getFwDirById(id);
             if (fwDir != null) {
+                fwDir.setIdstr(fwDir.getId().toHexString());
                 jsonObject.put("entity", fwDir);
             }
         }

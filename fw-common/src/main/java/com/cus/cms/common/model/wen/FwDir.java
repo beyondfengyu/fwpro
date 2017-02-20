@@ -24,9 +24,14 @@ public class FwDir implements Serializable {
     public static final String STATUS = "status";
     @Transient
     public static final String SHOW_ORDER = "show_order";
+    @Transient
+    private  String idstr;
+    @Transient
+    private String lastName;
+
 
     @Id
-    private String id;
+    private ObjectId id;
 
     @Property(value = FW_CODE)
     private String dirCode;
@@ -46,14 +51,20 @@ public class FwDir implements Serializable {
     @Property(value = SHOW_ORDER)
     private Integer showorder;
 
-    @Transient
-    private String lastName;
 
-    public String getId() {
+    public String getIdstr() {
+        return idstr;
+    }
+
+    public void setIdstr(String idstr) {
+        this.idstr = idstr;
+    }
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

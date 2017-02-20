@@ -113,7 +113,7 @@ public class DataService {
                 for (int i = 1; i <= Integer.valueOf(tmp[0]); i++) {
                     String page = url;
                     if (i != 1) {
-                        page = String.format("%sindex_%d.%s", arr[0],i,tmp[1]);
+                        page = String.format("%sindex_%d.%s", arr[0], i, tmp[1]);
                     }
                     // 解析出列表页的所有链接
                     getPageList(page, prxUrl, list);
@@ -129,7 +129,8 @@ public class DataService {
     }
 
     /**
-     *  解析列表页，获取其中所有有效的链接
+     * 解析列表页，获取其中所有有效的链接
+     *
      * @param page
      * @param prxUrl
      * @param list
@@ -157,6 +158,103 @@ public class DataService {
         }
     }
 
+
+    /**
+     * 解析详情页
+     *
+     * @throws IOException
+     */
+    public static String[] getDetailPage(String link) throws IOException {
+        try {
+            Document doc = Jsoup.connect(link).timeout(10000).get();
+            Element ArtContent = doc.getElementById("ArtContent");
+            // 标题
+            Element h1 = ArtContent.getElementsByTag("h1").first();
+            // 分页，若有
+            Element TxtPart = ArtContent.getElementById("TxtPart");
+            if (TxtPart != null) {
+                // 移除文章中的分页标签
+                ArtContent.select("div#TxtPart").first().remove();
+            }
+            // 移除文章中的广告、打印等标签
+            ArtContent.select("h1").first().remove();
+            ArtContent.select("div#Hzh1").remove();
+            ArtContent.select("div#Hzh2").remove();
+            ArtContent.select("div#Print").remove();
+            ArtContent.select("div#Hzh3").remove();
+            ArtContent.select("div#Hzh4").remove();
+            ArtContent.select("div#Hzh4b").remove();
+            ArtContent.select("div#RelateNewsSub").remove();
+            ArtContent.select("div#Hzh5").remove();
+
+            ArtContent.select("div.Hzh1").remove();
+            ArtContent.select("div.Hzh2").remove();
+            ArtContent.select("div.Print").remove();
+            ArtContent.select("div.Hzh3").remove();
+            ArtContent.select("div.Hzh4").remove();
+            ArtContent.select("div.Hzh4b").remove();
+            ArtContent.select("div.RelateNewsSub").remove();
+            ArtContent.select("div.Hzh5").remove();
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(ArtContent.html());
+
+            // 处理内容分页情况ArtCutPage
+            if (TxtPart != null) {
+                Elements PageA = TxtPart.getElementsByTag("a");
+                for (Element el : PageA) {
+                    String aurl = el.attr("abs:href");
+                    buffer.append("======================================").append(getDetailPage2(aurl));
+                }
+            }
+            String[] arr = {h1.text(), buffer.toString()};
+            return arr;
+        } catch (Exception e) {
+            logger.error("getDetailPage parse page error, link is :" + link, e);
+        }
+        return null;
+    }
+
+    /**
+     * 解析详情页分页的情况
+     *
+     * @throws IOException
+     */
+    public static String getDetailPage2(String link) throws IOException {
+        try {
+            Document doc = Jsoup.connect(link).timeout(10000).get();
+            Element ArtContent = doc.getElementById("ArtContent");
+            // 移除文章中的分页标签
+            ArtContent.select("div#ArtCutPage").remove();
+            // 移除文章中的广告、打印等标签
+            ArtContent.select("h1").first().remove();
+            ArtContent.select("div#Print").remove();
+            ArtContent.select("div#Hzh1").remove();
+            ArtContent.select("div#Hzh2").remove();
+            ArtContent.select("div#Hzh3").remove();
+            ArtContent.select("div#Hzh4").remove();
+            ArtContent.select("div#Hzh4b").remove();
+            ArtContent.select("div#RelateNewsSub").remove();
+            ArtContent.select("div#Hzh5").remove();
+
+            // 移除文章中的分页标签
+            ArtContent.select("div.ArtCutPage").remove();
+            // 移除文章中的广告、打印等标签
+            ArtContent.select("div.Print").remove();
+            ArtContent.select("div.Hzh1").remove();
+            ArtContent.select("div.Hzh2").remove();
+            ArtContent.select("div.Hzh3").remove();
+            ArtContent.select("div.Hzh4").remove();
+            ArtContent.select("div.Hzh4b").remove();
+            ArtContent.select("div.RelateNewsSub").remove();
+            ArtContent.select("div.Hzh5").remove();
+
+            return ArtContent.html();
+        } catch (Exception e) {
+            logger.error("getDetailPage2 parse page error, link is :" + link, e);
+        }
+        return "";
+    }
 
 
 }

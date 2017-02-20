@@ -20,7 +20,8 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="dirForm">
-                        <input type="hidden" name="id" id="id"/>
+                        <!--<input type="hidden" name="id" id="id"/>-->
+                        <input type="hidden" name="idstr" id="idstr"/>
                         <div class="form-group">
                             <label for="dirName" class="col-sm-2 control-label">名称:</label>
                             <div class="col-sm-10">
@@ -92,7 +93,8 @@
         $('#dirTable').bootstrapTable('destroy');
         $('#dirTable').bootstrapTable({
             columns: [
-                {field: 'id', title: 'ID', align: 'center',  width: '10%'},
+                {field: 'id', title: 'ID', align: 'center',  width: '10%', visible: false},
+                {field: 'idstr', title: 'ID', align: 'center',  width: '10%'},
                 {field: 'dirName', title: '名称', align: 'center', width: '10%'},
                 {field: 'dirCode', title: '编码', align: 'center', width: '10%'},
                 {field: 'lastCode', title: '父ID', align: 'center', visible: false},
@@ -113,7 +115,7 @@
                     }
                 },
                 {
-                    field: 'id',
+                    field: 'idstr',
                     title: '操作',
                     align: 'center',
                     width: '20%',
@@ -144,7 +146,7 @@
                 };
                 return param;
             },
-            uniqueId: 'id',
+            uniqueId: 'idstr',
             toolbar: '#toolbar',
             url: '/wen/getFwDirs.action',
             onLoadSuccess: function () {  //加载成功时执行
@@ -156,8 +158,6 @@
         });
 
 
-        // 构建下拉组合框
-        ComboboxHelper.build(null, '#status');
         ComboboxHelper.build('/wen/getParentFwDirs.action', '#lastCode', "0");
         $("#dirForm").validationEngine();
 
@@ -195,13 +195,13 @@
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
-                        $("#id").val(json.entity.id);
+                        $("#idstr").val(json.entity.idstr);
                         $("#dirCode").val(json.entity.dirCode);
                         $("#dirName").val(json.entity.dirName);
                         $("#dirType").val(json.entity.dirType);
+                        $("#status").val(json.entity.status);
                         $("#showorder").val(json.entity.showorder);
                         ComboboxHelper.setDef("#lastCode", json.entity.lastCode);
-                        ComboboxHelper.setDef("#status", json.entity.status ? "1" : "0");
                         // 打开编辑弹窗
                         $("#dirModal").modal('show');
                     } else {

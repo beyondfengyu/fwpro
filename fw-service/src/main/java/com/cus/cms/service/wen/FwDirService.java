@@ -50,21 +50,22 @@ public class FwDirService extends BaseService {
 
     public int saveFwDir(FwDir fwDir,boolean isEdit){
         if(isEdit) {
+            fwDir.setId(new ObjectId(fwDir.getIdstr()));
             fwDirDao.updateByKey(fwDir);
         }else{
             fwDir.setStatus(1);
-            fwDir.setId(new ObjectId().toHexString());
+            fwDir.setId(new ObjectId());
             fwDirDao.save(fwDir, WriteConcern.ACKNOWLEDGED);
         }
         return 1;
     }
 
     public FwDir getFwDirById(String id){
-        return fwDirDao.get(id);
+        return fwDirDao.get(new ObjectId(id));
     }
 
     public WriteResult delFwDirById(String id){
-        return fwDirDao.deleteById(id);
+        return fwDirDao.deleteById(new ObjectId(id));
     }
 
 
