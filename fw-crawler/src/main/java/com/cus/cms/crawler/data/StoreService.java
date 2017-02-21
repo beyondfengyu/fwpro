@@ -106,4 +106,17 @@ public class StoreService {
             logger.error("batchSaveNav error", e);
         }
     }
+
+    public static void saveDetailPage(long id, String title, String content, String source){
+        MongoCollection<Document> collPage = MongodbHelper.getDbCollection("fwpro", "fw_page");
+        String[] arr = source.split("/");
+        Document doc = new Document("_id", id)
+                .append("title", title)
+                .append("content", content)
+                .append("source", source)
+                .append("status", 1)
+                .append("onwDir", arr[3])
+                .append("twoDir", arr[4]);
+        collPage.insertOne(doc);
+    }
 }
