@@ -3,6 +3,7 @@ package com.cus.cms.admin.action.wen;
 import com.alibaba.fastjson.JSONObject;
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.common.constants.ErrorCode;
+import com.cus.cms.common.constants.FwStatus;
 import com.cus.cms.common.model.wen.FwPage;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.wrapper.Combobox;
@@ -96,7 +97,7 @@ public class FwPageAction extends BaseAction {
         int result = 1;
         if (!BlankUtil.isBlank(id)) {
             try {
-                fwPageService.delFwPageById(id);
+                fwPageService.updateStatus(id, FwStatus.CHECK_DISCARD);
             } catch (Exception e) {
                 result = ErrorCode.SERVER_ERROR;
                 m_logger.warn("delFwPages fail,cause by " + e.getMessage(), e);
@@ -107,5 +108,21 @@ public class FwPageAction extends BaseAction {
         writeJsonResult(result);
     }
 
+    @RequestMapping("/wen/optFwPages")
+    @ResponseBody
+    public void optFwPages(Long id, int status) {
+        int result = 1;
+        if (!BlankUtil.isBlank(id) && status != -1) {
+            try {
+                fwPageService.updateStatus(id, status);
+            } catch (Exception e) {
+                result = ErrorCode.SERVER_ERROR;
+                m_logger.warn("optFwPages fail,id is: " + id, e);
+            }
+        } else {
+            result = ErrorCode.ERROR_NULL_ARGU;
+        }
+        writeJsonResult(result);
+    }
 }
 

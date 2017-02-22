@@ -9,6 +9,7 @@ import com.cus.cms.service.BaseService;
 import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.query.UpdateResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +65,9 @@ public class FwPageService extends BaseService {
         return fwPageDao.deleteById(id);
     }
 
+    public UpdateResults updateStatus(long id, int status) {
+        return fwPageDao.updateStatusByKey(id, status);
+    }
 
     public List<FwPage> getAllFwPage() {
         return fwPageDao.find().asList();
