@@ -55,4 +55,20 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         updateOp.set(FwPage.STATUS, status);
         return updateFirst(query, updateOp);
     }
+
+    public List<FwPage> queryFwPages(String title, String oneDir, int offset, int size) {
+        Query<FwPage> query = createQuery();
+        if (!BlankUtil.isBlank(title)) {
+            query.field(FwPage.TITLE).contains(title);
+        }
+        query.field(FwPage.ONE_DIR).equal(oneDir).order("-id");
+        return query.asList(new FindOptions().skip(offset).limit(size));
+    }
+
+    public long queryFwPageCount(String title, String oneDir) {
+        Query<FwPage> query = createQuery();
+        query.field(FwPage.TITLE).equal(title)
+                .field(FwPage.ONE_DIR).equal(oneDir);
+        return count(query);
+    }
 }
