@@ -1,6 +1,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 id="itemTitle"></h1>
+    <input type="hidden" name="param" id="param" value="0"/>
 </section>
 <!-- .content -->
 <section class="content">
@@ -9,6 +10,11 @@
         <button id="add" class="btn btn-default">
             <i class="glyphicon glyphicon-plus"></i>增加
         </button>
+        <div class="btn-group" id="dirGrp">
+            <button type="button" class="btn btn-warning status sts-all" data-val="0">全部</button>
+            <button type="button" class="btn btn-default status sts-one" data-val="1">一级栏目</button>
+            <button type="button" class="btn btn-default status sts-two" data-val="2">二级栏目</button>
+        </div>
     </div>
     <div class="modal fade" id="dirModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
         <div class="modal-dialog" role="document">
@@ -142,6 +148,7 @@
                 var param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
+                    dirType: $('#param').val(),
                     searchText: params.searchText
                 };
                 return param;
@@ -213,12 +220,22 @@
         });
 
         $("#add").click(function () {
-            // 打开编辑弹窗
-            $("#dirModal").modal('show');
             isEdit = false;
             $("#dirForm")[0].reset();
+            $("#dirModal").modal('show');
         });
 
+        $('#dirGrp').on('click', '.sts-all',function(){
+            switchStatus('.sts-all');
+        });
+
+        $('#dirGrp').on('click', '.sts-one', function(){
+            switchStatus('.sts-one');
+        });
+
+        $('#dirGrp').on('click', '.sts-two', function(){
+            switchStatus('.sts-two');
+        });
 
         $("#save").click(function () {
             if ($("#dirForm").validationEngine('validate')) {
@@ -245,4 +262,11 @@
 
     });
 
+    function switchStatus(selt){
+        console.log('selt is: ' + selt);
+        $('#dirGrp button').removeClass('btn-warning').addClass('btn-default');
+        $(selt).addClass('btn-warning').removeClass('btn-default');
+        $('#param').val($(selt).attr('data-val'));
+        TableHelper.doRefresh("#dirTable");
+    }
 </script>

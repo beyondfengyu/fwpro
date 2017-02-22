@@ -30,19 +30,16 @@ public class FwPageService extends BaseService {
      * @param title
      * @return
      */
-    public List<FwPage> getFwPages(String title, int page, int size){
+    public List<FwPage> getFwPages(String title, int status, int page, int size){
         if (page < 1 || size < 0) {
             throw new IllegalArgumentException("page cann't less than 1 or size cann't less than 0");
         }
         int offset = (page - 1) * size;
-        return fwPageDao.queryFwPages(title, offset, size);
+        return fwPageDao.queryFwPages(title, status, offset, size);
     }
 
-    public long getFwPageCount(String title) {
-        if (!BlankUtil.isBlank(title)) {
-            return fwPageDao.count(FwPage.TITLE, title);
-        }
-        return fwPageDao.count();
+    public long getFwPageCount(String title, int status) {
+        return fwPageDao.queryFwPageCount(title, status);
     }
 
     public int saveFwPage(FwPage fwPage,boolean isEdit){

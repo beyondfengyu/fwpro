@@ -35,11 +35,11 @@ public class FwPageAction extends BaseAction {
      */
     @RequestMapping("/wen/getFwPages")
     @ResponseBody
-    public void getFwPages(String searchText) {
+    public void getFwPages(String searchText, int status) {
         JSONObject jsonObject = new JSONObject();
-        List<FwPage> list = fwPageService.getFwPages(searchText, getPageNumber(), getPageSize());
+        List<FwPage> list = fwPageService.getFwPages(searchText, status, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
-            jsonObject.put("total", fwPageService.getFwPageCount(searchText));
+            jsonObject.put("total", fwPageService.getFwPageCount(searchText, status));
         }
         jsonObject.put("rows", list);
         writeJson(jsonObject.toJSONString());
@@ -91,28 +91,11 @@ public class FwPageAction extends BaseAction {
         writeJsonResult(result);
     }
 
-    @RequestMapping("/wen/delFwPages")
+    @RequestMapping("/wen/optFwPage")
     @ResponseBody
-    public void delFwPages(Long id) {
+    public void optFwPage(Long id, int status) {
         int result = 1;
         if (!BlankUtil.isBlank(id)) {
-            try {
-                fwPageService.updateStatus(id, FwStatus.CHECK_DISCARD);
-            } catch (Exception e) {
-                result = ErrorCode.SERVER_ERROR;
-                m_logger.warn("delFwPages fail,cause by " + e.getMessage(), e);
-            }
-        } else {
-            result = ErrorCode.ERROR_NULL_ARGU;
-        }
-        writeJsonResult(result);
-    }
-
-    @RequestMapping("/wen/optFwPages")
-    @ResponseBody
-    public void optFwPages(Long id, int status) {
-        int result = 1;
-        if (!BlankUtil.isBlank(id) && status != -1) {
             try {
                 fwPageService.updateStatus(id, status);
             } catch (Exception e) {

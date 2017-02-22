@@ -115,7 +115,7 @@ public class StoreService {
                 .append("content", content)
                 .append("source", source)
                 .append("status", 1)
-                .append("onwDir", arr[3])
+                .append("oneDir", arr[3])
                 .append("twoDir", arr[4]);
         collPage.insertOne(doc);
     }

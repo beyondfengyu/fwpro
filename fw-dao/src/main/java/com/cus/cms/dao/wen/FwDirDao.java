@@ -26,13 +26,27 @@ public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
         super(ds);
     }
 
-    public List<FwDir> queryFwDirs(String name, int offset, int size) {
+    public List<FwDir> queryFwDirs(String name, int dirType, int offset, int size) {
         Query<FwDir> query = createQuery();
         if (!BlankUtil.isBlank(name)) {
             query.field(FwDir.FW_NAME).contains(name);
         }
+        if (dirType > 0) {
+            query.field(FwDir.FW_TYPE).equal(dirType);
+        }
         query.order("-id");
         return query.asList(new FindOptions().skip(offset).limit(size));
+    }
+
+    public long queryFwDirCount(String name, int dirType) {
+        Query<FwDir> query = createQuery();
+        if (!BlankUtil.isBlank(name)) {
+            query.field(FwDir.FW_NAME).contains(name);
+        }
+        if (dirType > 0) {
+            query.field(FwDir.FW_TYPE).equal(dirType);
+        }
+        return count(query);
     }
 
     public List<FwDir> queryParentFwDirs() {

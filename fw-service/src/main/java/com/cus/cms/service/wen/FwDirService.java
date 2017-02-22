@@ -29,19 +29,16 @@ public class FwDirService extends BaseService {
      * @param name
      * @return
      */
-    public List<FwDir> getFwDirs(String name, int page, int size){
+    public List<FwDir> getFwDirs(String name, int dirType, int page, int size){
         if (page < 1 || size < 0) {
             throw new IllegalArgumentException("page cann't less than 1 or size cann't less than 0");
         }
         int offset = (page - 1) * size;
-        return fwDirDao.queryFwDirs(name, offset, size);
+        return fwDirDao.queryFwDirs(name, dirType,  offset, size);
     }
 
-    public long getFwDirCount(String name) {
-        if (!BlankUtil.isBlank(name)) {
-            return fwDirDao.count("name", name);
-        }
-        return fwDirDao.count();
+    public long getFwDirCount(String name, int dirType) {
+        return fwDirDao.queryFwDirCount(name, dirType);
     }
 
     public List<FwDir> getParentFwDirs(){

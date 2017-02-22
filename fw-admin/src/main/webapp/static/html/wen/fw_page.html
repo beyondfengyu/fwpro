@@ -1,7 +1,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 id="itemTitle"></h1>
-    <input type="hidden" id="param" />
+    <input type="hidden" name="param" id="param" />
+    <input type="hidden" name="status" id="statusId" value="2"/>
 </section>
 <!-- .content -->
 <section class="content">
@@ -10,9 +11,17 @@
         <button id="add" class="btn btn-default">
             <i class="glyphicon glyphicon-plus"></i>增加
         </button>
+        <div class="btn-group" id="statusGrp">
+            <button type="button" class="btn btn-default status sts-allsts" data-val="-1">全部</button>
+            <button type="button" class="btn btn-warning status sts-editss" data-val="1">编辑</button>
+            <button type="button" class="btn btn-warning status sts-checks" data-val="2">审核</button>
+            <button type="button" class="btn btn-default status sts-succes" data-val="4">通过</button>
+            <button type="button" class="btn btn-default status sts-refuse" data-val="3">拒绝</button>
+            <button type="button" class="btn btn-default status sts-remove" data-val="0">丢弃</button>
+        </div>
     </div>
     <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" role="document" style="width:980px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -23,36 +32,35 @@
                     <form class="form-horizontal" id="pageForm">
                         <input type="hidden" name="id" id="id"/>
                         <div class="form-group">
-                            <label for="pageName" class="col-sm-2 control-label">标题:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control validate[required]" name="pageName" id="pageName">
+                            <label for="title" class="col-sm-1 control-label">标题:</label>
+                            <div class="col-sm-11">
+                                <input type="text" class="form-control validate[required]" name="title" id="title">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="oneDir" class="col-sm-2 control-label">栏目一:</label>
-                            <div class="col-sm-10">
+                            <label for="oneDir" class="col-sm-1 control-label">一级栏目:</label>
+                            <div class="col-sm-11">
                                 <select name="oneDir" id="oneDir" class="form-control">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="twoDir" class="col-sm-2 control-label">栏目二:</label>
-                            <div class="col-sm-10">
+                            <label for="twoDir" class="col-sm-1 control-label">二级栏目:</label>
+                            <div class="col-sm-11">
                                 <select name="twoDir" id="twoDir" class="form-control">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="source" class="col-sm-2 control-label">源址:</label>
-                            <div class="col-sm-10">
+                            <label for="source" class="col-sm-1 control-label">源址:</label>
+                            <div class="col-sm-11">
                                 <a href="" id="source" target="_blank"></a>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="lastCode" class="col-sm-2 control-label">上级:</label>
-                            <div class="col-sm-10">
-                                <select name="lastCode" id="lastCode" data-btn-class="btn-warning">
-                                </select>
+                            <label for="content" class="col-sm-1 control-label">正文:</label>
+                            <div class="col-sm-11">
+                                <textarea class="from-control" name="content" id="content" style="width:870px; height:600px;"></textarea>
                             </div>
                         </div>
                     </form>
@@ -82,37 +90,34 @@
         $('#pageTable').bootstrapTable('destroy');
         $('#pageTable').bootstrapTable({
             columns: [
-                {field: 'id', title: 'ID', align: 'center',  width: '10%', visible: false},
-                {field: 'idstr', title: 'ID', align: 'center',  width: '10%'},
-                {field: 'pageName', title: '名称', align: 'center', width: '10%'},
-                {field: 'pageCode', title: '编码', align: 'center', width: '10%'},
-                {field: 'lastCode', title: '父ID', align: 'center', visible: false},
-                {field: 'lastName', title: '上级', align: 'center', width: '10%'},
-                {field: 'pageType', title: '类型', width: '10%', formatter: function (val, row, index) {
-                    if (val == 1) {
-                        return '一级栏目';
+                {field: 'id', title: 'ID', align: 'center',  width: '8%'},
+                {field: 'title', title: '标题', align: 'center',  width: '15%'},
+                {field: 'oneDir', title: '一级栏目', align: 'center', width: '10%'},
+                {field: 'twoDir', title: '二级栏目', align: 'center', width: '10%'},
+                {field: 'status', title: '状态', align: 'center',width: '5%', formatter: function (val, row, index) {
+                    switch (val) {
+                        case 0: return "丢弃";
+                        case 1: return "编辑";
+                        case 2: return "审核";
+                        case 3: return "拒绝";
+                        case 4: return "通过";
+                        case 5: return "生成";
                     }
-                    return '二级栏目';
                 }},
-                {field: 'showorder', title: '排序', align: 'center', width: '5%'},
-                {
-                    field: 'status', title: '状态', align: 'center', width: '5%', formatter: function (val, row, index) {
-                        if (val == 1) {
-                            return '有效';
-                        }
-                        return '无效';
+                {field: 'source', title: '源址', align: 'center', width: '5%', formatter: function (val, row, index) {
+                        return '<a href="' + val + '" target="_blank">查看</a>';
                     }
                 },
                 {
-                    field: 'idstr',
+                    field: 'id',
                     title: '操作',
                     align: 'center',
                     width: '20%',
                     formatter: function (val, row, index) {
-                        return '<button class="btn btn-sm btn-success opt-edit" data-id=' + val + '>' +
-                                '<i class="glyphicon glyphicon-edit"></i>编辑</button>' +
-                                '&nbsp;&nbsp;<button class="btn btn-sm btn-danger opt-remove" data-id=' + val +
-                                '><i class="glyphicon glyphicon-remove"></i>删除</button>';
+                        return '<button class="btn btn-sm btn-primary opt-edit"  data-id='+ val +'>编辑</button>&nbsp;&nbsp;'+
+                                '<button class="btn btn-sm btn-success opt-agree" data-id='+ val +'>通过</button>&nbsp;&nbsp;'+
+                                '<button class="btn btn-sm btn-warning opt-refuse" data-id='+val +'>拒绝</button>&nbsp;&nbsp;'+
+                                '<button class="btn btn-sm btn-danger opt-remove" data-id='+ val +'>丢弃</button>';
                     }
                 }
             ],
@@ -131,13 +136,14 @@
                 var param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
+                    status: $('#statusId').val(),
                     searchText: params.searchText
                 };
                 return param;
             },
-            uniqueId: 'idstr',
+            uniqueId: 'id',
             toolbar: '#toolbar',
-            url: '/wen/getFwDirs.action',
+            url: '/wen/getFwPages.action',
             onLoadSuccess: function () {  //加载成功时执行
                 console.log("load success");
             },
@@ -147,31 +153,24 @@
         });
 
 
-        ComboboxHelper.build('/wen/getParentFwDirs.action', '#lastCode', "0");
         $("#pageForm").validationEngine();
-
 
         $("#pageTable").on("click", '.opt-remove', function () {
             var id = $(this).attr("data-id");  
-            if (confirm("你确认删除【" + TableHelper.getRowByUniqueId("#pageTable", id).pageName + "】吗?" +
-                            "\r\n删除后再也不能找回，请谨慎操作！")) {
-                $.ajax({
-                    type: 'post',
-                    url: "/wen/delFwDirs.action",
-                    data: {'id': id},
-                    dataType: "json",
-                    success: function (json) {
-                        if (json.result == 1) {
-                            $("#tipMsg").text("删除成功");
-                            $("#tipModal").modal('show');
-                            TableHelper.doRefresh("#pageTable");
-                        } else {
-                            $("#tipMsg").text("删除失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
-                        }
-                    }
-                });
+            if (confirm("你确认丢弃【" + TableHelper.getRowByUniqueId("#pageTable", id).title + "】吗?" +
+                            "\r\n丢弃后再也不能找回，请谨慎操作！")) {
+                optStatus(id, 0, "丢弃");
             }
+        });
+
+        $("#pageTable").on("click", '.opt-refuse', function () {
+            var id = $(this).attr("data-id");
+            optStatus(id, 3, "拒绝");
+        });
+
+        $("#pageTable").on("click", '.opt-agree', function () {
+            var id = $(this).attr("data-id");
+            optStatus(id, 4, "通过");
         });
 
         $("#pageTable").on("click", '.opt-edit', function () {
@@ -179,19 +178,19 @@
             isEdit = true;
             $.ajax({
                 type: "post",
-                url: "/wen/getFwDirById.action",
+                url: "/wen/getFwPageById.action",
                 data: {'id': id},
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
-                        $("#idstr").val(json.entity.idstr);
-                        $("#pageCode").val(json.entity.pageCode);
-                        $("#pageName").val(json.entity.pageName);
-                        $("#pageType").val(json.entity.pageType);
-                        $("#status").val(json.entity.status);
-                        $("#showorder").val(json.entity.showorder);
-                        ComboboxHelper.setDef("#lastCode", json.entity.lastCode);
-                        // 打开编辑弹窗
+                        $("#id").val(json.entity.id);
+                        $("#title").val(json.entity.title);
+                        $("#oneDir").val(json.entity.oneDir);
+                        $("#twoDir").val(json.entity.twoDir);
+                        $("#source").text(json.entity.source);
+//                        $("#content").text(json.entity.content);
+                        $("#source").attr("href",json.entity.source);
+
                         $("#pageModal").modal('show');
                     } else {
                         $("#tipMsg").text("获取信息出错");
@@ -199,15 +198,39 @@
                     }
                 }
             });
+            return false;
         });
 
         $("#add").click(function () {
-            // 打开编辑弹窗
-            $("#pageModal").modal('show');
             isEdit = false;
             $("#pageForm")[0].reset();
+            $("#pageModal").modal('show');
         });
 
+
+        $('#statusGrp').on('click', '.sts-allsts',function(){
+            switchStatus('.sts-allsts');
+        });
+
+        $('#statusGrp').on('click', '.sts-editss', function(){
+            switchStatus('.sts-editss');
+        });
+
+        $('#statusGrp').on('click', '.sts-checks', function(){
+            switchStatus('.sts-checks');
+        });
+
+        $('#statusGrp').on('click', '.sts-succes', function(){
+            switchStatus('.sts-succes');
+        });
+
+        $('#statusGrp').on('click', '.sts-refuse', function(){
+            switchStatus('.sts-refuse');
+        });
+
+        $('#statusGrp').on('click', '.sts-remove', function(){
+            switchStatus('.sts-remove');
+        });
 
         $("#save").click(function () {
             if ($("#pageForm").validationEngine('validate')) {
@@ -234,4 +257,30 @@
 
     });
 
+    function switchStatus(selt){
+        console.log('selt is: ' + selt);
+        $('#statusGrp button').removeClass('btn-warning').addClass('btn-default');
+        $(selt).addClass('btn-warning').removeClass('btn-default');
+        $('#statusId').val($(selt).attr('data-val'));
+        TableHelper.doRefresh("#pageTable");
+    }
+
+    function optStatus(id, status, action) {
+        $.ajax({
+            type: 'post',
+            url: "/wen/optFwPage.action",
+            data: {'id': id, 'status': status},
+            dataType: "json",
+            success: function (json) {
+                if (json.result == 1) {
+                    $("#tipMsg").text(action + "操作成功");
+                    $("#tipModal").modal('show');
+                    TableHelper.doRefresh("#pageTable");
+                } else {
+                    $("#tipMsg").text(action + "操作失败，错误码：" + json.result);
+                    $("#tipModal").modal('show');
+                }
+            }
+        });
+    }
 </script>

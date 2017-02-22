@@ -34,9 +34,9 @@ public class FwDirAction extends BaseAction {
      */
     @RequestMapping("/wen/getFwDirs")
     @ResponseBody
-    public void getFwDirs(String searchText) {
+    public void getFwDirs(String searchText, int dirType) {
         JSONObject jsonObject = new JSONObject();
-        List<FwDir> list = fwDirService.getFwDirs(searchText, getPageNumber(), getPageSize());
+        List<FwDir> list = fwDirService.getFwDirs(searchText, dirType, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
             Map<String, String> parentMap = getLastNames();
             for (FwDir fwDir : list) {
@@ -47,7 +47,7 @@ public class FwDirAction extends BaseAction {
                 }
                 fwDir.setIdstr(fwDir.getId().toHexString());
             }
-            jsonObject.put("total", fwDirService.getFwDirCount(searchText));
+            jsonObject.put("total", fwDirService.getFwDirCount(searchText, dirType));
         }
         jsonObject.put("rows", list);
         writeJson(jsonObject.toJSONString());
