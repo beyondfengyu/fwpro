@@ -81,6 +81,10 @@
     // 点击菜单栏，在右侧加载菜单的URL
     $(document).on("click",'.treeview-menu a',function(){
         var url = $(this).attr("data-url");
+        var param = "";
+        if(url.indexOf('?') != -1) {
+            param = url.split("?")[1];
+        }
         menuText = $(this).text();
         $.ajax({
             url:url,
@@ -91,6 +95,11 @@
                 if($("#itemTitle")) {
                     $("#itemTitle").text(menuText);
                 }
+                // 设置参数
+                if($('#param')){
+                    $("#param").val(param);
+                }
+
             },
             error: function(data){
                 $("#content").html("<h3>404&nbsp;&nbsp;The page can not found.</h3>"+data);
