@@ -26,10 +26,13 @@ public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
         super(ds);
     }
 
-    public List<FwDir> queryFwDirs(String name, int dirType, int offset, int size) {
+    public List<FwDir> queryFwDirs(String name, String oneDir, int dirType, int offset, int size) {
         Query<FwDir> query = createQuery();
         if (!BlankUtil.isBlank(name)) {
             query.field(FwDir.FW_NAME).contains(name);
+        }
+        if (!BlankUtil.isBlank(name)) {
+            query.field(FwDir.LAST_CODE).equal(oneDir);
         }
         if (dirType > 0) {
             query.field(FwDir.FW_TYPE).equal(dirType);
@@ -38,10 +41,13 @@ public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
         return query.asList(new FindOptions().skip(offset).limit(size));
     }
 
-    public long queryFwDirCount(String name, int dirType) {
+    public long queryFwDirCount(String name, String oneDir, int dirType) {
         Query<FwDir> query = createQuery();
         if (!BlankUtil.isBlank(name)) {
             query.field(FwDir.FW_NAME).contains(name);
+        }
+        if (!BlankUtil.isBlank(name)) {
+            query.field(FwDir.LAST_CODE).equal(oneDir);
         }
         if (dirType > 0) {
             query.field(FwDir.FW_TYPE).equal(dirType);

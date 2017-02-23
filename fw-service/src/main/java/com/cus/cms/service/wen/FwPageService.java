@@ -25,21 +25,26 @@ public class FwPageService extends BaseService {
     @Autowired
     private FwPageDao fwPageDao;
 
-    /**
-     *
-     * @param title
-     * @return
-     */
-    public List<FwPage> getFwPages(String title, int status, int page, int size){
+
+    public long getFwPageCount(String title, String oneDir, int status) {
+        if (BlankUtil.isBlank(oneDir)) {
+            throw new IllegalArgumentException("param oneDir cann't be null");
+        }
+        if (!BlankUtil.isBlank(title)) {
+            return fwPageDao.queryFwPageCount(title, oneDir, status);
+        }
+        return fwPageDao.count(FwPage.ONE_DIR, oneDir);
+    }
+
+    public List<FwPage> getFwPages(String title, String oneDir, int status, int page, int size){
+        if (BlankUtil.isBlank(oneDir)) {
+            throw new IllegalArgumentException("param oneDir cann't be null");
+        }
         if (page < 1 || size < 0) {
             throw new IllegalArgumentException("page cann't less than 1 or size cann't less than 0");
         }
         int offset = (page - 1) * size;
-        return fwPageDao.queryFwPages(title, status, offset, size);
-    }
-
-    public long getFwPageCount(String title, int status) {
-        return fwPageDao.queryFwPageCount(title, status);
+        return fwPageDao.queryFwPages(title, oneDir, status, offset, size);
     }
 
     public int saveFwPage(FwPage fwPage,boolean isEdit){
@@ -70,24 +75,5 @@ public class FwPageService extends BaseService {
         return fwPageDao.find().asList();
     }
 
-    public long getFwPageCount(String title, String oneDir) {
-        if (BlankUtil.isBlank(oneDir)) {
-            throw new IllegalArgumentException("param oneDir cann't be null");
-        }
-        if (!BlankUtil.isBlank(title)) {
-            return fwPageDao.queryFwPageCount(FwPage.TITLE, title);
-        }
-        return fwPageDao.count(FwPage.ONE_DIR, oneDir);
-    }
 
-    public List<FwPage> getFwPages(String title, String oneDir, int page, int size){
-        if (BlankUtil.isBlank(oneDir)) {
-            throw new IllegalArgumentException("param oneDir cann't be null");
-        }
-        if (page < 1 || size < 0) {
-            throw new IllegalArgumentException("page cann't less than 1 or size cann't less than 0");
-        }
-        int offset = (page - 1) * size;
-        return fwPageDao.queryFwPages(title, oneDir, offset, size);
-    }
 }

@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class DetailMain {
 
     private static final Logger logger = LoggerFactory.getLogger(DetailMain.class);
-    private static final int count = 16;
+    private static final int count = 20;
 
     private static Lock lock;
     private static SnowFlake snowFlake;
@@ -35,7 +35,7 @@ public class DetailMain {
     public static void main(String[] args) throws Exception {
         lock = new ReentrantLock();
         snowFlake = new SnowFlake(1, 1);
-        collLink = MongodbHelper.getDbCollection("fwpro", "fw_error");
+        collLink = MongodbHelper.getDbCollection("fwpro", "fw_link");
         collPage = MongodbHelper.getDbCollection("fwpro", "fw_page");
         collError = MongodbHelper.getDbCollection("fwpro", "fw_error");
         collTmp = MongodbHelper.getDbCollection("fwpro", "fw_tmp");
@@ -65,13 +65,13 @@ public class DetailMain {
                 try {
                     final List<String> finalList = list =  new ArrayList<>();
                     lock.lock();
-                    iter = collLink.find(new Document("status", 3)).limit(50);
+                    iter = collLink.find(new Document("status", 1)).limit(50);
                     iter.forEach(new Block<Document>() {
                         public void apply(Document doc) {
                             String link = doc.getString("link_url");
                             finalList.add(link);
                             Document newDoc = new Document("$set", new Document("status", 2));
-                            collLink.updateOne(new Document("link_url", link).append("status",3), newDoc);
+                            collLink.updateOne(new Document("link_url", link).append("status",1), newDoc);
                         }
                     });
                 } finally {
@@ -90,12 +90,12 @@ public class DetailMain {
 //                            logger.info("title is: {}", detail[0]);
                         } else {
                             logger.error("page parse error, link is " + link);
-                            Document doc = new Document("link_url", link).append("status", 3);
+                            Document doc = new Document("link_url", link).append("status", 1);
                             collError.insertOne(doc);
                         }
                     } catch (Exception e) {
                         logger.error("page parse error, link is " + link, e);
-                        Document doc = new Document("link_url", link).append("status", 3);
+                        Document doc = new Document("link_url", link).append("status", 1);
                         collError.insertOne(doc);
                     }
                 }

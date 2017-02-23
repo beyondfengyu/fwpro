@@ -9,6 +9,7 @@ import com.cus.cms.common.wrapper.Combobox;
 import com.cus.cms.service.wen.FwDirService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,6 +28,13 @@ public class FwDirAction extends BaseAction {
     @Autowired
     private FwDirService fwDirService;
 
+    @RequestMapping("/wen/indexDir")
+    public String indexDir(Model model, String oneDir) {
+        if (!BlankUtil.isBlank(oneDir)) {
+            model.addAttribute("oneDir", oneDir);
+        }
+        return "/module/fw_dir";
+    }
     /**
      * 查询列表
      *
@@ -34,9 +42,9 @@ public class FwDirAction extends BaseAction {
      */
     @RequestMapping("/wen/getFwDirs")
     @ResponseBody
-    public void getFwDirs(String searchText, int dirType) {
+    public void getFwDirs(String searchText, String oneDir, int dirType) {
         JSONObject jsonObject = new JSONObject();
-        List<FwDir> list = fwDirService.getFwDirs(searchText, dirType, getPageNumber(), getPageSize());
+        List<FwDir> list = fwDirService.getFwDirs(searchText, oneDir, dirType, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
             Map<String, String> parentMap = getLastNames();
             for (FwDir fwDir : list) {
@@ -47,7 +55,7 @@ public class FwDirAction extends BaseAction {
                 }
                 fwDir.setIdstr(fwDir.getId().toHexString());
             }
-            jsonObject.put("total", fwDirService.getFwDirCount(searchText, dirType));
+            jsonObject.put("total", fwDirService.getFwDirCount(searchText, oneDir, dirType));
         }
         jsonObject.put("rows", list);
         writeJson(jsonObject.toJSONString());

@@ -6,17 +6,15 @@ import com.cus.cms.common.constants.ErrorCode;
 import com.cus.cms.common.constants.FwStatus;
 import com.cus.cms.common.model.wen.FwPage;
 import com.cus.cms.common.util.BlankUtil;
-import com.cus.cms.common.wrapper.Combobox;
 import com.cus.cms.service.wen.FwPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * @author Andy
@@ -28,6 +26,15 @@ public class FwPageAction extends BaseAction {
     @Autowired
     private FwPageService fwPageService;
 
+    @RequestMapping("/wen/indexPage")
+    public String indexPage(Model model, String oneDir) {
+        if (!BlankUtil.isBlank(oneDir)) {
+            model.addAttribute("oneDir", oneDir);
+        }
+        return "/module/fw_page";
+    }
+
+
     /**
      * 查询列表
      *
@@ -35,32 +42,16 @@ public class FwPageAction extends BaseAction {
      */
     @RequestMapping("/wen/getFwPages")
     @ResponseBody
-    public void getFwPages(String searchText, int status) {
+    public void getFwPages(String searchText, String oneDir, int status) {
         JSONObject jsonObject = new JSONObject();
-        List<FwPage> list = fwPageService.getFwPages(searchText, status, getPageNumber(), getPageSize());
+        List<FwPage> list = fwPageService.getFwPages(searchText,null, status, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
-            jsonObject.put("total", fwPageService.getFwPageCount(searchText, status));
+            jsonObject.put("total", fwPageService.getFwPageCount(searchText,null, status));
         }
         jsonObject.put("rows", list);
         writeJson(jsonObject.toJSONString());
     }
 
-    /**
-     * 查询列表
-     *
-     * @param searchText
-     */
-    @RequestMapping("/wen/getFwPageByDir")
-    @ResponseBody
-    public void getFwPageByDir(String searchText, String oneDir) {
-        JSONObject jsonObject = new JSONObject();
-        List<FwPage> list = fwPageService.getFwPages(searchText, oneDir,getPageNumber(), getPageSize());
-        if (!BlankUtil.isBlank(list)) {
-            jsonObject.put("total", fwPageService.getFwPageCount(searchText, oneDir));
-        }
-        jsonObject.put("rows", list);
-        writeJson(jsonObject.toJSONString());
-    }
 
     @RequestMapping("/wen/getFwPageById")
     @ResponseBody

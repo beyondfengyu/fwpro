@@ -26,29 +26,6 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         super(ds);
     }
 
-    public List<FwPage> queryFwPages(String title, int status, int offset, int size) {
-        Query<FwPage> query = createQuery();
-        if (!BlankUtil.isBlank(title)) {
-            query.field(FwPage.TITLE).contains(title);
-        }
-        if (status > -1) {
-            query.field(FwPage.STATUS).equal(status);
-        }
-        query.order("-id");
-        return query.asList(new FindOptions().skip(offset).limit(size));
-    }
-
-    public long queryFwPageCount(String title, int status) {
-        Query<FwPage> query = createQuery();
-        if (!BlankUtil.isBlank(title)) {
-            query.field(FwPage.TITLE).contains(title);
-        }
-        if (status > -1) {
-            query.field(FwPage.STATUS).equal(status);
-        }
-        return count(query);
-    }
-
     public UpdateResults updateByKey(FwPage fwPage) {
         Query<FwPage> query = createQuery();
         query.field(FwPage.ID).equal(fwPage.getId());
@@ -69,19 +46,32 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         return updateFirst(query, updateOp);
     }
 
-    public List<FwPage> queryFwPages(String title, String oneDir, int offset, int size) {
+    public List<FwPage> queryFwPages(String title, String oneDir, int status, int offset, int size) {
         Query<FwPage> query = createQuery();
         if (!BlankUtil.isBlank(title)) {
             query.field(FwPage.TITLE).contains(title);
         }
-        query.field(FwPage.ONE_DIR).equal(oneDir).order("-id");
+        if (!BlankUtil.isBlank(title)) {
+            query.field(FwPage.ONE_DIR).equal(oneDir);;
+        }
+        if (status > -1) {
+            query.field(FwPage.STATUS).equal(status);
+        }
+        query.order("-id");
         return query.asList(new FindOptions().skip(offset).limit(size));
     }
 
-    public long queryFwPageCount(String title, String oneDir) {
+    public long queryFwPageCount(String title, String oneDir, int status) {
         Query<FwPage> query = createQuery();
-        query.field(FwPage.TITLE).equal(title)
-                .field(FwPage.ONE_DIR).equal(oneDir);
+        if (!BlankUtil.isBlank(title)) {
+            query.field(FwPage.TITLE).contains(title);
+        }
+        if (!BlankUtil.isBlank(title)) {
+            query.field(FwPage.ONE_DIR).equal(oneDir);
+        }
+        if (status > -1) {
+            query.field(FwPage.STATUS).equal(status);
+        }
         return count(query);
     }
 }
