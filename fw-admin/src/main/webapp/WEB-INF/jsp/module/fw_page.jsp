@@ -8,8 +8,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 id="itemTitle"></h1>
-    <input type="hidden" name="oneDir" id="${oneDir}"/>
-    <input type="hidden" name="status" id="statusId" value="2"/>
+    <input type="hidden" name="oneDir" id="oneDir" value="${oneDir}"/>
+    <input type="hidden" name="status" id="statusId" value="1"/>
 </section>
 <!-- .content -->
 <section class="content">
@@ -20,10 +20,9 @@
         </button>
         <div class="btn-group" id="statusGrp">
             <button type="button" class="btn btn-default status sts-allsts" data-val="-1">全部</button>
-            <button type="button" class="btn btn-warning status sts-editss" data-val="1">编辑</button>
-            <button type="button" class="btn btn-warning status sts-checks" data-val="2">审核</button>
-            <button type="button" class="btn btn-default status sts-succes" data-val="4">通过</button>
-            <button type="button" class="btn btn-default status sts-refuse" data-val="3">拒绝</button>
+            <button type="button" class="btn btn-warning status sts-checks" data-val="1">审核</button>
+            <button type="button" class="btn btn-default status sts-refuse" data-val="2">拒绝</button>
+            <button type="button" class="btn btn-default status sts-succes" data-val="3">通过</button>
             <button type="button" class="btn btn-default status sts-remove" data-val="0">丢弃</button>
         </div>
     </div>
@@ -50,7 +49,7 @@
                             <label for="oneDir" class="col-sm-1 control-label">一级栏目:</label>
 
                             <div class="col-sm-11">
-                                <select name="oneDir" id="oneDir" class="form-control">
+                                <select name="oneDir" id="oneDir2" class="form-control">
                                 </select>
                             </div>
                         </div>
@@ -100,6 +99,7 @@
 <!-- .content -->
 <script>
     var isEdit = false;
+    var isSwitch = false;
     var keditor = null;
     $(function () {
         keditor = KindEditor.create('textarea[name=content]', {
@@ -127,14 +127,12 @@
                         case 0:
                             return "丢弃";
                         case 1:
-                            return "编辑";
-                        case 2:
                             return "审核";
-                        case 3:
+                        case 2:
                             return "拒绝";
-                        case 4:
+                        case 3:
                             return "通过";
-                        case 5:
+                        case 4:
                             return "生成";
                     }
                 }
@@ -169,10 +167,15 @@
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
+                if(isSwitch) {
+                    params.pageNumber = 1;
+                    isSwitch = false;
+                }
                 var param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
                     status: $('#statusId').val(),
+                    oneDir: $('#oneDir').val(),
                     searchText: params.searchText
                 };
                 return param;
@@ -201,12 +204,12 @@
 
         $("#pageTable").on("click", '.opt-refuse', function () {
             var id = $(this).attr("data-id");
-            optStatus(id, 3, "拒绝");
+            optStatus(id, 2, "拒绝");
         });
 
         $("#pageTable").on("click", '.opt-agree', function () {
             var id = $(this).attr("data-id");
-            optStatus(id, 4, "通过");
+            optStatus(id, 3, "通过");
         });
 
         $("#pageTable").on("click", '.opt-edit', function () {
@@ -294,6 +297,7 @@
     });
 
     function switchStatus(selt) {
+        isSwitch = true;
         $('#statusGrp button').removeClass('btn-warning').addClass('btn-default');
         $(selt).addClass('btn-warning').removeClass('btn-default');
         $('#statusId').val($(selt).attr('data-val'));

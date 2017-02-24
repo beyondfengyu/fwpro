@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class FwPage implements Serializable {
 
     @Transient
-    public static final String ID = "id";
+    public static final String ID = "_id";
     @Transient
     public static final String TITLE = "title";
     @Transient

@@ -44,9 +44,9 @@ public class FwPageAction extends BaseAction {
     @ResponseBody
     public void getFwPages(String searchText, String oneDir, int status) {
         JSONObject jsonObject = new JSONObject();
-        List<FwPage> list = fwPageService.getFwPages(searchText,null, status, getPageNumber(), getPageSize());
+        List<FwPage> list = fwPageService.getFwPages(searchText, oneDir, status, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
-            jsonObject.put("total", fwPageService.getFwPageCount(searchText,null, status));
+            jsonObject.put("total", fwPageService.getFwPageCount(searchText,oneDir, status));
         }
         jsonObject.put("rows", list);
         writeJson(jsonObject.toJSONString());

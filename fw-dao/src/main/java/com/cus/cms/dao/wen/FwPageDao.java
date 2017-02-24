@@ -2,7 +2,6 @@ package com.cus.cms.dao.wen;
 
 import com.cus.cms.common.model.wen.FwPage;
 import com.cus.cms.common.util.BlankUtil;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.FindOptions;
@@ -48,16 +47,17 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
 
     public List<FwPage> queryFwPages(String title, String oneDir, int status, int offset, int size) {
         Query<FwPage> query = createQuery();
-        if (!BlankUtil.isBlank(title)) {
-            query.field(FwPage.TITLE).contains(title);
-        }
-        if (!BlankUtil.isBlank(title)) {
-            query.field(FwPage.ONE_DIR).equal(oneDir);;
-        }
         if (status > -1) {
             query.field(FwPage.STATUS).equal(status);
         }
-        query.order("-id");
+        if (!BlankUtil.isBlank(oneDir)) {
+            query.field(FwPage.ONE_DIR).equal(oneDir);
+        }
+        if (!BlankUtil.isBlank(title)) {
+            query.field(FwPage.TITLE).contains(title);
+        }
+        query.project(FwPage.CONTENT,false);
+        query.order("-_id");
         return query.asList(new FindOptions().skip(offset).limit(size));
     }
 
@@ -66,7 +66,7 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         if (!BlankUtil.isBlank(title)) {
             query.field(FwPage.TITLE).contains(title);
         }
-        if (!BlankUtil.isBlank(title)) {
+        if (!BlankUtil.isBlank(oneDir)) {
             query.field(FwPage.ONE_DIR).equal(oneDir);
         }
         if (status > -1) {

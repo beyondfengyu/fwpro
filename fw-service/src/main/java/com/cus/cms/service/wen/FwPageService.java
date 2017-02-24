@@ -27,19 +27,10 @@ public class FwPageService extends BaseService {
 
 
     public long getFwPageCount(String title, String oneDir, int status) {
-        if (BlankUtil.isBlank(oneDir)) {
-            throw new IllegalArgumentException("param oneDir cann't be null");
-        }
-        if (!BlankUtil.isBlank(title)) {
-            return fwPageDao.queryFwPageCount(title, oneDir, status);
-        }
-        return fwPageDao.count(FwPage.ONE_DIR, oneDir);
+        return fwPageDao.queryFwPageCount(title, oneDir, status);
     }
 
     public List<FwPage> getFwPages(String title, String oneDir, int status, int page, int size){
-        if (BlankUtil.isBlank(oneDir)) {
-            throw new IllegalArgumentException("param oneDir cann't be null");
-        }
         if (page < 1 || size < 0) {
             throw new IllegalArgumentException("page cann't less than 1 or size cann't less than 0");
         }
