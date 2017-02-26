@@ -112,11 +112,15 @@ public class StoreService {
         String[] arr = source.split("/");
         Document doc = new Document("_id", id)
                 .append("title", title)
-                .append("content", content)
                 .append("source", source)
                 .append("status", 1)
                 .append("oneDir", arr[3])
                 .append("twoDir", arr[4]);
         collPage.insertOne(doc);
+        MongoCollection<Document> collCont = MongodbHelper.getDbCollection("fwpro", "fw_content");
+        doc = new Document("_id", id)
+                .append("content", content);
+        collCont.insertOne(doc);
+
     }
 }

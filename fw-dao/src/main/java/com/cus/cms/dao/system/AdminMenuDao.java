@@ -59,6 +59,7 @@ public class AdminMenuDao extends BasicDAO<AdminMenu, Long> {
     public List<AdminMenu> queryMenuByRoles(List<Long> menuIds) {
         Query<AdminMenu> query = createQuery();
         query.field("id").in(menuIds);
+        query.order("-showorder");
         return find(query).asList();
     }
 }

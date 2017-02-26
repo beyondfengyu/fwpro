@@ -227,8 +227,8 @@
                         $("#oneDir").val(json.entity.oneDir);
                         $("#twoDir").val(json.entity.twoDir);
                         $("#source").text(json.entity.source);
-//                        $("#content").text(json.entity.content);
                         $("#source").attr("href", json.entity.source);
+                        keditor.html(json.entity.content);
 
                         $("#pageModal").modal('show');
                     } else {
@@ -273,6 +273,8 @@
 
         $("#save").click(function () {
             if ($("#pageForm").validationEngine('validate')) {
+                //同步kindeditor插件的内容到textare
+                keditor.sync();
                 $.ajax({
                     type: "post",
                     url: "/wen/saveFwDir.action?isEdit=" + isEdit,

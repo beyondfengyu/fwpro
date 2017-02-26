@@ -1,9 +1,11 @@
 package com.cus.cms.service.wen;
 
 
+import com.cus.cms.common.model.wen.FwContent;
 import com.cus.cms.common.model.wen.FwPage;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.util.DateTimeUtil;
+import com.cus.cms.dao.wen.FwContentDao;
 import com.cus.cms.dao.wen.FwPageDao;
 import com.cus.cms.service.BaseService;
 import com.mongodb.WriteConcern;
@@ -24,7 +26,8 @@ public class FwPageService extends BaseService {
     
     @Autowired
     private FwPageDao fwPageDao;
-
+    @Autowired
+    private FwContentDao fwContentDao;
 
     public long getFwPageCount(String title, String oneDir, int status) {
         return fwPageDao.queryFwPageCount(title, oneDir, status);
@@ -38,24 +41,35 @@ public class FwPageService extends BaseService {
         return fwPageDao.queryFwPages(title, oneDir, status, offset, size);
     }
 
-    public int saveFwPage(FwPage fwPage,boolean isEdit){
+    public int saveFwPage(FwPage fwPage, boolean isEdit){
         if(isEdit) {
             fwPage.setCreateTime(DateTimeUtil.getCurrentTime());
             fwPageDao.updateByKey(fwPage);
+            //保存详情内容
+            fwContentDao.updateByKey(new FwContent(fwPage.getId(), fwPage.getContent()));
         }else{
+            long id = snowFlake.nextId();
             fwPage.setStatus(1);
-            fwPage.setId(snowFlake.nextId());
+            fwPage.setId(id);
             fwPageDao.save(fwPage, WriteConcern.ACKNOWLEDGED);
+            //保存详情内容
+            fwContentDao.save(new FwContent(id, fwPage.getContent()), WriteConcern.ACKNOWLEDGED);
         }
         return 1;
     }
+
 
     public FwPage getFwPageById(long id){
         return fwPageDao.get(id);
     }
 
+    public FwContent getFwContentById(long id) {
+        return fwContentDao.get(id);
+    }
+
     public WriteResult delFwPageById(long id){
-        return fwPageDao.deleteById(id);
+        fwPageDao.deleteById(id);
+        return fwContentDao.deleteById(id);
     }
 
     public UpdateResults updateStatus(long id, int status) {
@@ -65,6 +79,7 @@ public class FwPageService extends BaseService {
     public List<FwPage> getAllFwPage() {
         return fwPageDao.find().asList();
     }
+
 
 
 }

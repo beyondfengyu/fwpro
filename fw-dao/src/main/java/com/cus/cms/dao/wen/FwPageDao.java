@@ -56,7 +56,6 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         if (!BlankUtil.isBlank(title)) {
             query.field(FwPage.TITLE).contains(title);
         }
-        query.project(FwPage.CONTENT,false);
         query.order("-_id");
         return query.asList(new FindOptions().skip(offset).limit(size));
     }

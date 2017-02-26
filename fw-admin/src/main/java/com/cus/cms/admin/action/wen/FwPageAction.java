@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.common.constants.ErrorCode;
 import com.cus.cms.common.constants.FwStatus;
+import com.cus.cms.common.model.wen.FwContent;
 import com.cus.cms.common.model.wen.FwPage;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.service.wen.FwPageService;
@@ -60,6 +61,8 @@ public class FwPageAction extends BaseAction {
         if (id != null) {
             FwPage fwPage = fwPageService.getFwPageById(id);
             if (fwPage != null) {
+                FwContent fwContent = fwPageService.getFwContentById(id);
+                fwPage.setContent(fwContent.getContent());
                 jsonObject.put("entity", fwPage);
             }
         }

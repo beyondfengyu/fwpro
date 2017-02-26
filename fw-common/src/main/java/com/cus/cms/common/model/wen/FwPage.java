@@ -35,6 +35,7 @@ public class FwPage implements Serializable {
 
     private String title;
 
+    @Transient
     private String content;
 
     private String oneDir;
