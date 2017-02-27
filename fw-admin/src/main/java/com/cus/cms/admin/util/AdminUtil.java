@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author laochunyu   2014-9-4
+ * @author Andy
  * @description 文件帮助类
  */
 public class AdminUtil {

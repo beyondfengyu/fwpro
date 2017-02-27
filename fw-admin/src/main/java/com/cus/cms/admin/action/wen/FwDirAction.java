@@ -1,8 +1,10 @@
 package com.cus.cms.admin.action.wen;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cus.cms.admin.base.BaseAction;
 import com.cus.cms.common.constants.ErrorCode;
+import com.cus.cms.common.model.system.AdminDict;
 import com.cus.cms.common.model.wen.FwDir;
 import com.cus.cms.common.util.BlankUtil;
 import com.cus.cms.common.wrapper.Combobox;
@@ -108,37 +110,26 @@ public class FwDirAction extends BaseAction {
         writeJsonResult(result);
     }
 
-    /**
-     * 获取所有父级菜单，转换成组合框结构
-     */
-    @RequestMapping("/wen/getParentFwDirs")
+    @RequestMapping("/wen/getOneDirByName")
     @ResponseBody
-    public void getParentFwDirs() {
-        String result = "[{txt:'--  无  --',val:'#'}]";
-        try {
-            List<FwDir> list = fwDirService.getParentFwDirs();
-            result = JSONObject.toJSONString(tranToCombobox(list));
-        } catch (Exception e) {
-            m_logger.warn("getParentFwDirs fail,cause by " + e.getMessage(), e);
+    public String getOneDirByName(String name, Boolean hasNull) {
+        List<FwDir> list = fwDirService.getOneDirByName(name);
+        JSONArray array = new JSONArray();
+        if (hasNull != null && hasNull) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", " ");
+            obj.put("text", "-- 请选择 --");
+            array.add(obj);
         }
-        writeJson(result);
-    }
-
-    private List<Combobox> tranToCombobox(List<FwDir> list) {
-        List<Combobox> boxs = new ArrayList<Combobox>();
-        Combobox box = null;
-        box = new Combobox();
-        box.setOtxt("--  无  --");
-        box.setOval("#");
-        boxs.add(box);
-        if (!BlankUtil.isBlank(list))
-            for (FwDir menu : list) {
-                box = new Combobox();
-                box.setOtxt(menu.getDirName());
-                box.setOval(menu.getDirCode());
-                boxs.add(box);
-            }
-        return boxs;
+        for (FwDir fwDir : list) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", fwDir.getDirCode());
+            obj.put("text", fwDir.getDirName());
+            array.add(obj);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("items", array);
+        return jsonObject.toJSONString();
     }
 
     private Map<String, String> getLastNames() {

@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Entity(value = "fw_page", noClassnameStored = true)
 @Indexes(
-        @Index(fields = {@Field("title")})
+        @Index(fields = {@Field("oneDir"),@Field("title")})
 )
 public class FwPage implements Serializable {
 

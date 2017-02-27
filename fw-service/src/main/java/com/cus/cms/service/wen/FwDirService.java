@@ -69,4 +69,8 @@ public class FwDirService extends BaseService {
     public List<FwDir> getAllFwDir() {
         return fwDirDao.find().asList();
     }
+
+    public List<FwDir> getOneDirByName(String name) {
+        return null;
+    }
 }

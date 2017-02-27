@@ -12,7 +12,7 @@ $(function(){
                 hasNull = true;
             }
             if (!url) {
-                url = "/auth/dict/getDictByCode.action";
+                url = "/admin/getDictByCode.action";
             }
             $.ajax({
                 url: url,

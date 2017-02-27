@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class DetailMain {
 
     private static final Logger logger = LoggerFactory.getLogger(DetailMain.class);
-    private static final int count = 20;
+    private static final int count = 32;
 
     private static Lock lock;
     private static SnowFlake snowFlake;
