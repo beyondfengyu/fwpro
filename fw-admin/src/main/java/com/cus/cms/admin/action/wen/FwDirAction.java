@@ -55,7 +55,6 @@ public class FwDirAction extends BaseAction {
                 } else {
                     fwDir.setLastName(parentMap.get(fwDir.getLastCode()));
                 }
-                fwDir.setIdstr(fwDir.getId().toHexString());
             }
             jsonObject.put("total", fwDirService.getFwDirCount(searchText, oneDir, dirType));
         }
@@ -65,14 +64,11 @@ public class FwDirAction extends BaseAction {
 
     @RequestMapping("/wen/getFwDirById")
     @ResponseBody
-    public void getFwDirById(String id) {
+    public void getFwDirById(long id) {
         JSONObject jsonObject = new JSONObject();
-        if (id != null) {
-            FwDir fwDir = fwDirService.getFwDirById(id);
-            if (fwDir != null) {
-                fwDir.setIdstr(fwDir.getId().toHexString());
-                jsonObject.put("entity", fwDir);
-            }
+        FwDir fwDir = fwDirService.getFwDirById(id);
+        if (fwDir != null) {
+            jsonObject.put("entity", fwDir);
         }
         writeJson(jsonObject.toJSONString());
     }
@@ -95,25 +91,43 @@ public class FwDirAction extends BaseAction {
 
     @RequestMapping("/wen/delFwDirs")
     @ResponseBody
-    public void delFwDirs(String id) {
+    public void delFwDirs(long id) {
         int result = 1;
-        if (!BlankUtil.isBlank(id)) {
-            try {
-                fwDirService.delFwDirById(id);
-            } catch (Exception e) {
-                result = ErrorCode.SERVER_ERROR;
-                m_logger.warn("delFwDirs fail,cause by " + e.getMessage(), e);
-            }
-        } else {
-            result = ErrorCode.ERROR_NULL_ARGU;
+        try {
+            fwDirService.delFwDirById(id);
+        } catch (Exception e) {
+            result = ErrorCode.SERVER_ERROR;
+            m_logger.warn("delFwDirs fail,cause by " + e.getMessage(), e);
         }
         writeJsonResult(result);
     }
 
-    @RequestMapping("/wen/getOneDirByName")
+    @RequestMapping("/wen/getOneDirs")
     @ResponseBody
-    public String getOneDirByName(String name, Boolean hasNull) {
-        List<FwDir> list = fwDirService.getOneDirByName(name);
+    public String getOneDirs(Boolean hasNull) {
+        List<FwDir> list = fwDirService.getOneDirs();
+        JSONArray array = new JSONArray();
+        if (hasNull != null && hasNull) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", " ");
+            obj.put("text", "-- 请选择 --");
+            array.add(obj);
+        }
+        for (FwDir fwDir : list) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", fwDir.getDirCode());
+            obj.put("text", fwDir.getDirName());
+            array.add(obj);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("items", array);
+        return jsonObject.toJSONString();
+    }
+
+    @RequestMapping("/wen/getTwoDirByOne")
+    @ResponseBody
+    public String getTwoDirByOne(String oneDir, Boolean hasNull) {
+        List<FwDir> list = fwDirService.getTwoDirByOne(oneDir);
         JSONArray array = new JSONArray();
         if (hasNull != null && hasNull) {
             JSONObject obj = new JSONObject();

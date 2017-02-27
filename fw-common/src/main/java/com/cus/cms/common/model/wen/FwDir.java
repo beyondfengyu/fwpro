@@ -1,37 +1,34 @@
 package com.cus.cms.common.model.wen;
 
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
 import java.io.Serializable;
 
 @Entity(value = "fw_dir", noClassnameStored = true)
 @Indexes(
-        @Index(fields = {@Field("dir_name")})
+        @Index(fields = {@Field("dirCode"),@Field("dirName")})
 )
 public class FwDir implements Serializable {
     @Transient
     public static final String ID = "_id";
     @Transient
-    public static final String FW_CODE = "dir_code";
+    public static final String FW_CODE = "dirCode";
     @Transient
-    public static final String FW_NAME = "dir_name";
+    public static final String FW_NAME = "dirName";
     @Transient
-    public static final String FW_TYPE = "dir_type";
+    public static final String FW_TYPE = "dirType";
     @Transient
-    public static final String LAST_CODE = "last_code";
+    public static final String LAST_CODE = "lastCode";
     @Transient
     public static final String STATUS = "status";
     @Transient
-    public static final String SHOW_ORDER = "show_order";
-    @Transient
-    private  String idstr;
+    public static final String SHOW_ORDER = "showOrder";
     @Transient
     private String lastName;
 
 
     @Id
-    private ObjectId id;
+    private long id;
 
     @Property(value = FW_CODE)
     private String dirCode;
@@ -49,24 +46,7 @@ public class FwDir implements Serializable {
     private Integer status;
 
     @Property(value = SHOW_ORDER)
-    private Integer showorder;
-
-
-    public String getIdstr() {
-        return idstr;
-    }
-
-    public void setIdstr(String idstr) {
-        this.idstr = idstr;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
+    private Integer showOrder;
 
     public String getLastName() {
         return lastName;
@@ -76,13 +56,12 @@ public class FwDir implements Serializable {
         this.lastName = lastName;
     }
 
-
-    public String getDirName() {
-        return dirName;
+    public long getId() {
+        return id;
     }
 
-    public void setDirName(String dirName) {
-        this.dirName = dirName;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getDirCode() {
@@ -91,6 +70,14 @@ public class FwDir implements Serializable {
 
     public void setDirCode(String dirCode) {
         this.dirCode = dirCode;
+    }
+
+    public String getDirName() {
+        return dirName;
+    }
+
+    public void setDirName(String dirName) {
+        this.dirName = dirName;
     }
 
     public Integer getDirType() {
@@ -117,11 +104,11 @@ public class FwDir implements Serializable {
         this.status = status;
     }
 
-    public Integer getShoworder() {
-        return showorder;
+    public Integer getShowOrder() {
+        return showOrder;
     }
 
-    public void setShoworder(Integer showorder) {
-        this.showorder = showorder;
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
     }
 }

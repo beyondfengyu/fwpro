@@ -19,7 +19,7 @@ import java.util.List;
  * @author Andy
  */
 @Repository
-public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
+public class FwDirDao extends BasicDAO<FwDir, Long> {
 
     @Autowired
     protected FwDirDao(@Qualifier("datastore")Datastore ds) {
@@ -31,7 +31,7 @@ public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
         if (!BlankUtil.isBlank(name)) {
             query.field(FwDir.FW_NAME).contains(name);
         }
-        if (!BlankUtil.isBlank(name)) {
+        if (!BlankUtil.isBlank(oneDir)) {
             query.field(FwDir.LAST_CODE).equal(oneDir);
         }
         if (dirType > 0) {
@@ -57,7 +57,7 @@ public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
 
     public List<FwDir> queryParentFwDirs() {
         Query<FwDir> query = createQuery();
-        query.field(FwDir.LAST_CODE).equal("#");
+        query.field(FwDir.FW_TYPE).equal(1);
         query.field(FwDir.STATUS).equal(1);
         query.order("-" + FwDir.SHOW_ORDER);
         return query.asList();
@@ -70,9 +70,18 @@ public class FwDirDao extends BasicDAO<FwDir, ObjectId> {
         updateOp.set(FwDir.FW_NAME, fwDir.getDirName())
                 .set(FwDir.FW_TYPE, fwDir.getDirType())
                 .set(FwDir.LAST_CODE, fwDir.getLastCode())
-                .set(FwDir.SHOW_ORDER, fwDir.getShoworder())
+                .set(FwDir.SHOW_ORDER, fwDir.getShowOrder())
                 .set(FwDir.STATUS, fwDir.getStatus());
         return updateFirst(query, updateOp);
     }
 
+    public List<FwDir> queryFwDirByParent(String oneDir) {
+        Query<FwDir> query = createQuery();
+        if (!BlankUtil.isBlank(oneDir)) {
+            query.field(FwDir.LAST_CODE).equal(oneDir);
+        }
+        query.field(FwDir.STATUS).equal(1);
+        query.order("-id");
+        return query.asList();
+    }
 }

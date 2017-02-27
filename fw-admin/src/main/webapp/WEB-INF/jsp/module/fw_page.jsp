@@ -37,33 +37,28 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="pageForm">
                         <input type="hidden" name="id" id="id"/>
-
                         <div class="form-group">
                             <label for="title" class="col-sm-1 control-label">标题:</label>
-
                             <div class="col-sm-11">
                                 <input type="text" class="form-control validate[required]" name="title" id="title">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="oneDir" class="col-sm-1 control-label">一级栏目:</label>
-
                             <div class="col-sm-11">
                                 <select name="oneDir" id="oneDir2" class="form-control">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="twoDir" class="col-sm-1 control-label">二级栏目:</label>
-
+                            <label for="twoDir2" class="col-sm-1 control-label">二级栏目:</label>
                             <div class="col-sm-11">
-                                <select name="twoDir" id="twoDir" class="form-control">
+                                <select name="twoDir" id="twoDir2" class="form-control">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="source" class="col-sm-1 control-label">源址:</label>
-
                             <div class="col-sm-11">
                                 <a href="" id="source" target="_blank"></a>
                             </div>
@@ -102,17 +97,6 @@
     var isSwitch = false;
     var keditor = null;
     $(function () {
-        keditor = KindEditor.create('textarea[name=content]', {
-            filterMode: false,//是否开启过滤模式
-            newlineTag: 'br',
-            uploadJson: '/admin/upload/editorimage.action',//上传路径
-            fileManagerJson: '/admin/image/scan.action',
-            allowFileManager: true,
-            allowImageUpload: true,
-            extraFileUploadParams: {//上传文件额外的参数
-
-            }
-        });
 
         $('#pageTable').bootstrapTable('destroy');
         $('#pageTable').bootstrapTable({
@@ -191,7 +175,20 @@
             }
         });
 
+        // 加载select2下拉组件
+        loadOneDir();
+        loadTwoDir();
+        keditor = KindEditor.create('textarea[name=content]', {
+            filterMode: false,//是否开启过滤模式
+            newlineTag: 'br',
+            uploadJson: '/admin/upload/editorimage.action',//上传路径
+            fileManagerJson: '/admin/image/scan.action',
+            allowFileManager: true,
+            allowImageUpload: true,
+            extraFileUploadParams: {//上传文件额外的参数
 
+            }
+        });
         $("#pageForm").validationEngine();
 
         $("#pageTable").on("click", '.opt-remove', function () {
@@ -224,16 +221,16 @@
                     if (json.entity) {
                         $("#id").val(json.entity.id);
                         $("#title").val(json.entity.title);
-                        $("#oneDir").val(json.entity.oneDir);
-                        $("#twoDir").val(json.entity.twoDir);
+                        $("#oneDir2").val(json.entity.oneDir);
+                        $("#twoDir2").val(json.entity.twoDir);
+                        $('#oneDir2').trigger('change');
+                        $('#twoDir2').trigger('change');
                         $("#source").text(json.entity.source);
                         $("#source").attr("href", json.entity.source);
                         keditor.html(json.entity.content);
-
                         $("#pageModal").modal('show');
                     } else {
-                        $("#tipMsg").text("获取信息出错");
-                        $("#tipModal").modal('show');
+                        commonModal.openMessage("获取信息出错");
                     }
                 }
             });
@@ -242,6 +239,7 @@
 
         $("#add").click(function () {
             isEdit = false;
+            keditor.html();
             $("#pageForm")[0].reset();
             $("#pageModal").modal('show');
         });
@@ -273,8 +271,7 @@
 
         $("#save").click(function () {
             if ($("#pageForm").validationEngine('validate')) {
-                //同步kindeditor插件的内容到textare
-                keditor.sync();
+                keditor.sync(); //同步kindeditor插件的内容到textare
                 $.ajax({
                     type: "post",
                     url: "/wen/saveFwDir.action?isEdit=" + isEdit,
@@ -283,12 +280,10 @@
                     success: function (json) {
                         if (json.result == 1) {
                             $("#pageModal").modal('hide');
-                            $("#tipMsg").text("保存成功");
-                            $("#tipModal").modal('show');
+                            commonModal.openMessage("保存成功");
                             TableHelper.doRefresh("#pageTable");
                         } else {
-                            $("#tipMsg").text("保存失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
+                            commonModal.openWarning("保存失败", json.result);
                         }
                     }
                 });
@@ -298,13 +293,44 @@
 
     });
 
+    function loadOneDir() {
+        $.ajax({
+            url: "/wen/getOneDirs.action",
+            dataType: "json",
+            success: function (data) {
+                $('#oneDir2').select2({data: data.items, width: 870, minimumResultsForSearch: Infinity}).on('change',
+                        function(e) {
+                            loadTwoDir($(this).val());
+                        }
+                );
+                if('${oneDir}'){
+                    $('#oneDir2').val('${oneDir}').prop("disabled", false);;
+                    $('#oneDir2').trigger('change');
+                }
+            }
+        });
+        loadTwoDir('${oneDir}');
+    };
+
+    function loadTwoDir(oneDir){
+        $.ajax({
+            url: "/wen/getTwoDirByOne.action",
+            data: {'oneDir': oneDir},
+            dataType: "json",
+            success: function (data) {
+                $('#twoDir2').select2({data: data.items, width: 870, minimumResultsForSearch: Infinity});
+            }
+        });
+    };
+
     function switchStatus(selt) {
         isSwitch = true;
         $('#statusGrp button').removeClass('btn-warning').addClass('btn-default');
         $(selt).addClass('btn-warning').removeClass('btn-default');
         $('#statusId').val($(selt).attr('data-val'));
         TableHelper.doRefresh("#pageTable");
-    }
+    };
+
 
     function optStatus(id, status, action) {
         $.ajax({
@@ -314,15 +340,14 @@
             dataType: "json",
             success: function (json) {
                 if (json.result == 1) {
-                    $("#tipMsg").text(action + "操作成功");
-                    $("#tipModal").modal('show');
+                    commonModal.openMessage(action + "操作成功");
                     TableHelper.doRefresh("#pageTable");
                 } else {
-                    $("#tipMsg").text(action + "操作失败，错误码：" + json.result);
-                    $("#tipModal").modal('show');
+                    commonModal.openWarning(action + "操作失败", json.result);
                 }
             }
         });
-    }
+    };
+
 </script>
 

@@ -46,14 +46,14 @@ public class FwPageService extends BaseService {
             fwPage.setCreateTime(DateTimeUtil.getCurrentTime());
             fwPageDao.updateByKey(fwPage);
             //保存详情内容
-            fwContentDao.updateByKey(new FwContent(fwPage.getId(), fwPage.getContent()));
+            fwContentDao.updateByKey(buildFwContent(fwPage.getId(), fwPage.getContent()));
         }else{
             long id = snowFlake.nextId();
             fwPage.setStatus(1);
             fwPage.setId(id);
             fwPageDao.save(fwPage, WriteConcern.ACKNOWLEDGED);
             //保存详情内容
-            fwContentDao.save(new FwContent(id, fwPage.getContent()), WriteConcern.ACKNOWLEDGED);
+            fwContentDao.save(buildFwContent(id,fwPage.getContent()), WriteConcern.ACKNOWLEDGED);
         }
         return 1;
     }
@@ -81,5 +81,11 @@ public class FwPageService extends BaseService {
     }
 
 
+    private FwContent buildFwContent(long id, String content) {
+        FwContent fwContent = new FwContent();
+        fwContent.setId(id);
+        fwContent.setContent(content);
+        return fwContent;
+    }
 
 }

@@ -31,8 +31,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="dirForm">
-                        <!--<input type="hidden" name="id" id="id"/>-->
-                        <input type="hidden" name="idstr" id="idstr"/>
+                        <input type="hidden" name="id" id="id"/>
                         <div class="form-group">
                             <label for="dirName" class="col-sm-2 control-label">名称:</label>
                             <div class="col-sm-10">
@@ -57,8 +56,8 @@
                         <div class="form-group">
                             <label for="showorder" class="col-sm-2 control-label">排序:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control validate[required]" name="showorder"
-                                       id="showorder" value="0">
+                                <input type="text" class="form-control validate[required]" name="showOrder"
+                                       id="showOrder" value="0">
                             </div>
                         </div>
                         <div class="form-group">
@@ -105,7 +104,6 @@
         $('#dirTable').bootstrapTable({
             columns: [
                 {field: 'id', title: 'ID', align: 'center',  width: '10%', visible: false},
-                {field: 'idstr', title: 'ID', align: 'center',  width: '10%'},
                 {field: 'dirName', title: '名称', align: 'center', width: '10%'},
                 {field: 'dirCode', title: '编码', align: 'center', width: '10%'},
                 {field: 'lastCode', title: '父ID', align: 'center', visible: false},
@@ -116,7 +114,7 @@
                     }
                     return '二级栏目';
                 }},
-                {field: 'showorder', title: '排序', align: 'center', width: '5%'},
+                {field: 'showOrder', title: '排序', align: 'center', width: '5%'},
                 {
                     field: 'status', title: '状态', align: 'center', width: '5%', formatter: function (val, row, index) {
                     if (val == 1) {
@@ -126,7 +124,7 @@
                 }
                 },
                 {
-                    field: 'idstr',
+                    field: 'id',
                     title: '操作',
                     align: 'center',
                     width: '20%',
@@ -158,7 +156,7 @@
                 };
                 return param;
             },
-            uniqueId: 'idstr',
+            uniqueId: 'id',
             toolbar: '#toolbar',
             url: '/wen/getFwDirs.action',
             onLoadSuccess: function () {  //加载成功时执行
@@ -207,18 +205,16 @@
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
-                        $("#idstr").val(json.entity.idstr);
+                        $("#id").val(json.entity.id);
                         $("#dirCode").val(json.entity.dirCode);
                         $("#dirName").val(json.entity.dirName);
                         $("#dirType").val(json.entity.dirType);
                         $("#status").val(json.entity.status);
-                        $("#showorder").val(json.entity.showorder);
+                        $("#showOrder").val(json.entity.showOrder);
                         ComboboxHelper.setDef("#lastCode", json.entity.lastCode);
-                        // 打开编辑弹窗
                         $("#dirModal").modal('show');
                     } else {
-                        $("#tipMsg").text("获取信息出错");
-                        $("#tipModal").modal('show');
+                        commonModal.openMessage("获取信息出错");
                     }
                 }
             });
@@ -252,12 +248,10 @@
                     success: function (json) {
                         if (json.result == 1) {
                             $("#dirModal").modal('hide');
-                            $("#tipMsg").text("保存成功");
-                            $("#tipModal").modal('show');
+                            commonModal.openMessage("保存成功");
                             TableHelper.doRefresh("#dirTable");
                         } else {
-                            $("#tipMsg").text("保存失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
+                            commonModal.openWarning("保存失败", json.result);
                         }
                     }
                 });
@@ -268,7 +262,6 @@
     });
 
     function switchStatus(selt){
-        console.log('selt is: ' + selt);
         $('#dirGrp button').removeClass('btn-warning').addClass('btn-default');
         $(selt).addClass('btn-warning').removeClass('btn-default');
         $('#param').val($(selt).attr('data-val'));

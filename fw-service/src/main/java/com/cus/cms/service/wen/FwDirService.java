@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author Andy  2015/12/26.
+ * @author Andy
  * @description
  */
 @Service("fwDirService")
@@ -47,30 +47,30 @@ public class FwDirService extends BaseService {
 
     public int saveFwDir(FwDir fwDir,boolean isEdit){
         if(isEdit) {
-            fwDir.setId(new ObjectId(fwDir.getIdstr()));
+            fwDir.setId(fwDir.getId());
             fwDirDao.updateByKey(fwDir);
         }else{
             fwDir.setStatus(1);
-            fwDir.setId(new ObjectId());
+            fwDir.setId(snowFlake.nextId());
             fwDirDao.save(fwDir, WriteConcern.ACKNOWLEDGED);
         }
         return 1;
     }
 
-    public FwDir getFwDirById(String id){
-        return fwDirDao.get(new ObjectId(id));
+    public FwDir getFwDirById(long id){
+        return fwDirDao.get(id);
     }
 
-    public WriteResult delFwDirById(String id){
-        return fwDirDao.deleteById(new ObjectId(id));
+    public WriteResult delFwDirById(long id){
+        return fwDirDao.deleteById(id);
     }
 
 
-    public List<FwDir> getAllFwDir() {
-        return fwDirDao.find().asList();
+    public List<FwDir> getOneDirs() {
+        return fwDirDao.queryParentFwDirs();
     }
 
-    public List<FwDir> getOneDirByName(String name) {
-        return null;
+    public List<FwDir> getTwoDirByOne(String oneDir) {
+        return fwDirDao.queryFwDirByParent(oneDir);
     }
 }
