@@ -1,7 +1,6 @@
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 id="itemTitle"></h1>
-    <input type="hidden" name="param" id="param" value="0"/>
+    <input type="hidden" name="param" id="param" value="-1"/>
 </section>
 <!-- .content -->
 <section class="content">
@@ -22,12 +21,11 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalLabel">频道信息</h4>
+                    <h4 class="modal-title" id="modalLabel">栏目信息</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="dirForm">
-                        <!--<input type="hidden" name="id" id="id"/>-->
-                        <input type="hidden" name="idstr" id="idstr"/>
+                        <input type="hidden" name="id" id="id"/>
                         <div class="form-group">
                             <label for="dirName" class="col-sm-2 control-label">名称:</label>
                             <div class="col-sm-10">
@@ -43,7 +41,7 @@
                         <div class="form-group">
                             <label for="dirType" class="col-sm-2 control-label">类型:</label>
                             <div class="col-sm-10">
-                                <select name="dirType" id="dirType" data-btn-class="btn-warning">
+                                <select name="dirType" id="dirType" data-btn-class="btn-warning" style="width:467px;height:30px;">
                                     <option value="1">一级栏目</option>
                                     <option value="2">二级栏目</option>
                                 </select>
@@ -52,14 +50,14 @@
                         <div class="form-group">
                             <label for="showorder" class="col-sm-2 control-label">排序:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control validate[required]" name="showorder"
-                                       id="showorder" value="0">
+                                <input type="text" class="form-control validate[required]" name="showOrder"
+                                       id="showOrder" value="0">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="status" class="col-sm-2 control-label">状态:</label>
                             <div class="col-sm-10">
-                                <select name="status" id="status" data-btn-class="btn-warning">
+                                <select name="status" id="status" data-btn-class="btn-warning" style="width:467px;height:30px;">
                                     <option value="1">有效</option>
                                     <option value="0">无效</option>
                                 </select>
@@ -95,42 +93,40 @@
 <!-- .content -->
 <script>
     var isEdit = false;
+    var isSwitch = false;
     $(function () {
         $('#dirTable').bootstrapTable('destroy');
         $('#dirTable').bootstrapTable({
             columns: [
-                {field: 'id', title: 'ID', align: 'center',  width: '10%', visible: false},
-                {field: 'idstr', title: 'ID', align: 'center',  width: '10%'},
-                {field: 'dirName', title: '名称', align: 'center', width: '10%'},
-                {field: 'dirCode', title: '编码', align: 'center', width: '10%'},
+                {field: 'id',       title: 'ID',   align: 'center', width: '5%'},
+                {field: 'dirName',  title: '名称', align: 'center', width: '10%'},
+                {field: 'dirCode',  title: '编码', align: 'center', width: '10%'},
                 {field: 'lastCode', title: '父ID', align: 'center', visible: false},
                 {field: 'lastName', title: '上级', align: 'center', width: '10%'},
-                {field: 'dirType', title: '类型', width: '10%', formatter: function (val, row, index) {
-                    if (val == 1) {
-                        return '一级栏目';
-                    }
-                    return '二级栏目';
-                }},
-                {field: 'showorder', title: '排序', align: 'center', width: '5%'},
-                {
-                    field: 'status', title: '状态', align: 'center', width: '5%', formatter: function (val, row, index) {
-                        if (val == 1) {
-                            return '有效';
+                {field: 'dirType',  title: '类型', align: 'center', width: '6%', formatter:
+                        function (val, row, index) {
+                            if (val == 1) {
+                                return '一级栏目';
+                            }
+                            return '二级栏目';
                         }
-                        return '无效';
-                    }
+                },
+                {field: 'showOrder', title: '排序', align: 'center', width: '5%'},
+                {
+                    field: 'status', title: '状态', align: 'center', width: '5%', formatter:
+                        function (val, row, index) {
+                            if (val == 1) {
+                                return '有效';
+                            }
+                            return '无效';
+                        }
                 },
                 {
-                    field: 'idstr',
-                    title: '操作',
-                    align: 'center',
-                    width: '20%',
-                    formatter: function (val, row, index) {
-                        return '<button class="btn btn-sm btn-success opt-edit" data-id=' + val + '>' +
-                                '<i class="glyphicon glyphicon-edit"></i>编辑</button>' +
-                                '&nbsp;&nbsp;<button class="btn btn-sm btn-danger opt-remove" data-id=' + val +
-                                '><i class="glyphicon glyphicon-remove"></i>删除</button>';
-                    }
+                    field: 'id',title: '操作',align: 'center',width: '15%',formatter:
+                        function (val, row, index) {
+                        return '<button class="btn btn-sm btn-success opt-edit" data-id=' + val + '>编辑</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-sm btn-danger opt-remove" data-id='+ val + '>删除</button>';
+                        }
                 }
             ],
             cache: false,
@@ -145,6 +141,10 @@
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
+                if(isSwitch) {
+                    params.pageNumber = 1;
+                    isSwitch = false;
+                }
                 var param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
@@ -153,7 +153,7 @@
                 };
                 return param;
             },
-            uniqueId: 'idstr',
+            uniqueId: 'id',
             toolbar: '#toolbar',
             url: '/wen/getFwDirs.action',
             onLoadSuccess: function () {  //加载成功时执行
@@ -164,13 +164,12 @@
             }
         });
 
-
-        ComboboxHelper.build('/wen/getParentFwDirs.action', '#lastCode', "0");
+        loadOneDir(); //加载select2组件
         $("#dirForm").validationEngine();
 
 
         $("#dirTable").on("click", '.opt-remove', function () {
-            var id = $(this).attr("data-id");  
+            var id = $(this).attr("data-id");
             if (confirm("你确认删除【" + TableHelper.getRowByUniqueId("#dirTable", id).dirName + "】吗?" +
                             "\r\n删除后再也不能找回，请谨慎操作！")) {
                 $.ajax({
@@ -180,12 +179,10 @@
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
-                            $("#tipMsg").text("删除成功");
-                            $("#tipModal").modal('show');
+                            commonModal.openMessage({body: "删除成功"});
                             TableHelper.doRefresh("#dirTable");
                         } else {
-                            $("#tipMsg").text("删除失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
+                            commonModal.openWarning({body:"删除失败"}, json.result);
                         }
                     }
                 });
@@ -202,18 +199,17 @@
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
-                        $("#idstr").val(json.entity.idstr);
+                        $("#id").val(json.entity.id);
                         $("#dirCode").val(json.entity.dirCode);
                         $("#dirName").val(json.entity.dirName);
                         $("#dirType").val(json.entity.dirType);
                         $("#status").val(json.entity.status);
-                        $("#showorder").val(json.entity.showorder);
-                        ComboboxHelper.setDef("#lastCode", json.entity.lastCode);
-                        // 打开编辑弹窗
+                        $("#showOrder").val(json.entity.showOrder);
+                        $("#lastCode").val(json.entity.lastCode).trigger('change');
+
                         $("#dirModal").modal('show');
                     } else {
-                        $("#tipMsg").text("获取信息出错");
-                        $("#tipModal").modal('show');
+                        commonModal.openMessage({body:"获取信息出错"});
                     }
                 }
             });
@@ -247,12 +243,10 @@
                     success: function (json) {
                         if (json.result == 1) {
                             $("#dirModal").modal('hide');
-                            $("#tipMsg").text("保存成功");
-                            $("#tipModal").modal('show');
+                            commonModal.openMessage({body:"保存成功"});
                             TableHelper.doRefresh("#dirTable");
                         } else {
-                            $("#tipMsg").text("保存失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
+                            commonModal.openWarning({body:"保存失败"}, json.result);
                         }
                     }
                 });
@@ -263,10 +257,22 @@
     });
 
     function switchStatus(selt){
-        console.log('selt is: ' + selt);
+        isSwitch = true;
         $('#dirGrp button').removeClass('btn-warning').addClass('btn-default');
         $(selt).addClass('btn-warning').removeClass('btn-default');
         $('#param').val($(selt).attr('data-val'));
         TableHelper.doRefresh("#dirTable");
-    }
+    };
+
+    function loadOneDir() {
+        $.ajax({
+            url: "/wen/getOneDirs.action",
+            data: {'hasNull':true},
+            dataType: "json",
+            success: function (data) {
+                $('#lastCode').select2({data: data.items, width: 467, minimumResultsForSearch: Infinity});
+            }
+        });
+
+    };
 </script>

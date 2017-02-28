@@ -6,7 +6,7 @@
 <section class="content-header">
     <h1 id="itemTitle"></h1>
     <input type="hidden" name="oneDir" id="${oneDir}"/>
-    <input type="hidden" name="param" id="param" value="0"/>
+    <input type="hidden" name="param" id="param" value=-1/>
 </section>
 <!-- .content -->
 <section class="content">
@@ -27,11 +27,12 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalLabel">频道信息</h4>
+                    <h4 class="modal-title" id="modalLabel">栏目信息</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="dirForm">
                         <input type="hidden" name="id" id="id"/>
+                        <input type="hidden" name="lastCode" id="lastCode" value="${oneDir}"/>
                         <div class="form-group">
                             <label for="dirName" class="col-sm-2 control-label">名称:</label>
                             <div class="col-sm-10">
@@ -69,13 +70,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="lastCode" class="col-sm-2 control-label">上级:</label>
-                            <div class="col-sm-10">
-                                <select name="lastCode" id="lastCode" data-btn-class="btn-warning">
-                                </select>
-                            </div>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -99,6 +93,7 @@
 <!-- .content -->
 <script>
     var isEdit = false;
+    var isSwitch = false;
     $(function () {
         $('#dirTable').bootstrapTable('destroy');
         $('#dirTable').bootstrapTable({
@@ -148,10 +143,15 @@
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
+                if(isSwitch) {
+                    params.pageNumber = 1;
+                    isSwitch = false;
+                }
                 var param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
                     dirType: $('#param').val(),
+                    oneDir: $('#oneDir').val(),
                     searchText: params.searchText
                 };
                 return param;
@@ -168,7 +168,6 @@
         });
 
 
-        ComboboxHelper.build('/wen/getParentFwDirs.action', '#lastCode', "0");
         $("#dirForm").validationEngine();
 
 
@@ -183,12 +182,10 @@
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
-                            $("#tipMsg").text("删除成功");
-                            $("#tipModal").modal('show');
+                            commonModal.openMessage({body: "删除成功"});
                             TableHelper.doRefresh("#dirTable");
                         } else {
-                            $("#tipMsg").text("删除失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
+                            commonModal.openWarning({body:"删除失败"}, json.result);
                         }
                     }
                 });
@@ -211,10 +208,10 @@
                         $("#dirType").val(json.entity.dirType);
                         $("#status").val(json.entity.status);
                         $("#showOrder").val(json.entity.showOrder);
-                        ComboboxHelper.setDef("#lastCode", json.entity.lastCode);
+
                         $("#dirModal").modal('show');
                     } else {
-                        commonModal.openMessage("获取信息出错");
+                        commonModal.openMessage({body:"获取信息出错"});
                     }
                 }
             });
@@ -248,10 +245,10 @@
                     success: function (json) {
                         if (json.result == 1) {
                             $("#dirModal").modal('hide');
-                            commonModal.openMessage("保存成功");
+                            commonModal.openMessage({body:"保存成功"});
                             TableHelper.doRefresh("#dirTable");
                         } else {
-                            commonModal.openWarning("保存失败", json.result);
+                            commonModal.openWarning({body:"保存失败"}, json.result);
                         }
                     }
                 });
@@ -262,6 +259,7 @@
     });
 
     function switchStatus(selt){
+        isSwitch = true;
         $('#dirGrp button').removeClass('btn-warning').addClass('btn-default');
         $(selt).addClass('btn-warning').removeClass('btn-default');
         $('#param').val($(selt).attr('data-val'));

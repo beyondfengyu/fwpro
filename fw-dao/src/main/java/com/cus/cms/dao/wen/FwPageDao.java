@@ -30,7 +30,6 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         query.field(FwPage.ID).equal(fwPage.getId());
         UpdateOperations<FwPage> updateOp = createUpdateOperations();
         updateOp.set(FwPage.TITLE, fwPage.getTitle())
-                .set(FwPage.CONTENT, fwPage.getContent())
                 .set(FwPage.ONE_DIR, fwPage.getOneDir())
                 .set(FwPage.TWO_DIR, fwPage.getTwoDir())
                 .set(FwPage.STATUS, fwPage.getStatus());
@@ -45,13 +44,16 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         return updateFirst(query, updateOp);
     }
 
-    public List<FwPage> queryFwPages(String title, String oneDir, int status, int offset, int size) {
+    public List<FwPage> queryFwPages(String title, String oneDir, String twoDir, int status, int offset, int size) {
         Query<FwPage> query = createQuery();
         if (status > -1) {
             query.field(FwPage.STATUS).equal(status);
         }
         if (!BlankUtil.isBlank(oneDir)) {
             query.field(FwPage.ONE_DIR).equal(oneDir);
+        }
+        if (!BlankUtil.isBlank(twoDir)) {
+            query.field(FwPage.TWO_DIR).equal(twoDir);
         }
         if (!BlankUtil.isBlank(title)) {
             query.field(FwPage.TITLE).contains(title);
@@ -60,13 +62,16 @@ public class FwPageDao extends BasicDAO<FwPage, Long> {
         return query.asList(new FindOptions().skip(offset).limit(size));
     }
 
-    public long queryFwPageCount(String title, String oneDir, int status) {
+    public long queryFwPageCount(String title, String oneDir, String twoDir, int status) {
         Query<FwPage> query = createQuery();
         if (!BlankUtil.isBlank(title)) {
             query.field(FwPage.TITLE).contains(title);
         }
         if (!BlankUtil.isBlank(oneDir)) {
             query.field(FwPage.ONE_DIR).equal(oneDir);
+        }
+        if (!BlankUtil.isBlank(twoDir)) {
+            query.field(FwPage.TWO_DIR).equal(twoDir);
         }
         if (status > -1) {
             query.field(FwPage.STATUS).equal(status);

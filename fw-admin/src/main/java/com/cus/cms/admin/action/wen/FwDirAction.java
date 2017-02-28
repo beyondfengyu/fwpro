@@ -79,6 +79,9 @@ public class FwDirAction extends BaseAction {
         int result = -1;
         if (fwDir != null) {
             try {
+                if (BlankUtil.isBlank(fwDir.getLastCode())) {
+                    fwDir.setLastCode("#");
+                }
                 result = fwDirService.saveFwDir(fwDir, isEdit);
             } catch (Exception e) {
                 m_logger.warn("saveFwDir fail,cause by " + e.getMessage(), e);

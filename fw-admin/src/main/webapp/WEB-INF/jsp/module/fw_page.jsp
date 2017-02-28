@@ -8,7 +8,6 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 id="itemTitle"></h1>
-    <input type="hidden" name="oneDir" id="oneDir" value="${oneDir}"/>
     <input type="hidden" name="status" id="statusId" value="1"/>
 </section>
 <!-- .content -->
@@ -37,6 +36,8 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="pageForm">
                         <input type="hidden" name="id" id="id"/>
+                        <input type="hidden" name="status" id="status"/>
+                        <input type="hidden" name="oneDir" id="oneDir" value="${oneDir}"/>
                         <div class="form-group">
                             <label for="title" class="col-sm-1 control-label">标题:</label>
                             <div class="col-sm-11">
@@ -44,14 +45,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="oneDir" class="col-sm-1 control-label">一级栏目:</label>
-                            <div class="col-sm-11">
-                                <select name="oneDir" id="oneDir2" class="form-control">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="twoDir2" class="col-sm-1 control-label">二级栏目:</label>
+                            <label for="twoDir2" class="col-sm-1 control-label">栏目:</label>
                             <div class="col-sm-11">
                                 <select name="twoDir" id="twoDir2" class="form-control">
                                 </select>
@@ -176,8 +170,7 @@
         });
 
         // 加载select2下拉组件
-        loadOneDir();
-        loadTwoDir();
+        loadTwoDir('${oneDir}');
         keditor = KindEditor.create('textarea[name=content]', {
             filterMode: false,//是否开启过滤模式
             newlineTag: 'br',
@@ -219,18 +212,17 @@
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
+                        keditor.html(json.entity.content);
+
                         $("#id").val(json.entity.id);
                         $("#title").val(json.entity.title);
-                        $("#oneDir2").val(json.entity.oneDir);
-                        $("#twoDir2").val(json.entity.twoDir);
-                        $('#oneDir2').trigger('change');
-                        $('#twoDir2').trigger('change');
+                        $("#status").val(json.entity.status);
                         $("#source").text(json.entity.source);
                         $("#source").attr("href", json.entity.source);
-                        keditor.html(json.entity.content);
+                        $("#twoDir2").val(json.entity.twoDir).trigger('change');
                         $("#pageModal").modal('show');
                     } else {
-                        commonModal.openMessage("获取信息出错");
+                        commonModal.openMessage({body:"获取信息出错"});
                     }
                 }
             });
@@ -274,16 +266,16 @@
                 keditor.sync(); //同步kindeditor插件的内容到textare
                 $.ajax({
                     type: "post",
-                    url: "/wen/saveFwDir.action?isEdit=" + isEdit,
+                    url: "/wen/saveFwPage.action?isEdit=" + isEdit,
                     data: $('#pageForm').serialize(),
                     dataType: "json",
                     success: function (json) {
                         if (json.result == 1) {
                             $("#pageModal").modal('hide');
-                            commonModal.openMessage("保存成功");
+                            commonModal.openMessage({body:"保存成功"});
                             TableHelper.doRefresh("#pageTable");
                         } else {
-                            commonModal.openWarning("保存失败", json.result);
+                            commonModal.openWarning({body:"保存失败"}, json.result);
                         }
                     }
                 });
@@ -293,26 +285,9 @@
 
     });
 
-    function loadOneDir() {
-        $.ajax({
-            url: "/wen/getOneDirs.action",
-            dataType: "json",
-            success: function (data) {
-                $('#oneDir2').select2({data: data.items, width: 870, minimumResultsForSearch: Infinity}).on('change',
-                        function(e) {
-                            loadTwoDir($(this).val());
-                        }
-                );
-                if('${oneDir}'){
-                    $('#oneDir2').val('${oneDir}').prop("disabled", false);;
-                    $('#oneDir2').trigger('change');
-                }
-            }
-        });
-        loadTwoDir('${oneDir}');
-    };
 
     function loadTwoDir(oneDir){
+        $('#twoDir2').empty();
         $.ajax({
             url: "/wen/getTwoDirByOne.action",
             data: {'oneDir': oneDir},

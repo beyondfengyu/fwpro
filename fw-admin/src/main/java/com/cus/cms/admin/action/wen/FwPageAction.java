@@ -43,11 +43,11 @@ public class FwPageAction extends BaseAction {
      */
     @RequestMapping("/wen/getFwPages")
     @ResponseBody
-    public void getFwPages(String searchText, String oneDir, int status) {
+    public void getFwPages(String searchText, String oneDir,String twoDir, int status) {
         JSONObject jsonObject = new JSONObject();
-        List<FwPage> list = fwPageService.getFwPages(searchText, oneDir, status, getPageNumber(), getPageSize());
+        List<FwPage> list = fwPageService.getFwPages(searchText, oneDir, twoDir, status, getPageNumber(), getPageSize());
         if (!BlankUtil.isBlank(list)) {
-            jsonObject.put("total", fwPageService.getFwPageCount(searchText,oneDir, status));
+            jsonObject.put("total", fwPageService.getFwPageCount(searchText, oneDir, twoDir, status));
         }
         jsonObject.put("rows", list);
         writeJson(jsonObject.toJSONString());

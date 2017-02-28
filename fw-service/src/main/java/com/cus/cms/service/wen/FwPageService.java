@@ -29,16 +29,16 @@ public class FwPageService extends BaseService {
     @Autowired
     private FwContentDao fwContentDao;
 
-    public long getFwPageCount(String title, String oneDir, int status) {
-        return fwPageDao.queryFwPageCount(title, oneDir, status);
+    public long getFwPageCount(String title, String oneDir, String twoDir, int status) {
+        return fwPageDao.queryFwPageCount(title, oneDir, twoDir, status);
     }
 
-    public List<FwPage> getFwPages(String title, String oneDir, int status, int page, int size){
+    public List<FwPage> getFwPages(String title, String oneDir, String twoDir, int status, int page, int size){
         if (page < 1 || size < 0) {
             throw new IllegalArgumentException("page cann't less than 1 or size cann't less than 0");
         }
         int offset = (page - 1) * size;
-        return fwPageDao.queryFwPages(title, oneDir, status, offset, size);
+        return fwPageDao.queryFwPages(title, oneDir, twoDir, status, offset, size);
     }
 
     public int saveFwPage(FwPage fwPage, boolean isEdit){

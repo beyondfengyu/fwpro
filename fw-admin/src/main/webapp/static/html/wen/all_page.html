@@ -1,24 +1,20 @@
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 id="itemTitle"></h1>
-    <input type="hidden" name="param" id="param" />
-    <input type="hidden" name="status" id="statusId" value="2"/>
+    <input type="hidden" name="status" id="statusId" value="1"/>
 </section>
 <!-- .content -->
 <section class="content">
     <div id="pageTable"></div>
     <div id="toolbar">
-        <button id="add" class="btn btn-default">
-            <i class="glyphicon glyphicon-plus"></i>增加
-        </button>
         <div class="btn-group" id="statusGrp">
             <button type="button" class="btn btn-default status sts-allsts" data-val="-1">全部</button>
-            <button type="button" class="btn btn-warning status sts-editss" data-val="1">编辑</button>
-            <button type="button" class="btn btn-warning status sts-checks" data-val="2">审核</button>
-            <button type="button" class="btn btn-default status sts-succes" data-val="4">通过</button>
-            <button type="button" class="btn btn-default status sts-refuse" data-val="3">拒绝</button>
+            <button type="button" class="btn btn-warning status sts-checks" data-val="1">审核</button>
+            <button type="button" class="btn btn-default status sts-refuse" data-val="2">拒绝</button>
+            <button type="button" class="btn btn-default status sts-succes" data-val="3">通过</button>
             <button type="button" class="btn btn-default status sts-remove" data-val="0">丢弃</button>
         </div>
+        <select id="oneDir"></select>
+        <select id="twoDir"></select>
     </div>
     <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
         <div class="modal-dialog" role="document" style="width:980px;">
@@ -30,44 +26,38 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="pageForm">
-                        <input type="hidden" name="id" id="id"/>
                         <div class="form-group">
                             <label for="title" class="col-sm-1 control-label">标题:</label>
                             <div class="col-sm-11">
                                 <input type="text" class="form-control validate[required]" name="title" id="title">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="oneDir" class="col-sm-1 control-label">一级栏目:</label>
-                            <div class="col-sm-11">
-                                <select name="oneDir" id="oneDir" class="form-control">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="twoDir" class="col-sm-1 control-label">二级栏目:</label>
-                            <div class="col-sm-11">
-                                <select name="twoDir" id="twoDir" class="form-control">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="source" class="col-sm-1 control-label">源址:</label>
-                            <div class="col-sm-11">
-                                <a href="" id="source" target="_blank"></a>
-                            </div>
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label for="twoDir2" class="col-sm-1 control-label">栏目:</label>-->
+                            <!--<div class="col-sm-11">-->
+                                <!--<select name="twoDir" id="twoDir2" class="form-control">-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="source" class="col-sm-1 control-label">源址:</label>-->
+                            <!--<div class="col-sm-11">-->
+                                <!--<a href="" id="source" target="_blank"></a>-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <div class="form-group">
                             <label for="content" class="col-sm-1 control-label">正文:</label>
+
                             <div class="col-sm-11">
-                                <textarea class="from-control" name="content" id="content" style="width:870px; height:600px;"></textarea>
+                                <textarea class="from-control" name="content" id="content"
+                                          style="width:870px; height:600px;"></textarea>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="save">保存</button>
+                    <!--<button type="button" class="btn btn-primary" id="save">保存</button>-->
                 </div>
             </div>
         </div>
@@ -86,27 +76,37 @@
 <!-- .content -->
 <script>
     var isEdit = false;
+    var isSwitch = false;
+    var keditor = null;
     $(function () {
+
         $('#pageTable').bootstrapTable('destroy');
         $('#pageTable').bootstrapTable({
             columns: [
-                {field: 'id', title: 'ID', align: 'center',  width: '8%'},
-                {field: 'title', title: '标题', align: 'center',  width: '15%'},
+                {field: 'id', title: 'ID', align: 'center', width: '8%'},
+                {field: 'title', title: '标题', align: 'center', width: '15%'},
                 {field: 'oneDir', title: '一级栏目', align: 'center', width: '10%'},
                 {field: 'twoDir', title: '二级栏目', align: 'center', width: '10%'},
-                {field: 'status', title: '状态', align: 'center',width: '5%', formatter: function (val, row, index) {
+                {
+                    field: 'status', title: '状态', align: 'center', width: '5%', formatter: function (val, row, index) {
                     switch (val) {
-                        case 0: return "丢弃";
-                        case 1: return "编辑";
-                        case 2: return "审核";
-                        case 3: return "拒绝";
-                        case 4: return "通过";
-                        case 5: return "生成";
+                        case 0:
+                            return "丢弃";
+                        case 1:
+                            return "审核";
+                        case 2:
+                            return "拒绝";
+                        case 3:
+                            return "通过";
+                        case 4:
+                            return "生成";
                     }
-                }},
-                {field: 'source', title: '源址', align: 'center', width: '5%', formatter: function (val, row, index) {
-                        return '<a href="' + val + '" target="_blank">查看</a>';
-                    }
+                }
+                },
+                {
+                    field: 'source', title: '源址', align: 'center', width: '5%', formatter: function (val, row, index) {
+                    return '<a href="' + val + '" target="_blank">查看</a>';
+                }
                 },
                 {
                     field: 'id',
@@ -114,10 +114,10 @@
                     align: 'center',
                     width: '20%',
                     formatter: function (val, row, index) {
-                        return '<button class="btn btn-sm btn-primary opt-edit"  data-id='+ val +'>编辑</button>&nbsp;&nbsp;'+
-                                '<button class="btn btn-sm btn-success opt-agree" data-id='+ val +'>通过</button>&nbsp;&nbsp;'+
-                                '<button class="btn btn-sm btn-warning opt-refuse" data-id='+val +'>拒绝</button>&nbsp;&nbsp;'+
-                                '<button class="btn btn-sm btn-danger opt-remove" data-id='+ val +'>丢弃</button>';
+                        return '<button class="btn btn-sm btn-primary opt-edit"  data-id=' + val + '>查看</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-sm btn-success opt-agree" data-id=' + val + '>通过</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-sm btn-warning opt-refuse" data-id=' + val + '>拒绝</button>&nbsp;&nbsp;' +
+                                '<button class="btn btn-sm btn-danger opt-remove" data-id=' + val + '>丢弃</button>';
                     }
                 }
             ],
@@ -133,10 +133,16 @@
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
+                if(isSwitch) {
+                    params.pageNumber = 1;
+                    isSwitch = false;
+                }
                 var param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
                     status: $('#statusId').val(),
+                    oneDir: $('#oneDir').val(),
+                    twoDir: $('#twoDir').val(),
                     searchText: params.searchText
                 };
                 return param;
@@ -152,11 +158,23 @@
             }
         });
 
+        loadOneDir();
+        loadTwoDir("", true);
 
-        $("#pageForm").validationEngine();
+        keditor = KindEditor.create('textarea[name=content]', {
+            filterMode: false,//是否开启过滤模式
+            newlineTag: 'br',
+            uploadJson: '/admin/upload/editorimage.action',//上传路径
+            fileManagerJson: '/admin/image/scan.action',
+            allowFileManager: true,
+            allowImageUpload: true,
+            extraFileUploadParams: {//上传文件额外的参数
+
+            }
+        });
 
         $("#pageTable").on("click", '.opt-remove', function () {
-            var id = $(this).attr("data-id");  
+            var id = $(this).attr("data-id");
             if (confirm("你确认丢弃【" + TableHelper.getRowByUniqueId("#pageTable", id).title + "】吗?" +
                             "\r\n丢弃后再也不能找回，请谨慎操作！")) {
                 optStatus(id, 0, "丢弃");
@@ -165,12 +183,12 @@
 
         $("#pageTable").on("click", '.opt-refuse', function () {
             var id = $(this).attr("data-id");
-            optStatus(id, 3, "拒绝");
+            optStatus(id, 2, "拒绝");
         });
 
         $("#pageTable").on("click", '.opt-agree', function () {
             var id = $(this).attr("data-id");
-            optStatus(id, 4, "通过");
+            optStatus(id, 3, "通过");
         });
 
         $("#pageTable").on("click", '.opt-edit', function () {
@@ -183,87 +201,52 @@
                 dataType: "json",
                 success: function (json) {
                     if (json.entity) {
-                        $("#id").val(json.entity.id);
+                        keditor.html(json.entity.content);
                         $("#title").val(json.entity.title);
-                        $("#oneDir").val(json.entity.oneDir);
-                        $("#twoDir").val(json.entity.twoDir);
-                        $("#source").text(json.entity.source);
-//                        $("#content").text(json.entity.content);
-                        $("#source").attr("href",json.entity.source);
-
                         $("#pageModal").modal('show');
                     } else {
-                        $("#tipMsg").text("获取信息出错");
-                        $("#tipModal").modal('show');
+                        commonModal.openMessage({body:"获取信息出错"});
                     }
                 }
             });
             return false;
         });
 
-        $("#add").click(function () {
-            isEdit = false;
-            $("#pageForm")[0].reset();
-            $("#pageModal").modal('show');
-        });
 
-
-        $('#statusGrp').on('click', '.sts-allsts',function(){
+        $('#statusGrp').on('click', '.sts-allsts', function () {
             switchStatus('.sts-allsts');
         });
 
-        $('#statusGrp').on('click', '.sts-editss', function(){
+        $('#statusGrp').on('click', '.sts-editss', function () {
             switchStatus('.sts-editss');
         });
 
-        $('#statusGrp').on('click', '.sts-checks', function(){
+        $('#statusGrp').on('click', '.sts-checks', function () {
             switchStatus('.sts-checks');
         });
 
-        $('#statusGrp').on('click', '.sts-succes', function(){
+        $('#statusGrp').on('click', '.sts-succes', function () {
             switchStatus('.sts-succes');
         });
 
-        $('#statusGrp').on('click', '.sts-refuse', function(){
+        $('#statusGrp').on('click', '.sts-refuse', function () {
             switchStatus('.sts-refuse');
         });
 
-        $('#statusGrp').on('click', '.sts-remove', function(){
+        $('#statusGrp').on('click', '.sts-remove', function () {
             switchStatus('.sts-remove');
-        });
-
-        $("#save").click(function () {
-            if ($("#pageForm").validationEngine('validate')) {
-                $.ajax({
-                    type: "post",
-                    url: "/wen/saveFwDir.action?isEdit=" + isEdit,
-                    data: $('#pageForm').serialize(),
-                    dataType: "json",
-                    success: function (json) {
-                        if (json.result == 1) {
-                            $("#pageModal").modal('hide');
-                            $("#tipMsg").text("保存成功");
-                            $("#tipModal").modal('show');
-                            TableHelper.doRefresh("#pageTable");
-                        } else {
-                            $("#tipMsg").text("保存失败，错误码：" + json.result);
-                            $("#tipModal").modal('show');
-                        }
-                    }
-                });
-            }
-            ;
         });
 
     });
 
-    function switchStatus(selt){
-        console.log('selt is: ' + selt);
+    function switchStatus(selt) {
+        isSwitch = true;
         $('#statusGrp button').removeClass('btn-warning').addClass('btn-default');
         $(selt).addClass('btn-warning').removeClass('btn-default');
         $('#statusId').val($(selt).attr('data-val'));
         TableHelper.doRefresh("#pageTable");
-    }
+    };
+
 
     function optStatus(id, status, action) {
         $.ajax({
@@ -273,14 +256,45 @@
             dataType: "json",
             success: function (json) {
                 if (json.result == 1) {
-                    $("#tipMsg").text(action + "操作成功");
-                    $("#tipModal").modal('show');
+                    commonModal.openMessage({body:action + "操作成功"});
                     TableHelper.doRefresh("#pageTable");
                 } else {
-                    $("#tipMsg").text(action + "操作失败，错误码：" + json.result);
-                    $("#tipModal").modal('show');
+                    commonModal.openWarning({body:action + "操作失败"}, json.result);
                 }
             }
         });
-    }
+    };
+
+    function loadOneDir() {
+        $.ajax({
+            url: "/wen/getOneDirs.action",
+            data: {'hasNull':true},
+            dataType: "json",
+            success: function (data) {
+                $('#oneDir').select2({data: data.items, width: 120, minimumResultsForSearch: Infinity})
+                        .on('change', function(e){
+                            loadTwoDir($(this).val(), true);
+                            TableHelper.doRefresh("#pageTable");
+                        });
+            }
+        });
+
+    };
+
+    function loadTwoDir(oneDir, hasNull){
+        $('#twoDir').empty();
+        $.ajax({
+            url: "/wen/getTwoDirByOne.action",
+            data: {'oneDir': oneDir, 'hasNull':hasNull},
+            dataType: "json",
+            success: function (data) {
+                $('#twoDir').select2({data: data.items, width: 120, minimumResultsForSearch: Infinity})
+                        .on('change', function(e){
+                            TableHelper.doRefresh("#pageTable");
+                        });
+            }
+        });
+    };
+
 </script>
+
