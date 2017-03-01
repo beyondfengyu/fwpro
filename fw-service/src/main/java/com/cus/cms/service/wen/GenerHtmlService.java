@@ -1,5 +1,6 @@
 package com.cus.cms.service.wen;
 
+import com.cus.cms.common.util.DateTimeUtil;
 import com.cus.cms.dao.wen.FwContentDao;
 import com.cus.cms.dao.wen.FwDirDao;
 import com.cus.cms.dao.wen.FwPageDao;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 /**
  * @author Andy
  */
-
 @Service("generHtmlService")
 public class GenerHtmlService extends BaseService {
 
@@ -22,5 +22,8 @@ public class GenerHtmlService extends BaseService {
     private FwContentDao fwContentDao;
 
 
+    public String test() {
+        return DateTimeUtil.getCurrentTime();
+    }
 
 }

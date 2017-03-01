@@ -1,5 +1,6 @@
 package com.cus.cms.admin.listener;
 
+import com.cus.cms.admin.task.StaticTask;
 import com.cus.cms.common.frame.mvc.ContextUtil;
 import com.cus.cms.common.quartz.WorkScheduler;
 import com.cus.cms.admin.task.HtmlTask;
@@ -25,7 +26,8 @@ public class WebInitListener implements ApplicationListener<ContextRefreshedEven
             PropertyUtil.addConfigFile(ContextUtil.getContextPath() + "/config/server.properties");
 
             //定时获取资源网站最新的资源0 0 */6 * * ?
-            WorkScheduler.executeCronSchedule(HtmlTask.class, "executePiaoHua", PropertyUtil.getValByKey("executePiaoHua"));
+//            WorkScheduler.executeCronSchedule(HtmlTask.class, "executePiaoHua", PropertyUtil.getValByKey("executePiaoHua"));
+            WorkScheduler.executeCronSchedule(StaticTask.class, "generDetailPage", PropertyUtil.getValByKey("executeDetailPage"));
         }
     }
 }

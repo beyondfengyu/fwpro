@@ -15,7 +15,7 @@ import java.util.Map;
  * @description
  */
 public class BaseTask {
-    protected static Engine engine;
+    private static Engine engine;
     protected static ServerConfig serverConfig;
 
     static {
