@@ -33,7 +33,7 @@ public class MainMog {
                         .append("lastCode", doc.get("last_code"))
                         .append("status", doc.getInteger("status"))
                         .append("showOrder", doc.getInteger("show_order"));
-                collection2.insertOne(newDoc);
+//                collection2.insertOne(newDoc);
 
             }
         });

@@ -2,10 +2,13 @@ package com.cus.cms.crawler.mogodb;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+
+import java.util.Arrays;
 
 /**
  * @author Andy
@@ -25,7 +28,10 @@ public class MongodbHelper {
         buide.socketTimeout(0);
         buide.socketKeepAlive(true);
         MongoClientOptions myOptions = buide.build();
-        mongoClient = new MongoClient(new ServerAddress("127.0.0.1", 27017), myOptions);
+        MongoCredential credential = MongoCredential.createCredential("fwpro", "fwpro", "123".toCharArray());
+
+//        mongoClient = new MongoClient(new ServerAddress("127.0.0.1", 27017), Arrays.asList(credential), myOptions);
+        mongoClient = new MongoClient(new ServerAddress("192.168.75.130", 35178),  myOptions);
     }
 
     public static MongoCollection<Document>  getDbCollection(String db, String docset) {

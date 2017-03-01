@@ -56,11 +56,11 @@
 			</array>
 		</property>
 		<!-- 设定认证参数列表，默认为空 -->
-		<!-- <property name="credentialStrings">
-            <array>
-               <value>${mongo.db.credential_1}</value>
-            </array>
-        </property> -->
+		 <!--<property name="credentialStrings">-->
+            <!--<array>-->
+               <!--<value>${mongo.credential}</value>-->
+            <!--</array>-->
+        <!--</property>-->
 	</bean>
 
 	<!-- 使用工厂创建morphia实例，同时完成类映射操作 -->

@@ -8,15 +8,12 @@ $(function(){
 	/*提示*/
 	window.dictSelect = {
         select: function(id, code, hasNull, url) {
-            if (!hasNull) {
-                hasNull = true;
-            }
-            if (!url) {
-                url = "/admin/getDictByCode.action";
-            }
+            var hasNull2 = hasNull || false;
+            var url2 = url || "/admin/getDictByCode.action";
+
             $.ajax({
-                url: url,
-                data: {'code': code, 'hasNull': hasNull},
+                url: url2,
+                data: {'code': code, 'hasNull': hasNull2},
                 dataType: "json",
                 success: function (data) {
                     $(id).select2({data: data.items});
