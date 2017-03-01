@@ -1,9 +1,12 @@
 package com.cus.cms.admin.task;
 
 
+import com.cus.cms.admin.util.ServerConfig;
 import com.cus.cms.common.frame.ioc.SpringContextUtil;
 import com.cus.cms.common.freemarker.Engine;
 import com.cus.cms.common.util.PropertyUtil;
+import org.aeonbits.owner.Config;
+import org.aeonbits.owner.ConfigFactory;
 
 import java.util.Map;
 
@@ -12,7 +15,12 @@ import java.util.Map;
  * @description
  */
 public class BaseTask {
-    private static Engine engine;
+    protected static Engine engine;
+    protected static ServerConfig serverConfig;
+
+    static {
+        serverConfig = ConfigFactory.create(ServerConfig.class);
+    }
 //    private static ResNavDao resNavDao;
 //    private static ResVideoDao resVideoDao;
 //    private static VideoTypeDao videoTypeDao;
@@ -61,12 +69,12 @@ public class BaseTask {
      * @param outPath 输出的文件路径，该路径在默认的目录下
      */
     protected static void generateWithBasePath(Map<String,Object> datas,String ftlPath,String outPath){
-        outPath = PropertyUtil.getValByKey("static_base_path") + outPath;
+        outPath = serverConfig.webHtmlPath() + outPath;
         generate(datas,ftlPath,outPath);
     }
 
     protected static void generateMobileWithBasePath(Map<String,Object> datas,String ftlPath,String outPath){
-        outPath = PropertyUtil.getValByKey("static_mobile_base_path") + outPath;
+        outPath = serverConfig.mobHtmlPath() + outPath;
         generate(datas,ftlPath,outPath);
     }
 
@@ -80,7 +88,7 @@ public class BaseTask {
         getEngine().writeHtml(datas, ftlPath, outPath);
     }
 
-    private static Engine getEngine(){
+    protected static Engine getEngine(){
         if(engine==null){
             engine = (Engine) SpringContextUtil.getBean("engine");
         }
