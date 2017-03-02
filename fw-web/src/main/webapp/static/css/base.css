@@ -132,6 +132,7 @@ ul{
     overflow: hidden;
 }
 .llist li a:hover{
+    color:#f34540;
     text-decoration: underline;
     cursor: auto;
 }
@@ -151,22 +152,26 @@ ul{
     width: 360px;
     height:140px;
 }
-.mtop .mtpt{
+.mtpt{
     width: 360px;
     height: 30px;
     line-height:30px;
-    font-size:20px;
-    color:orange;
     text-align:center;
     overflow: hidden;
 }
-.mtop .mtpp{
+.mtpt a:link, .mtpt a:visited{
+    line-height:30px;
+    font-size:20px;
+    color:orange;
+    text-decoration: none;
+}
+.mtpp{
     padding: 5px;
     width: 360px;
     height: 110px;
     line-height: 20px;
     font-size: 13px;
-    color: #333;
+    color: #555;
     text-indent:2em;
     overflow: hidden;
 }
@@ -195,6 +200,7 @@ ul{
     overflow: hidden;
 }
 .mmid li a:hover{
+    color:#f34540;
     text-decoration: underline;
     cursor: auto;
 }
@@ -241,6 +247,7 @@ ul{
     overflow: hidden;
 }
 .mblist li a:hover{
+    color:#f34540;
     text-decoration: underline;
     cursor: auto;
 }
@@ -286,6 +293,7 @@ ul{
     overflow: hidden;
 }
 .rlist li a:hover{
+    color:#f34540;
     text-decoration: underline;
     cursor: auto;
 }
@@ -327,12 +335,14 @@ ul{
     overflow: hidden;
 }
 .rlist2 li a:hover{
+    color:#f34540;
     text-decoration: underline;
     cursor: auto;
 }
 
 /** .mnav **/
 .mnav{
+    margin-top: 20px;
     padding: 0 10px;
     width: 960px;
     height: 36px;
@@ -361,6 +371,9 @@ ul{
     line-height: 33px;
     font-size: 13px;
     color: #333;
+}
+.mnvchild a:hover{
+    color:#f34540;
 }
 /*Tab栏目标签*/
 .iTabBox{width:948px;margin:0 auto;border-bottom: 1px solid #dbe4f9;zoom: 1;background: #f9fbfc;border-left:1px solid #dbe4f9;border-right:1px solid #dbe4f9;}
