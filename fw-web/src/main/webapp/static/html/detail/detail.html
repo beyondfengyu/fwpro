@@ -1,0 +1,418 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Linux 日志分析命令详解 |  新学度博客</title>
+    <link rel="icon" href="/favicon.ico">
+
+
+    <script type="text/javascript">
+        contextPath = 'http://localhost:8080/';
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="互联网，编程，Java，博客">
+    <meta name="author" content="锋宇">
+    <meta name="baidu_union_verify" content="b6e0733c09647f20082b7e0f2f3146ec">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="bookmark" href="/favicon.ico" type="image/x-icon"　/>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="/bootstrap/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/bootstrap/js/ie-emulation-modes-warning.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="/component/syntaxhighlighter/styles/shCoreRDark.css" rel="stylesheet"/>
+    <!--<link href="http://static.wolfbe.com/main/css/base.css" rel="stylesheet">-->
+    <link rel ="stylesheet" href="http://static.wolfbe.com/main/css/base.css">
+    <link rel ="stylesheet" href="http://static.wolfbe.com/main/css/detail.css" >
+</head>
+
+<body>
+<nav  role="navigation">
+    <div id="top"></div>
+    <div id="hmain" class="w1024">
+        <div id="htop" >
+            <div >
+                <div style="float:left;width:278px;">
+                    <a href="http://v.wolfbe.com" ><img src="http://static.wolfbe.com/images/nav/logo.png" /></a>
+                </div>
+            </div>
+        </div>
+        <div id="hnav">
+            <div>
+                <ul class="nav-area">
+                    <li><a class="nav-a nav-act"  href="http://v.wolfbe.com">首页</a></li>
+                    <li><a class="nav-a"  href="http://v.wolfbe.com/html/xj/index.html">喜剧片</a></li>
+                    <li><a class="nav-a"  href="http://v.wolfbe.com/html/aq/index.html">爱情片</a></li>
+                    <li><a class="nav-a"  href="http://v.wolfbe.com/html/xj/index.html">剧情片</a></li>
+                    <li><a class="nav-a"  href="http://v.wolfbe.com/html/aq/index.html">科幻片</a></li>
+                    <li><a class="nav-a"  href="http://v.wolfbe.com/html/dz/index.html">动作片</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+            <div class="ex">
+                <a href="http://www.wolfbe.com" id="homebtn"><span class="glyphicon glyphicon-home"></span>&nbsp;朗度云</a>
+                <span class="glyphicon glyphicon-align-justify" id="exbtn"></span>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container main w1024">
+    <div class="row">
+        <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="row bg-main bobm">
+                <div class="bg-post bg-detail">
+                    <div class="header">
+                        <a href="#" class="bg-post-title"><h3 class="dh2">Linux 日志分析命令详解</h3></a>
+                        <div class="bg-post-meta meta-top">
+							<span>分类:
+
+							<a href="#" class="bg-classify">操作系统</a>
+
+							</span>
+                            <span>阅读:<a href="#" class="bg-classify">276</a>次</span>
+                            <span>发表于:<a href="#" class="bg-classify">2015-08-10</a></span>
+                            <span>作者:<a href="#" class="bg-classify">开发者</a></span>
+                            <a href="#anchor1" title="评论次数" style="color:#666;"><span class="ds-thread-count" data-thread-key="57" data-count-type="comments"></span></a>
+                        </div>
+                        <div class="clear"></div>
+
+                    </div>
+                    <div class="content my-height">
+                        很多人都说要养成个好习惯实在是难，普通人总是容易三天打鱼,两天晒网，还没尝到好习惯给我们带来的甜头便夭折在半路上。其实要养成一个好习惯，需要我们看到事物的本质，追本溯源，进而对症下药。
+                        很多人都说要养成个好习惯实在是难，普通人总是容易三天打鱼,两天晒网，还没尝到好习惯给我们带来的甜头便夭折在半路上。其实要养成一个好习惯，需要我们看到事物的本质，追本溯源，进而对症下药。
+
+                        1什么是习惯？
+
+                        所谓习惯就是“不依赖意志或毅力，把自己想要持续的事情引导到如每天刷牙般轻松的状态”。其实对于大脑而言，没有所谓的好习惯和坏习惯的分别，习惯就是在脑中设定的在一定时期内重复进行某项行动的程序而已。
+
+                        文／怦然心动的人生（简书作者）
+                        原文链接：http://www.jianshu.com/p/15d04affd4d8#
+                        著作权归作者所有，转载请联系作者获得授权，并标注“简书作者”。
+                        1什么是习惯？
+
+                        所谓习惯就是“不依赖意志或毅力，把自己想要持续的事情引导到如每天刷牙般轻松的状态”。其实对于大脑而言，没有所谓的好习惯和坏习惯的分别，习惯就是在脑中设定的在一定时期内重复进行某项行动的程序而已。
+
+                        举
+
+                        个栗子来说，早睡早起对我而言并不是难事，因为我本身不喜欢也不习惯熬夜，过了11点脑子自动进入待机状态，但到了早晨6点左右会自动开机。但对有些习惯
+
+                        晚睡晚起的伙伴而言，刻意早睡早起不但让人感到痛苦，而且白天容易疲惫，效果不佳。如果“夜猫子”们可以利用好晚上安静而高效的时间，那晚睡晚起对于他们
+
+                        而言就是好习惯。
+
+                        2为什么我们容易产生“三分钟热度”？
+
+                        我曾经尝试学习过很多东西，如油画，拉丁舞，手风琴，钢琴，唱歌，法语，口译.....但最终都没能走到终点站。为什么？
+
+                        对于人类而言，我们习惯保持在固定的状态，因为这样能让我们感到舒适和安全，变化则被视为是一种威胁。正因为身体对“培养新习惯”的变化感受到了威胁，于是开始不断反抗，也就是“三分钟热度”现象的内部机制。认识到这一点后，我们就要有针对性的采取措施，让大脑认为这项新习惯“跟往常一样”就好了。
+
+
+                        3习惯的三种分类
+
+                        关于习惯养成有很多理论，21天养成一个好习惯，三个月养成习惯，10000小时定律等，但事实证明对于不同的习惯，所需的时间是不同的。
+
+                        对于行为习惯，培养时间大约为一个月，主要是一些每天规律的行为如写日记、整理、读书等。对于身体习惯如减肥、运动、早起、戒烟等，由于这种变化对人的影响比较大，通常需要三个月。对于思考习惯如逻辑性思考能力、批判性思维、创意能力等，通常和我们的性格有关，身体对于变化所产生的抵抗也最强烈，需要六个月来养成。
+
+                        4培养习惯的三个阶段
+
+                        习惯培养主要分为三个阶段，阶段一：反抗期（第1天~第7天）马上就想放弃，42%的人失败。阶段二：不稳定期（第8天~第21天）被预定事项或他人影响，40%的人失败。阶段三：倦怠期（第22天~第30天）逐渐感到厌烦，18%的人失败。
+
+                        如何才能针对不同阶段， 有效采取措施从而养成良好的习惯呢？
+
+                        我们要学会以农业眼光培养习惯，即拥有长远眼光，培养不同类型的好习惯。在决定培养什么习惯之前，我们要弄清楚自己三年、五年后要成为什么样的人，达到怎么样的目标、工作和生活上取得怎么样的成绩，从而进行习惯的选择。通常而言，习惯分为短期、中期和长期习惯。短期习惯效果立竿见影，如整理、不吃零食、减少看手机的次数。中期习惯包括时间管理、写日记、考职业证等。长期习惯需要长时间的积累才能达到水滴石穿的效果，如扩展人脉，终身学习，健康管理。
+
+
+                        5顺利培养习惯的三个阶段
+
+                        反抗期：咬牙坚持下去
+
+                        在阶段一，我们会有各种各样不舒适以及想放弃的感觉，如学了觉得没用，时间不够，内容太无趣，想要试试别的等。在这个阶段，我们完全可以忽略行动量或结果，而是将重心放在开始行动并且坚持每天行动。
+
+                        假如我想养成晨跑的习惯，原先的目标是每天30分钟，但是当第3-4天的时候，心里会产生抗拒感，这时候我们要做的不是逼自己跑完30分钟，而是告诉自己，我可以选择跑5-10分钟或者走20分钟，但是不能不行动，过两天之后，我们就又能恢复正常的30分钟晨跑了。
+
+                        在这个阶段，我们可以锁定一项习惯（切忌三心二意），坚持有效的行动（事情越简单越容易坚持下去）并且不过分在意结果。可采用的方法如“以婴儿学步开始”，从小的地方开始做，不追求完美，而是注重开始行动的过程。再如每天进行简单记录，让过程和结果可视化，增强自信心。其中最关键的一点还是坚持每天持续进行。
+
+
+                        不稳定期：提高门槛，形成稳定机制
+
+
+                        在阶段二，我们经常会被加班或其他突发事情所打扰，从而产生厌倦、怀疑等不良情绪。在这个阶段，我们要学会调高门槛，使得行为模式化，设立好例外规则，设定持续开关。
+
+                        行为模式化指的是将自己需要做的事情细分，具体到何时何地何人，如每天晚上10-11点，关闭一切通讯工具，专心看书，一周2本书，2篇书评。
+
+                        设定例外规则是为了让计划保持弹性，即凡事都有Plan B。例如本来周三晚上准备去健身房上瑜伽课的，但是由于临时有事需要加班去不了，那我们的Plan B可以是在家附近夜跑30分钟或者室内跟着Keep软件健身。凡事提前想好PlanB，可以让我们更轻松地应对变化带来的不愉悦感。
+
+                        文／怦然心动的人生（简书作者）
+                        原文链接：http://www.jianshu.com/p/15d04affd4d8
+                        著作权归作者所有，转载请联系作者获得授权，并标注“简书作者”。
+                        <div class="bg-jox">
+                            <a href="javascript:void(0);" class="zai" id="zai">
+                                赞&nbsp;<b id="zaic">0</b></a><a href="javascript:void(0);" class="share" id="share">
+                            <span class="glyphicon glyphicon-share-alt"></span>&nbsp;&nbsp;分享</a>
+                            <span href="javascript:void(0);" class="shang" id="shang">赏</span>
+                        </div><!-- /.bg-like-->
+                        <div class="bg-copy">
+                            <p>版权说明：如无特殊说明，文章均为本站原创，如需转载请注明出处</p>
+                            <p>本文标题：<a href="#">【原创】移植知更鸟的点赞、分享、打赏的样式教程</a></p>
+                            <p>本文地址：<a href="#">http://www.slmwp.com/transplant-zan-share-admire.html</a></p>
+                            <p class="bg-tag">本文标签：
+                                <a href="/web/blog/tags/Linux">Linux</a>
+                                <a href="/web/blog/tags/日志">日志</a>
+                                <a href="/web/blog/tags/命令">命令</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div><!-- /.bg-post -->
+            </div><!-- /.bg-main -->
+            <div class="row bg-main brs">
+                <div class="container" style="width:100%;">
+                    <div class="row til">相关文章</div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-xs-6 its2">
+                            <a href="#" target="_blank">
+                                <img class="himg2" src="http://c11.eoemarket.com/app0/210/210768/icon/437326.png">
+                                <div class="htxt2">
+                                    Linux 日志分析命令详解
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6 its2">
+                            <a href="#" target="_blank">
+                                <img class="himg2" src="http://pic1.win4000.com/wallpaper/4/5599f66607098_270_185.jpg">
+                                <div class="htxt2">
+                                    Linux 日志分析命令详解
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-3  col-xs-6 its2">
+                            <a href="#" target="_blank">
+                                <img class="himg2" src="http://pic1.win4000.com/wallpaper/4/5599f66607098_270_185.jpg">
+                                <div class="htxt2">
+                                    Linux 日志分析命令详解
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6 its2">
+                            <a href="#" target="_blank">
+                                <img class="himg2" src="http://pic1.win4000.com/wallpaper/4/5599f66607098_270_185.jpg">
+                                <div class="htxt2">
+                                    Linux 日志分析命令详解
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row bg-main">
+                <a name="anchor1"></a>
+                <!-- 多说评论框 start -->
+                <div class="ds-thread" data-thread-key="57" data-title="Linux 日志分析命令详解" data-url="/web/blog/detail/57"></div>
+            </div>
+        </div>
+        <!-- 关联右侧页面的信息 -->
+        <div class="col-md-3 col-sm-3  col-xs-12">
+            <div class="row rmain">
+                <div class="rma">
+                    <div class="twp">
+                        <h4 class="dh3">最新发布</h4>
+                    </div>
+                    <div class="lss">
+                        <ul>
+                            <li>
+                                <a href="#" target="_blank">
+                                    1、Linux 日志分析命令详解Linux 日志分析命令详解
+                                </a>
+                            </li><li>
+                            <a href="#" target="_blank">
+                                Linux 日志分析命令详解Linux 日志分析命令详解Linux 日志分析命令详解
+                            </a>
+                        </li><li>
+
+                            <a href="#" target="_blank">
+                                Linux 日志分析命令详解Linux 日志分析命令详解Linux 日志分析命令详解
+                            </a>
+                        </li><li>
+
+                            <a href="#" target="_blank">
+                                Linux 日志分析命令详解Linux 日志分析命令详解Linux 日志分析命令详解
+                            </a>
+                        </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="rma">
+                    <div class="twp">
+                        <h4 class="dh3">最新发布</h4>
+                    </div>
+                    <ul class="lss">
+                        <li>
+                            <a href="#" target="_blank">
+                                1、Linux 日志分析命令详解Linux 日志分析命令详解
+                            </a>
+                        </li><li>
+                        <a href="#" target="_blank">
+                            Linux 日志分析命令详解Linux 日志分析命令详解Linux 日志分析命令详解
+                        </a>
+                    </li><li>
+
+                        <a href="#" target="_blank">
+                            Linux 日志分析命令详解Linux 日志分析命令详解Linux 日志分析命令详解
+                        </a>
+                    </li><li>
+
+                        <a href="#" target="_blank">
+                            Linux 日志分析命令详解Linux 日志分析命令详解Linux 日志分析命令详解
+                        </a>
+                    </li>
+
+                    </ul>
+                </div>
+            </div><!--.row -->
+        </div><!-- col-md-3 -->
+    </div><!-- /.row -->
+</div><!-- /.container -->
+
+<div class="dlg" id="dlg1">
+    <div class="container dlg-share" id="dlg-share">
+        <div class="row">
+            <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a></div>
+            <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script></div>
+        </div>
+    </div>
+<div class="dlg" id="dlg2">
+    <div class="container dlg-shang" id="dlg-shang">
+        <div class="row">
+            <h3 class="tlt">感谢您的支持，朗度云将继续前行</h3>
+        </div>
+        <div class="row">
+            <div class="scode">
+                <div class="code-bg">
+                    <img src="http://static.wolfbe.com/main/images/wx_code.png" class="code" id="wx_code" style="display:block;">
+                    <img src="http://static.wolfbe.com/main/images/zf_code.png" class="code" id="zf_code">
+                </div>
+                <span>扫码打赏，金额随意</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="chtype">
+                <div class="item" id="wxcode">
+                    <span class="ra ra1" id="ra1"></span>
+                    <span class="zf zf1"></span>
+                </div>
+                <div class="item" id="zfbcode">
+                    <span class="ra" id="ra2"></span>
+                    <span class="zf"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h4 class="tip">
+                温馨提醒：打赏一旦完成，金额无法退还，请谨慎操作！
+            </h4>
+        </div>
+    </div>
+</div>
+<!-- footer -->
+<footer>
+    <div id="footerwrap">
+        <div class="w1024" id="footertop">
+            <div class="container w1024"  id="footernav">
+                <div class="row">
+                    <div class="col-md-5">
+                        <span class="link-title">网站导航</span>
+                        <div class="link-list ">
+                            <a class="link-item" href="http://v.wolfbe.com" >首页</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/xj/index.html" >喜剧片</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/aq/index.html" >爱情片</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/xj/index.html" >剧情片</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/aq/index.html" >科幻片</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/dz/index.html" >动作片</a>
+                        </div>
+                    </div>
+                    <!--<div class="ft-item-spa"></div>-->
+                    <div class="col-md-5">
+                        <span class="link-title">服务</span>
+                        <div class="link-list">
+                            <a class="link-item" href="http://sou.wolfbe.com" >云搜</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/service/about.html" >关于我们</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/service/declare.html" >网站声明</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/service/feedback.html" >意见反馈</a>
+                            <a class="link-item" href="http://v.wolfbe.com/html/service/ad.html" >广告合作</a>
+                        </div>
+                    </div>
+                    <div class="col-md-2 code">
+                        <img src="http://static.wolfbe.com/images/code.png">
+                    </div>
+                </div>
+            </div>
+
+            <div class="w1024" id="friendlink">
+                <span class="link-title">合作伙伴</span>
+                <div id="link-list">
+                    <a href="http://baidu.com">百度</a>
+                    |
+                    <a href="http://baidu.com">百度</a>
+
+                </div>
+            </div>
+        </div><!-- /#footertop -->
+        <div id="copyright">
+            <p >
+                ©2016 朗度云 <a href="http://www.miitbeian.gov.cn/"  target="_blank">粤ICP备14048636号 </a>
+            </p>
+
+        </div><!--/#fbody-->
+    </div><!--/#footerwrap" -->
+</footer><!--/#footer -->
+<!-- fixed right bar -->
+<div class="frg">
+    <a href="#" class="ic ic-cd is"><span class="glyphicon glyphicon-qrcode"></span>扫二维码</a>
+    <a href="#" class="ic ic-fk is"><span class="glyphicon glyphicon-comment"></span>我要反馈</a>
+    <a href="#" class="ic ic-top is"><span class="glyphicon glyphicon-chevron-up"></span>回到顶部</a>
+    <a href="#" class="ic ic-top top2"><span class="glyphicon glyphicon-chevron-up"></span></a>
+    <div class="qrcode"><img src="http://www.wolfbe.com/main/images/wx_code.png"></div>
+</div><!-- .frg -->
+<!-- Core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+<script src="http://static.wolfbe.com/main/js/base.js" type="text/javascript"></script>
+<script src="http://static.wolfbe.com/main/js/detail.js" type="text/javascript"></script>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"wolfbe"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</body>
+</html>
