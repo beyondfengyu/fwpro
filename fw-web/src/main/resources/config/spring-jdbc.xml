@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<description>数据源配置</description>
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/config/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- writeConcern  -->
+	<bean id="writeConcern" class="com.mongodb.WriteConcern">
+		<!-- 对应全局的WriteConcern中的w，默认为0 -->
+		<constructor-arg name="w" value="1" />
+		<!-- 对应全局的WriteConcern中的wtimeout，默认为0 -->
+		<constructor-arg name="wTimeoutMS" value="0" />
+		<!-- 对应全局的WriteConcern.FSYNC_SAFE，如果为真，每次写入要等待写入磁盘，默认为false -->
+		<constructor-arg name="fsync" value="false" />
+		<!-- 对应全局的WriteConcern.JOURNAL_SAFE，如果为真，每次写入要等待日志文件写入磁盘，默认为false -->
+		<constructor-arg name="journal" value="false" />
+	</bean>
+
+	<bean id="mongoClientOption" class="com.cus.cms.common.mongo.MongoClientOption">
+		<property name="minConnectionsPerHost" value="20" />
+		<property name="maxConnectionsPerHost" value="100" />
+		<property name="threadsAllowedToBlockForConnectionMultiplier" value="20" />
+		<property name="maxWaitTime" value="12000" />
+		<property name="maxConnectionIdleTime" value="0" />
+		<property name="maxConnectionLifeTime" value="0" />
+		<property name="connectTimeout" value="3000" />
+		<property name="socketTimeout" value="60000" />
+		<property name="socketKeepAlive" value="true" />
+		<property name="writeConcern" ref="writeConcern" />
+	</bean>
+
+	<!-- 使用工厂创建mongo实例 -->
+	<bean id="mongo" class="com.cus.cms.common.mongo.MongoFactoryBean">
+		<!-- mongoDB的配置对象 -->
+		<property name="mongoOption" ref="mongoClientOption"/>
+		<!-- 是否主从分离(读取从库)，默认为false，读写都在主库 -->
+		<!-- <property name="readSecondary" value="true" /> -->
+
+		<!-- 设定写策略，默认为WriteConcern.SAFE，优先级高于mongoOptions中的safe -->
+		<!--<property name="writeConcern" value="MAJORITY" />-->
+
+		<!-- 设定服务器列表，默认为localhost:27017 -->
+		<property name="serverStrings">
+			<array>
+				<value>${mongo.master}</value>
+				<!-- <value>${mongo.db.host_salve}</value> -->
+			</array>
+		</property>
+		<!-- 设定认证参数列表，默认为空 -->
+		 <!--<property name="credentialStrings">-->
+            <!--<array>-->
+               <!--<value>${mongo.credential}</value>-->
+            <!--</array>-->
+        <!--</property>-->
+	</bean>
+
+	<!-- 使用工厂创建morphia实例，同时完成类映射操作 -->
+	<bean id="morphia"
+		  class="com.cus.cms.common.mongo.MorphiaFactoryBean">
+		<!-- 指定要扫描的POJO包路径 -->
+		<property name="mapPackages">
+			<array>
+				<value>com.cus.cms.common.model</value>
+			</array>
+		</property>
+	</bean>
+	<!-- 使用工厂创建datastore，同时完成index和caps的确认操作 -->
+	<bean id="datastore" class="com.cus.cms.common.mongo.DataStoreFactoryBean">
+		<property name="morphia" ref="morphia" />
+		<property name="mongo" ref="mongo" />
+		<property name="dbName" value="${mongo.dbname}" />
+		<!-- 是否进行index和caps的确认操作，默认为flase -->
+		<property name="toEnsureIndexes" value="true" /><!-- 是否确认索引存在，默认false -->
+		<property name="toEnsureCaps" value="true" /><!-- 是否确认caps存在，默认false -->
+	</bean>
+</beans>
