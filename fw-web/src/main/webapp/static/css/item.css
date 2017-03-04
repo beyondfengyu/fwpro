@@ -1,0 +1,133 @@
+
+.left {
+    float: left;
+    display: block;
+    margin-right: 15px;
+    width: 685px;
+    border: 1px solid #eee;
+}
+
+.ltitle {
+    width: 685px;
+    height: 30px;
+    border-bottom: 1px #eee solid;
+}
+
+.ltitle a:link, .ltitle a:visited {
+    display: inline-block;
+    margin-right: 10px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #404040;
+    text-decoration: none;
+    text-indent: 10px;
+}
+.ltitle a:hover {
+    color: #f34540;
+    text-decoration: underline;
+    cursor: auto;
+}
+
+.llist {
+    width: 685px;
+    padding: 10px 15px;
+}
+
+.lldl {
+    width: 685px;
+    margin: 20px 0;
+}
+.dlfirst{
+    margin-top: 0;
+}
+.lldt{
+    margin-bottom: 2px;
+}
+.lldt a:link, .lldt a:visited {
+    height: 30px;
+    line-height: 30px;
+    color: #404040;
+    font-size: 14px;
+    text-decoration: none;
+    overflow: hidden;
+}
+.lldt a:hover {
+    color: #f34540;
+    text-decoration: underline;
+    cursor: auto;
+}
+.lldd{
+    float: left;
+    margin-left:6px;
+    width: 126px;
+    height: 20px;
+    overflow: hidden;
+}
+.lldd a:link, .lldd a:visited {
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    color: #404040;
+    font-size: 13px;
+    text-decoration: none;
+    overflow: hidden;
+}
+.lldd a:hover {
+    color: #f34540;
+    text-decoration: underline;
+    cursor: auto;
+}
+
+.right {
+    float: left;
+    display: block;
+    width: 260px;
+}
+.rtitle2 {
+    width: 260px;
+    height: 30px;
+    border-bottom: 1px #eee solid;
+}
+.rtitle2 a:link, .rtitle2 a:visited {
+    display: inline-block;
+    border-left: 2px #f34540 solid;
+    line-height: 22px;
+    font-size: 14px;
+    color: #111;
+    text-decoration: none;
+    text-indent: 10px;
+}
+.rtitle2 a:hover{
+    color:#f34540;
+}
+.rlist2 {
+    margin-bottom:10px;
+    width: 260px;
+    padding: 7px 5px 7px 0;
+}
+
+.rlist2 li {
+    width: 260px;
+    height: 24px;
+    background: url("../img/li.gif") -3px -136px no-repeat;
+    text-indent: 10px;
+    list-style: none;
+    overflow: hidden;
+}
+
+.rlist2 li a:link, .rlist2 li a:visited {
+    display: inline-block;
+    width: 260px;
+    height: 24px;
+    line-height: 24px;
+    color: #404040;
+    font-size: 13px;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.rlist2 li a:hover {
+    color: #f34540;
+    text-decoration: underline;
+    cursor: auto;
+}
