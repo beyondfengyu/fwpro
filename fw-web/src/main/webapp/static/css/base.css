@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: microsoft yahei, hiragino sans gb, simsun;
+    font-size: 13px;
 }
 
 a:focus {
@@ -74,9 +75,9 @@ ul {
 #linkgrp {
     padding: 6px 10px;
     line-height: 26px;
-    text-align: center;
+    /*text-align: center;*/
     word-spacing: 3px;
-    font-size: 14px;
+    font-size: 13px;
     color: #FFF;
 }
 

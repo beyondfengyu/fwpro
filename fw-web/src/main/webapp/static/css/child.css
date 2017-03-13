@@ -1,4 +1,4 @@
-
+@charset "utf-8";
 .left {
     float: left;
     display: block;
@@ -11,13 +11,14 @@
     width: 685px;
     height: 30px;
     border: 1px #eee solid;
+    background:#fcfcfc;
 }
 
 .ltitle a:link, .ltitle a:visited {
     display: inline-block;
     margin-right: 10px;
     line-height: 30px;
-    font-size: 14px;
+    font-size: 13px;
     color: #404040;
     text-decoration: none;
     text-indent: 10px;
@@ -30,12 +31,14 @@
 
 .llist {
     width: 685px;
+    background:#fcfcfc;
 }
 
 .item {
     float: left;
-    width: 332px;
-    margin-right:21px;
+    margin-bottom: 10px;
+    margin-right:11px;
+    width: 337px;
     padding-bottom: 6px;
     border:1px solid #eee;
 }
@@ -44,7 +47,7 @@
 }
 .emtitle{
     margin-bottom: 2px;
-    width:332px;
+    width:337px;
     height: 30px;
     line-height:30px;
     border-bottom: 1px solid #eee;
@@ -62,7 +65,7 @@
 }
 .emtitle .title{
     float: left;
-    font-size: 14px;
+    font-size: 13px;
 }
 .emtitle .more {
     float: right;
@@ -71,7 +74,7 @@
 }
 .item dd{
     margin-right: 5px;
-    width: 332px;
+    width: 337px;
     height: 24px;
     padding-left: 5px;
     padding-right: 5px;
@@ -83,7 +86,7 @@
 }
 .item dd a:link, .item dd a:visited{
     display: inline-block;
-    width: 312px;
+    width: 317px;
     height: 24px;
     line-height: 24px;
     color: #404040;
@@ -108,7 +111,7 @@
     display: inline-block;
     border-left: 2px #f34540 solid;
     line-height: 22px;
-    font-size: 14px;
+    font-size: 13px;
     color: #111;
     text-decoration: none;
     text-indent: 10px;

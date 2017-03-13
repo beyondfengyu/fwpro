@@ -4,13 +4,13 @@
     display: block;
     margin-right: 15px;
     width: 685px;
-    border: 1px solid #eee;
 }
 
 .ltitle {
+    margin-bottom:10px;
     width: 685px;
     height: 30px;
-    border-bottom: 1px #eee solid;
+    border: 1px #eee solid;
     background:#fcfcfc;
 }
 
@@ -31,21 +31,40 @@
 
 .llist {
     width: 685px;
-    padding: 10px 15px;
+    border:1px solid #eee;
     background:#fcfcfc;
 }
 
-.lldl {
-    width: 685px;
-    margin: 20px 0;
-}
-.dlfirst{
-    margin-top: 0;
-}
-.lldt{
+.lshare{
     margin-bottom: 2px;
+    padding: 0 10px;
+    width:683px;
+    height: 30px;
+    line-height:30px;
+
 }
-.lldt a:link, .lldt a:visited {
+.item {
+    margin-bottom: 0;
+    width: 683px;
+    padding: 10px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+.item dd{
+    margin-right: 5px;
+    width: 683px;
+    height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background: url("../img/li.gif") 1px -46.5px no-repeat;
+    text-indent: 6px;
+    list-style: none;
+    overflow: hidden;
+
+}
+.item dd a:link, .item dd a:visited{
+    display: inline-block;
+    width: 683px;
     height: 30px;
     line-height: 30px;
     color: #404040;
@@ -53,33 +72,18 @@
     text-decoration: none;
     overflow: hidden;
 }
-.lldt a:hover {
+.item dd a:hover{
     color: #f34540;
-    text-decoration: underline;
-    cursor: auto;
-}
-.lldd{
-    float: left;
-    margin-left:6px;
-    width: 126px;
-    height: 20px;
-    overflow: hidden;
-}
-.lldd a:link, .lldd a:visited {
-    display: inline-block;
-    height: 24px;
-    line-height: 24px;
-    color: #404040;
-    font-size: 13px;
-    text-decoration: none;
-    overflow: hidden;
-}
-.lldd a:hover {
-    color: #f34540;
-    text-decoration: underline;
-    cursor: auto;
 }
 
+.pagination>li>a, .pagination>li>a:visited{
+    color:#f34540;
+    margin-right: 10px;
+}
+.pagination>li>a:hover{
+    color: #ea433e;
+    background: #f3dddb;
+}
 .right {
     float: left;
     display: block;
