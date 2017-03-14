@@ -13,7 +13,7 @@ public class AdminDict {
 
     @Transient
     public static final String ID = "id";
-        public static final String CODE = "code";
+    public static final String CODE = "code";
     public static final String CKEY = "ckey";
     public static final String CVAL = "cval";
     public static final String DESC = "desc";
