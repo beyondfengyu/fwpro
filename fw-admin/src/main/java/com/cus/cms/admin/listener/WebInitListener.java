@@ -27,7 +27,7 @@ public class WebInitListener implements ApplicationListener<ContextRefreshedEven
 
             //定时获取资源网站最新的资源0 0 */6 * * ?
 //            WorkScheduler.executeCronSchedule(HtmlTask.class, "executePiaoHua", PropertyUtil.getValByKey("executePiaoHua"));
-            WorkScheduler.executeCronSchedule(StaticTask.class, "generDetailPage", PropertyUtil.getValByKey("executeDetailPage"));
+//            WorkScheduler.executeCronSchedule(StaticTask.class, "generDetailPage", PropertyUtil.getValByKey("executeDetailPage"));
         }
     }
 }

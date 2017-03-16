@@ -26,4 +26,5 @@ public class GenerHtmlService extends BaseService {
         return DateTimeUtil.getCurrentTime();
     }
 
+
 }
